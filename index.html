@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="aurora">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparison of Reactive Power Compensation Methods — SVA 2026</title>
+  <!-- KaTeX for True Mathematical Equation Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 01 — Cover                                             -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-0">
+    <div class="cover-wave">
+      <svg width="100%" height="100%" preserveAspectRatio="none">
+        <path data-wave data-w="900" data-h="500" data-amp="45" data-freq="2" data-off="0" data-mid="250"
+              fill="none" stroke="var(--p)" stroke-width="2.2" opacity="0.35"/>
+        <path data-wave data-w="900" data-h="500" data-amp="32" data-freq="3" data-off="1.4" data-mid="250"
+              fill="none" stroke="var(--s)" stroke-width="2" opacity="0.28"/>
+      </svg>
+    </div>
+    <div class="slide-inner cover-content">
+      <div class="inst-badge">
+        <div class="inst-seal">
+          <img src="assets/logo-clean.png" alt="Science Valley Academy">
+        </div>
+        <div class="inst-text">
+          <div class="inst-name">SCIENCE VALLEY ACADEMY (SVA)</div>
+          <div class="inst-dept">Department of Electrical Power Engineering · Graduation Project 2026</div>
+        </div>
+      </div>
+
+      <h1 class="cover-title" style="margin-top:10px;">
+        Comparison of <span>Reactive Power Compensation</span> Methods
+      </h1>
+
+      <div class="cover-devices">
+        Shunt Capacitors &nbsp;·&nbsp; Synchronous Condenser &nbsp;·&nbsp; SVC &nbsp;·&nbsp; STATCOM
+      </div>
+
+      <div class="elec-border" style="display:inline-block;margin-top:10px;">
+        <div style="padding:14px 32px;text-align:center;">
+          <span class="slide-kicker" style="margin-bottom:4px;display:block;">Under the Supervision of</span>
+          <strong style="font-size:1.35rem;color:var(--s);">Dr. Abdelaziz Ismail</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 02 — Project Team                                      -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-1">
+    <div class="slide-inner">
+      <div class="team-header">
+        <span class="team-pill">Graduation Project Team · 10 Members</span>
+        <h2 class="team-main-title">Project <span>Team Members</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+      <div class="team-grid stagger">
+        <div class="team-card-wrap role-svc"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">HA</span><span class="team-group-tag">SVC</span></div>
+          <div class="team-name">Hassan Ahmed Hassan</div>
+          <div class="team-meta"><span class="team-id">ID: 20220870</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-svc"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">AM</span><span class="team-group-tag">SVC</span></div>
+          <div class="team-name">Ahmed Mohamed Abdel-Moaty</div>
+          <div class="team-meta"><span class="team-id">ID: 20220967</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-stat"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">TT</span><span class="team-group-tag">STATCOM</span></div>
+          <div class="team-name">Taha Tarek Taha</div>
+          <div class="team-meta"><span class="team-id">ID: 20220960</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-stat"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">AB</span><span class="team-group-tag">STATCOM</span></div>
+          <div class="team-name">Abdo Bakhit Abdel-Hafiz</div>
+          <div class="team-meta"><span class="team-id">ID: 20220825</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-sc"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">MH</span><span class="team-group-tag">Sync. Condenser</span></div>
+          <div class="team-name">Moataz Haitham Mohamed</div>
+          <div class="team-meta"><span class="team-id">ID: 20220836</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-sc"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">EM</span><span class="team-group-tag">Sync. Condenser</span></div>
+          <div class="team-name">Essam Mohamed Mohamed</div>
+          <div class="team-meta"><span class="team-id">ID: 20220989</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-sc"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">HM</span><span class="team-group-tag">Sync. Condenser</span></div>
+          <div class="team-name">Hassan Mohamed Abdel Moneim</div>
+          <div class="team-meta"><span class="team-id">ID: 20220853</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-cap"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">SA</span><span class="team-group-tag">Shunt Capacitors</span></div>
+          <div class="team-name">Salma Ahmed Mohamed</div>
+          <div class="team-meta"><span class="team-id">ID: 20220812</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-cap"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">HS</span><span class="team-group-tag">Shunt Capacitors</span></div>
+          <div class="team-name">Hana Sherif Fawzy</div>
+          <div class="team-meta"><span class="team-id">ID: 20220911</span></div>
+        </div></div></div>
+
+        <div class="team-card-wrap role-cap"><div class="elec-border"><div>
+          <div class="team-card-top"><span class="team-avatar">NT</span><span class="team-group-tag">Shunt Capacitors</span></div>
+          <div class="team-name">Nermeen Tarek Abdullah</div>
+          <div class="team-meta"><span class="team-id">ID: 20220899</span></div>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 03 — Presentation Roadmap                              -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="team-header">
+        <span class="team-pill">Interactive Navigation · Click Any Section</span>
+        <h2 class="team-main-title">Presentation <span>Roadmap</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+      <div class="agenda-map stagger">
+        <div class="agenda-node" style="--card-clr:var(--err); --card-glow:rgba(244,63,94,0.38);" data-goto="3">
+          <span class="num-badge warn">01</span>
+          <span class="agenda-label">The Reactive Power Problem</span>
+        </div>
+        <div class="agenda-node" style="--card-clr:var(--cap); --card-glow:rgba(56,189,248,0.38);" data-goto="7">
+          <span class="num-badge" style="color:var(--cap);border-color:var(--cap);background:rgba(56,189,248,0.12);">02</span>
+          <span class="agenda-label text-cap">Shunt Capacitors</span>
+        </div>
+        <div class="agenda-node" style="--card-clr:var(--sc); --card-glow:rgba(251,146,60,0.38);" data-goto="13">
+          <span class="num-badge amber" style="color:var(--sc);border-color:var(--sc);background:rgba(251,146,60,0.12);">03</span>
+          <span class="agenda-label text-sc">Synchronous Condenser</span>
+        </div>
+        <div class="agenda-node" style="--card-clr:var(--svc); --card-glow:rgba(250,204,21,0.40);" data-goto="19">
+          <span class="num-badge amber">04</span>
+          <span class="agenda-label text-svc">Static Var Compensator (SVC)</span>
+        </div>
+        <div class="agenda-node" style="--card-clr:var(--stat); --card-glow:rgba(192,132,252,0.40);" data-goto="26">
+          <span class="num-badge" style="color:var(--stat);border-color:var(--stat);background:rgba(192,132,252,0.12);">05</span>
+          <span class="agenda-label text-stat">STATCOM &amp; Simulink</span>
+        </div>
+        <div class="agenda-node" style="--card-clr:var(--ok); --card-glow:rgba(16,185,129,0.38);" data-goto="34">
+          <span class="num-badge ok">06</span>
+          <span class="agenda-label" style="color:var(--ok);">Comparison &amp; Selection Guide</span>
+        </div>
+      </div>
+      <p class="slide-subtitle" style="text-align:center;">
+        Narrative Flow: Each compensation technology emerged to solve the engineering limitations of the one before it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 04 — What is Reactive Power?                           -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-3">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker">Section 01 · Fundamentals</div>
+        <h2 class="slide-title">What is Reactive Power?</h2>
+      </div>
+      <div class="two-col">
+        <div>
+          <div id="widget-power-triangle" class="widget"></div>
+          <div class="math-box" style="margin-top:12px;">
+            <div>$$S = \sqrt{P^2 + Q^2} \qquad \text{PF} = \cos\varphi = \frac{P}{S} = \frac{P}{\sqrt{P^2 + Q^2}}$$</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card" style="border-top-color:var(--ok);">
+            <div class="card-head">
+              <span class="num-badge ok">P</span>
+              <strong>Active Power — Real Work (kW / MW)</strong>
+            </div>
+            <p>The useful power consumed by loads to produce mechanical shaft torque, heat, or illumination: \(P = V I \cos\varphi\).</p>
+          </div>
+          <div class="card" style="border-top-color:var(--err);">
+            <div class="card-head">
+              <span class="num-badge warn">Q</span>
+              <strong>Reactive Power — Magnetic Field Energy (kVAR / MVAR)</strong>
+            </div>
+            <p>Required by inductive loads (induction motors, transformers, reactors) to build their magnetic fields. It oscillates back and forth between source and load: \(Q = V I \sin\varphi\).</p>
+          </div>
+          <div class="card" style="border-top-color:var(--p);">
+            <div class="card-head">
+              <span class="num-badge">S</span>
+              <strong>Apparent Power — Total Grid Burden (kVA / MVA)</strong>
+            </div>
+            <p>The vector sum of \(P\) and \(Q\). Generators, transformers, and transmission cables must be sized to carry the full apparent power \(S = V I\).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 05 — The Cost of Poor Power Factor (NO EMOJIS)         -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-4">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker">Section 01 · Why Compensation is Mandatory</div>
+        <h2 class="slide-title">The Cost of Poor Power Factor</h2>
+      </div>
+      <div class="two-col stagger">
+        <div class="card" style="border-top-color:var(--err);">
+          <div class="card-head">
+            <span class="num-badge warn">01</span>
+            <strong>Severe Voltage Drop Along Feeders</strong>
+          </div>
+          <p>Inductive reactive current \(I_Q\) flowing through line reactance \(X_L\) causes a direct voltage drop across transmission and distribution lines, degrading voltage stability at load buses:</p>
+          <div class="math-box">
+            <div>$$\Delta V \approx \frac{P \cdot R + Q \cdot X_L}{V}$$</div>
+            <span class="math-note">High \(Q\) directly depresses load bus voltage</span>
+          </div>
+        </div>
+
+        <div class="card" style="border-top-color:var(--s);">
+          <div class="card-head">
+            <span class="num-badge amber">02</span>
+            <strong>Higher Line Current &amp; Copper Losses</strong>
+          </div>
+          <p>For a fixed active power \(P\), a lower power factor forces the network to carry much higher total current, increasing thermal \(I^2R\) losses quadratically in cables and transformers:</p>
+          <div class="math-box">
+            <div>$$I = \frac{P}{\sqrt{3}\,V\cos\varphi} \implies P_{\text{loss}} = 3 I^2 R \propto \frac{1}{\cos^2\varphi}$$</div>
+          </div>
+        </div>
+
+        <div class="card" style="border-top-color:var(--p);">
+          <div class="card-head">
+            <span class="num-badge">03</span>
+            <strong>Wasted System Capacity &amp; Utility Penalties</strong>
+          </div>
+          <p>Reactive current occupies transformer and cable kVA ratings without delivering real work. Utilities impose financial penalties when industrial power factor falls below \(0.90\text{–}0.92\).</p>
+        </div>
+
+        <div class="card" style="border-top-color:var(--stat);">
+          <div class="card-head">
+            <span class="num-badge" style="color:var(--stat);border-color:var(--stat);">04</span>
+            <strong>Voltage Flicker &amp; Dynamic Instability</strong>
+          </div>
+          <p>Rapidly fluctuating inductive loads (such as electric arc furnaces, rolling mills, and large motor starts) draw erratic \(Q(t)\), causing rapid voltage oscillations and risk of voltage collapse.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 06 — The Solution: Shunt Compensation                  -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-5">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker">Section 01 · Core Engineering Principle</div>
+        <h2 class="slide-title">The Solution: Local Shunt Compensation</h2>
+      </div>
+      <div class="two-col">
+        <div class="svg-diagram" style="display:flex;flex-direction:column;justify-content:center;gap:14px;padding:20px 22px;">
+          <svg viewBox="0 0 700 226" width="700" style="width:100%;height:auto;">
+            <defs>
+              <marker id="arrP" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="var(--p)"/>
+              </marker>
+              <marker id="arrErr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="var(--err)"/>
+              </marker>
+              <marker id="arrOk" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                <path d="M0,0 L8,3 L0,6 Z" fill="var(--ok)"/>
+              </marker>
+            </defs>
+
+            <!-- 1. Utility Grid Source -->
+            <rect x="18" y="54" width="116" height="64" rx="10" fill="var(--surf-2)" stroke="var(--p)" stroke-width="2.5"/>
+            <text x="76" y="82" text-anchor="middle" fill="var(--tx)" font-size="14" font-weight="800">Utility Grid</text>
+            <text x="76" y="102" text-anchor="middle" fill="var(--p)" font-size="11" font-weight="700">Source Bus</text>
+
+            <!-- Feeder Line Part 1 -->
+            <line x1="134" y1="86" x2="210" y2="86" stroke="var(--tx)" stroke-width="2.5"/>
+
+            <!-- 2. Feeder / Transformer Impedance (R + jX_L) -->
+            <rect x="210" y="64" width="126" height="44" rx="8" fill="var(--surf-2)" stroke="var(--mut)" stroke-width="2"/>
+            <text x="273" y="83" text-anchor="middle" fill="var(--tx)" font-size="12" font-weight="700">Feeder Impedance</text>
+            <text x="273" y="100" text-anchor="middle" fill="var(--s)" font-size="12" font-weight="700"><tspan font-style="italic">R</tspan> + <tspan font-style="italic">jX</tspan><tspan dy="3" font-size="9">L</tspan></text>
+
+            <!-- Feeder Line Part 2 to Load Bus -->
+            <line x1="336" y1="86" x2="455" y2="86" stroke="var(--tx)" stroke-width="2.5"/>
+
+            <!-- 3. Load Bus Vertical Bar -->
+            <line x1="455" y1="42" x2="455" y2="210" stroke="var(--tx)" stroke-width="4.5" stroke-linecap="round"/>
+            <text x="455" y="30" text-anchor="middle" fill="var(--tx)" font-size="12" font-weight="800">Load Bus</text>
+
+            <!-- 4. Inductive Load (Top Right from Load Bus) -->
+            <line x1="455" y1="86" x2="525" y2="86" stroke="var(--tx)" stroke-width="2.5"/>
+            <rect x="525" y="54" width="152" height="64" rx="10" fill="var(--surf-2)" stroke="var(--s)" stroke-width="2.5"/>
+            <text x="601" y="82" text-anchor="middle" fill="var(--tx)" font-size="14" font-weight="800">Inductive Load</text>
+            <text x="601" y="102" text-anchor="middle" fill="var(--s)" font-size="11.5" font-weight="700">Demands <tspan font-style="italic">P</tspan> + <tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">L</tspan></text>
+
+            <!-- Active Power P Flow Arrow (Always from Grid through Feeder to Load) -->
+            <line x1="145" y1="44" x2="435" y2="44" stroke="var(--p)" stroke-width="2.8" class="flow-line" marker-end="url(#arrP)"/>
+            <text x="290" y="34" text-anchor="middle" fill="var(--p)" font-size="12" font-weight="800">Active Power (<tspan font-style="italic">P</tspan>) from Grid</text>
+
+            <!-- BEFORE VIEW: Full Q_L pulled all the way from Grid through R + jX_L -->
+            <g id="q-before">
+              <line x1="145" y1="130" x2="435" y2="130" stroke="var(--err)" stroke-width="3.2" class="flow-line" marker-end="url(#arrErr)"/>
+              <text x="290" y="150" text-anchor="middle" fill="var(--err)" font-size="12" font-weight="800">Full Reactive Power (<tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">L</tspan><tspan dy="-3">) Pulled Through Feeder</tspan></text>
+
+              <!-- Disconnected Shunt Branch Preview -->
+              <line x1="455" y1="184" x2="525" y2="184" stroke="var(--mut)" stroke-width="2" stroke-dasharray="5 4"/>
+              <rect x="525" y="154" width="152" height="60" rx="10" fill="var(--surf)" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.55"/>
+              <text x="601" y="180" text-anchor="middle" fill="var(--mut)" font-size="12" font-weight="700">Shunt Compensator</text>
+              <text x="601" y="198" text-anchor="middle" fill="var(--mut)" font-size="11">(Switch OFF)</text>
+            </g>
+
+            <!-- AFTER VIEW: Q_C supplied locally at Load Bus; Q_grid ≈ 0 -->
+            <g id="q-after" style="display:none;">
+              <line x1="145" y1="130" x2="435" y2="130" stroke="var(--ok)" stroke-width="1.8" stroke-dasharray="4 4"/>
+              <text x="290" y="150" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="800">Feeder Relieved: <tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">grid</tspan><tspan dy="-3"> ≈ 0 (Only </tspan><tspan font-style="italic">P</tspan> Flows)</text>
+
+              <!-- Connected Shunt Compensator at Load Bus -->
+              <line x1="455" y1="184" x2="525" y2="184" stroke="var(--ok)" stroke-width="3"/>
+              <rect x="525" y="154" width="152" height="62" rx="10" fill="var(--surf-2)" stroke="var(--ok)" stroke-width="2.5"/>
+              <text x="601" y="180" text-anchor="middle" fill="var(--ok)" font-size="13" font-weight="800">Shunt Compensator</text>
+              <text x="601" y="199" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="700">Injects Local <tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">C</tspan><tspan dy="-3"> ≈ </tspan><tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">L</tspan></text>
+
+              <!-- Local Q_C flow arrow into Load Bus -> Inductive Load + Right-Side Label -->
+              <path d="M 520,168 L 474,168 L 474,104 L 518,104" fill="none" stroke="var(--ok)" stroke-width="3.2" class="flow-line" marker-end="url(#arrOk)"/>
+              <text x="601" y="140" text-anchor="middle" fill="var(--ok)" font-size="12" font-weight="800">Local <tspan font-style="italic">Q</tspan><tspan dy="3" font-size="9">C</tspan><tspan dy="-3"> Loop</tspan></text>
+            </g>
+          </svg>
+
+          <!-- Live Telemetry Readout Pills (2-Line Structured Sans-Serif) -->
+          <div id="readout-before" class="sld-readout-bar">
+            <div class="sld-pill bad">
+              <span class="sld-pill-label">Grid Current (<i>I</i><sub>grid</sub>)</span>
+              <span class="sld-pill-val">High · 1.39 pu</span>
+            </div>
+            <div class="sld-pill bad">
+              <span class="sld-pill-label">Grid Power Factor</span>
+              <span class="sld-pill-val">0.72 Lagging</span>
+            </div>
+            <div class="sld-pill bad">
+              <span class="sld-pill-label">Feeder Drop (Δ<i>V</i>)</span>
+              <span class="sld-pill-val">High · 6.8%</span>
+            </div>
+          </div>
+          <div id="readout-after" class="sld-readout-bar" style="display:none;">
+            <div class="sld-pill good">
+              <span class="sld-pill-label">Grid Current (<i>I</i><sub>grid</sub>)</span>
+              <span class="sld-pill-val">Reduced · 1.00 pu</span>
+            </div>
+            <div class="sld-pill good">
+              <span class="sld-pill-label">Grid Power Factor</span>
+              <span class="sld-pill-val">0.99 Unity</span>
+            </div>
+            <div class="sld-pill good">
+              <span class="sld-pill-label">Feeder Drop (Δ<i>V</i>)</span>
+              <span class="sld-pill-val">Minimal · 1.4%</span>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin-top:4px;">
+            <button class="widget-btn" data-toggle-comp>Switch View → After Local Shunt Compensation</button>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card" style="border-top-color:var(--p);">
+            <div class="card-head">
+              <span class="num-badge">01</span>
+              <strong>Core Principle</strong>
+            </div>
+            <p>Instead of forcing reactive power \(Q_L\) to travel all the way from utility generators through transformers and transmission lines, we connect a <strong>Shunt Compensator</strong> in parallel directly at the Load Bus.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--ok);">
+            <div class="card-head">
+              <span class="num-badge ok">02</span>
+              <strong>Local Reactive Current Cancellation</strong>
+            </div>
+            <p>The compensator supplies capacitive reactive power \(Q_C\) locally to the load, so the net reactive power drawn from the upstream grid drops to \(Q_{\text{grid}} = Q_L - Q_C \approx 0\).</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--s);">
+            <div class="card-head">
+              <span class="num-badge amber">03</span>
+              <strong>Direct Engineering Impact</strong>
+            </div>
+            <p>By eliminating reactive current from the upstream feeder, total line current \(I_{\text{grid}}\) drops significantly — cutting feeder voltage drop \(\Delta V\), reducing thermal \(I^2R\) copper losses, and freeing up transformer and cable kVA capacity for useful active loads.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 07 — Evolution Timeline (Names-Only + Icons + Arrows)  -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-6">
+    <div class="slide-inner">
+      <div class="team-header">
+        <span class="team-pill">Section 01 · Technological Progression (Click Any Card to Jump)</span>
+        <h2 class="team-main-title">Evolution of <span>Shunt Compensation</span> Technologies</h2>
+        <div class="team-title-bar"></div>
+      </div>
+
+      <div class="evo-flow stagger">
+        <!-- 1. Shunt Capacitors -->
+        <div class="evo-card" style="--card-clr:var(--cap); --card-glow:rgba(56,189,248,0.32);" data-goto="7">
+          <span class="evo-gen">Generation 01</span>
+          <div class="evo-icon-box">
+            <svg viewBox="0 0 64 64" width="52" height="52">
+              <line x1="32" y1="8" x2="32" y2="26" stroke="var(--cap)" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="14" y1="26" x2="50" y2="26" stroke="var(--cap)" stroke-width="4.5" stroke-linecap="round"/>
+              <line x1="14" y1="36" x2="50" y2="36" stroke="var(--cap)" stroke-width="4.5" stroke-linecap="round"/>
+              <line x1="32" y1="36" x2="32" y2="54" stroke="var(--cap)" stroke-width="3.5" stroke-linecap="round"/>
+              <line x1="20" y1="54" x2="44" y2="54" stroke="var(--mut)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="evo-title text-cap">Shunt Capacitors</div>
+        </div>
+
+        <!-- Connector 1: Blue (Cap) -> Orange (SC) -->
+        <div class="evo-arrow" style="--c1:var(--cap); --c2:var(--sc);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--sc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 2. Synchronous Condenser -->
+        <div class="evo-card" style="--card-clr:var(--sc); --card-glow:rgba(251,146,60,0.32);" data-goto="13">
+          <span class="evo-gen">Generation 02</span>
+          <div class="evo-icon-box">
+            <svg viewBox="0 0 64 64" width="52" height="52">
+              <circle cx="32" cy="34" r="20" fill="none" stroke="var(--sc)" stroke-width="3.5"/>
+              <circle cx="32" cy="34" r="11" fill="none" stroke="var(--sc)" stroke-width="2" stroke-dasharray="4 3"/>
+              <line x1="32" y1="6" x2="32" y2="14" stroke="var(--sc)" stroke-width="3.5" stroke-linecap="round"/>
+              <text x="32" y="39" text-anchor="middle" fill="var(--sc)" font-size="14" font-weight="800">SC</text>
+            </svg>
+          </div>
+          <div class="evo-title text-sc">Synchronous Condenser</div>
+        </div>
+
+        <!-- Connector 2: Orange (SC) -> Amber (SVC) -->
+        <div class="evo-arrow" style="--c1:var(--sc); --c2:var(--svc);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--svc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 3. Static Var Compensator (SVC) -->
+        <div class="evo-card" style="--card-clr:var(--svc); --card-glow:rgba(250,204,21,0.34);" data-goto="19">
+          <span class="evo-gen">Generation 03</span>
+          <div class="evo-icon-box">
+            <svg viewBox="0 0 64 64" width="52" height="52">
+              <line x1="32" y1="6" x2="32" y2="16" stroke="var(--svc)" stroke-width="3" stroke-linecap="round"/>
+              <polygon points="18,16 46,16 32,34" fill="none" stroke="var(--svc)" stroke-width="3" stroke-linejoin="round"/>
+              <polygon points="18,52 46,52 32,34" fill="none" stroke="var(--svc)" stroke-width="3" stroke-linejoin="round"/>
+              <line x1="16" y1="34" x2="48" y2="34" stroke="var(--svc)" stroke-width="3" stroke-linecap="round"/>
+              <line x1="32" y1="52" x2="32" y2="59" stroke="var(--svc)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="evo-title text-svc">Static Var Compensator (SVC)</div>
+        </div>
+
+        <!-- Connector 3: Amber (SVC) -> Purple (STATCOM) -->
+        <div class="evo-arrow" style="--c1:var(--svc); --c2:var(--stat);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--stat)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 4. STATCOM -->
+        <div class="evo-card" style="--card-clr:var(--stat); --card-glow:rgba(192,132,252,0.34);" data-goto="26">
+          <span class="evo-gen">Generation 04</span>
+          <div class="evo-icon-box">
+            <svg viewBox="0 0 64 64" width="52" height="52">
+              <rect x="10" y="12" width="44" height="40" rx="8" fill="none" stroke="var(--stat)" stroke-width="3.2"/>
+              <line x1="14" y1="48" x2="50" y2="16" stroke="var(--stat)" stroke-width="2.5"/>
+              <text x="22" y="28" text-anchor="middle" fill="var(--stat)" font-size="13" font-weight="800">≈</text>
+              <text x="42" y="45" text-anchor="middle" fill="var(--stat)" font-size="12" font-weight="800">=</text>
+            </svg>
+          </div>
+          <div class="evo-title text-stat">STATCOM</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 08 — Section 02: Shunt Capacitors                      -->
+  <!-- ============================================================ -->
+  <section class="slide section-slide" id="slide-7">
+    <div class="slide-inner">
+      <span class="section-badge text-cap">Technology 01 of 04</span>
+      <h2 class="slide-title text-cap" style="font-size:clamp(2.8rem,5vw,4.2rem);">Shunt Capacitor Banks</h2>
+      <p class="slide-subtitle">Passive Capacitive Compensation — Fixed &amp; Automatic Contactor-Switched Banks</p>
+      <div class="presented-by-label">Presented By</div>
+      <div class="presenters sec-cap stagger">
+        <div class="presenter-chip">
+          <span class="speaker-name">Salma Ahmed Mohamed</span>
+          <span class="speaker-id">ID: 20220812</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Hana Sherif Fawzy</span>
+          <span class="speaker-id">ID: 20220911</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Nermeen Tarek Abdullah</span>
+          <span class="speaker-id">ID: 20220899</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 09 — Shunt Capacitors: Concept & Operating Principle   -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-8">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-cap">Shunt Capacitors · Principle &amp; Installation</div>
+        <h2 class="slide-title">How Shunt Capacitors Work</h2>
+      </div>
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <div class="svg-diagram" style="flex:1;display:flex;align-items:center;justify-content:center;padding:16px 18px;">
+            <svg viewBox="0 0 640 246" width="100%" style="max-height:255px;">
+              <defs>
+                <marker id="arrCapP" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--p)"/>
+                </marker>
+                <marker id="arrCapC" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--cap)"/>
+                </marker>
+                <marker id="arrCapL" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--s)"/>
+                </marker>
+                <marker id="arrCapErr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--err)"/>
+                </marker>
+              </defs>
+
+              <!-- 1. AC Grid Source -->
+              <rect x="14" y="42" width="90" height="54" rx="10" fill="var(--surf-2)" stroke="var(--p)" stroke-width="2.4"/>
+              <text x="59" y="66" text-anchor="middle" fill="var(--tx)" font-size="13.5" font-weight="800">AC Grid</text>
+              <text x="59" y="83" text-anchor="middle" fill="var(--p)" font-size="10.5" font-weight="700">Source Bus</text>
+
+              <!-- Feeder Line + Z_feeder -->
+              <line x1="104" y1="69" x2="156" y2="69" stroke="var(--p)" stroke-width="2.5" class="flow-line"/>
+              <rect x="156" y="48" width="84" height="42" rx="8" fill="var(--surf-2)" stroke="var(--mut)" stroke-width="1.8"/>
+              <text x="198" y="66" text-anchor="middle" fill="var(--mut)" font-size="10" font-weight="700">Feeder</text>
+              <text x="198" y="81" text-anchor="middle" fill="var(--tx)" font-size="12.5" font-weight="800"><tspan font-style="italic">Z</tspan><tspan dy="3" font-size="9">feeder</tspan></text>
+              <line x1="240" y1="69" x2="294" y2="69" stroke="var(--p)" stroke-width="2.5" class="flow-line" marker-end="url(#arrCapP)"/>
+              <text x="198" y="34" text-anchor="middle" fill="var(--p)" font-size="11" font-weight="800">Only Active <tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">P</tspan><tspan dy="-3"> from Grid</tspan></text>
+
+              <!-- Load Busbar -->
+              <line x1="298" y1="24" x2="298" y2="218" stroke="var(--tx)" stroke-width="4.5" stroke-linecap="round"/>
+              <text x="298" y="16" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="800">Load Bus (<tspan font-style="italic">V</tspan> ∠ 0°)</text>
+
+              <!-- Upper Branch: Inductive Motor Load -->
+              <line x1="298" y1="64" x2="348" y2="64" stroke="var(--s)" stroke-width="2.5"/>
+              <rect x="348" y="36" width="110" height="56" rx="10" fill="var(--surf-2)" stroke="var(--s)" stroke-width="2.2"/>
+              <text x="403" y="61" text-anchor="middle" fill="var(--tx)" font-size="13" font-weight="800">Motor Load</text>
+              <text x="403" y="79" text-anchor="middle" fill="var(--s)" font-size="11" font-weight="700">(<tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">L</tspan><tspan dy="-3"> lags </tspan><tspan font-style="italic">V</tspan>)</text>
+
+              <!-- Lower Branch: Shunt Capacitor Bank -->
+              <line x1="298" y1="168" x2="352" y2="168" stroke="var(--cap)" stroke-width="2.5"/>
+              <line x1="352" y1="142" x2="352" y2="161" stroke="var(--cap)" stroke-width="2.8"/>
+              <line x1="332" y1="161" x2="372" y2="161" stroke="var(--cap)" stroke-width="4.2" stroke-linecap="round"/>
+              <line x1="332" y1="172" x2="372" y2="172" stroke="var(--cap)" stroke-width="4.2" stroke-linecap="round"/>
+              <line x1="352" y1="172" x2="352" y2="194" stroke="var(--cap)" stroke-width="2.8"/>
+              <line x1="338" y1="194" x2="366" y2="194" stroke="var(--mut)" stroke-width="2.4" stroke-linecap="round"/>
+              <text x="380" y="164" text-anchor="start" fill="var(--cap)" font-size="12.5" font-weight="800">Shunt Bank</text>
+              <text x="380" y="181" text-anchor="start" fill="var(--tx)" font-size="11" font-weight="700"><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">C</tspan><tspan dy="-3"> leads </tspan><tspan font-style="italic">V</tspan> by 90°</text>
+
+              <!-- Animated Local Reactive Current Exchange Loop between Capacitor & Motor -->
+              <path d="M 352,136 L 320,136 L 320,82 L 344,82" fill="none" stroke="var(--cap)" stroke-width="2.8" class="flow-line" marker-end="url(#arrCapC)"/>
+              <text x="392" y="122" text-anchor="middle" fill="var(--cap)" font-size="11.5" font-weight="800">Local <tspan font-style="italic">Q</tspan><tspan dy="3" font-size="8.5">C</tspan><tspan dy="-3"> Loop (</tspan><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">C</tspan><tspan dy="-3"> ↔ </tspan><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">LQ</tspan><tspan dy="-3">)</tspan></text>
+
+              <!-- 2. Compact Phasor Inset (Right Side Inside Card) -->
+              <rect x="476" y="16" width="152" height="214" rx="12" fill="var(--surf-2)" stroke="var(--line-bright)" stroke-width="1.6"/>
+              <text x="552" y="35" text-anchor="middle" fill="var(--mut)" font-size="10" font-weight="800" letter-spacing="1.2">PHASOR INSET</text>
+
+              <!-- Phasor Axes Origin at (512, 126) -->
+              <circle cx="512" cy="126" r="3" fill="var(--tx)"/>
+              <!-- +90° Leading I_C Vector (Upward) -->
+              <line x1="512" y1="126" x2="512" y2="56" stroke="var(--cap)" stroke-width="2.8" marker-end="url(#arrCapC)"/>
+              <text x="520" y="62" text-anchor="start" fill="var(--cap)" font-size="11" font-weight="800"><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8">C</tspan><tspan dy="-3"> (+90°)</tspan></text>
+
+              <!-- 0° Reference V Vector (Horizontal Right) -->
+              <line x1="512" y1="126" x2="606" y2="126" stroke="var(--p)" stroke-width="2.8" marker-end="url(#arrCapP)"/>
+              <text x="608" y="117" text-anchor="end" fill="var(--p)" font-size="11" font-weight="800"><tspan font-style="italic">V</tspan> (0°)</text>
+
+              <!-- -90° Lagging Reactive Component I_LQ (Downward Dashed) -->
+              <line x1="512" y1="126" x2="512" y2="192" stroke="var(--err)" stroke-width="2.2" stroke-dasharray="4 3" marker-end="url(#arrCapErr)"/>
+              <text x="520" y="196" text-anchor="start" fill="var(--err)" font-size="10.5" font-weight="700"><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8">LQ</tspan><tspan dy="-3"> (−90°)</tspan></text>
+
+              <!-- Total Motor Current I_L (Lagging Angle φ) -->
+              <line x1="512" y1="126" x2="584" y2="184" stroke="var(--s)" stroke-width="2.6" marker-end="url(#arrCapL)"/>
+              <text x="592" y="176" text-anchor="end" fill="var(--s)" font-size="11" font-weight="800"><tspan font-style="italic">I</tspan><tspan dy="3" font-size="8">L</tspan></text>
+
+              <!-- Inset Summary Note -->
+              <text x="552" y="218" text-anchor="middle" fill="var(--ok)" font-size="10" font-weight="800"><tspan font-style="italic">I</tspan><tspan dy="2.5" font-size="7.5">C</tspan><tspan dy="-2.5"> cancels </tspan><tspan font-style="italic">I</tspan><tspan dy="2.5" font-size="7.5">LQ</tspan><tspan dy="-2.5"> (180° opposed)</tspan></text>
+            </svg>
+          </div>
+          <div class="math-box" style="padding:11px 18px;">
+            <div>$$X_C = \frac{1}{2\pi f C} \qquad Q_C = \frac{V^2}{X_C} = 2\pi f C \, V^2$$</div>
+          </div>
+        </div>
+
+        <!-- Right Column: 3 Scannable, Uncrowded Cards -->
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <!-- Card 1: Combined 90° Leading & Local Cancellation -->
+          <div class="card" style="border-top-color:var(--cap);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--cap);border-color:var(--cap);background:rgba(2,132,199,0.12);">01</span>
+              <strong>90° Leading Principle &amp; Local Cancellation</strong>
+            </div>
+            <p style="font-size:0.98rem;line-height:1.48;">An inductive motor draws lagging current \(I_L\), whereas a shunt capacitor draws current \(I_C\) that <strong>leads voltage \(V\) by \(90^\circ\)</strong> (`\(180^\circ\)` opposed to \(I_{LQ}\)). Reactive energy exchanges locally between capacitor and motor without loading the upstream feeder.</p>
+          </div>
+
+          <!-- Card 2: 2-Column Mini Comparison of Capacitor Bank Types -->
+          <div class="card" style="border-top-color:var(--p);padding:15px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge">02</span>
+              <strong>Types of Capacitor Banks</strong>
+            </div>
+            <div class="mini-two-col">
+              <div class="mini-bank-card">
+                <div class="mini-bank-title">1. Fixed Banks</div>
+                <div class="mini-bank-desc">Permanently connected to supply constant base-load \(Q_C\) for steady motor loads.</div>
+              </div>
+              <div class="mini-bank-card">
+                <div class="mini-bank-title">2. Automatic APFC</div>
+                <div class="mini-bank-desc">Power Factor Relay switches contactor steps ON/OFF dynamically as load varies.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: 3 Clean Horizontal Installation Location Pills -->
+          <div class="card" style="border-top-color:var(--ok);padding:15px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge ok">03</span>
+              <strong>3 Installation Locations</strong>
+            </div>
+            <div class="loc-pills-grid">
+              <div class="loc-pill">
+                <span class="loc-pill-tag">Location 01</span>
+                <span class="loc-pill-name">Individual</span>
+                <span class="loc-pill-sub">At large motor terminals</span>
+              </div>
+              <div class="loc-pill">
+                <span class="loc-pill-tag">Location 02</span>
+                <span class="loc-pill-name">Group / Sector</span>
+                <span class="loc-pill-sub">At sub-distribution board</span>
+              </div>
+              <div class="loc-pill">
+                <span class="loc-pill-tag">Location 03</span>
+                <span class="loc-pill-name">Central MDB</span>
+                <span class="loc-pill-sub">At Main Distribution Board</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 10 — Shunt Capacitors: Q-V Characteristic              -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-9">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-cap">Shunt Capacitors · Interactive Simulation</div>
+        <h2 class="slide-title">Q–V Characteristic &amp; Stepped Switching</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-cap-qv" class="widget" data-max-h="245"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card" style="border-top-color:var(--err);padding:15px 20px;gap:7px;">
+            <div class="card-head">
+              <span class="num-badge warn">V²</span>
+              <strong>Critical Limitation: Square-Law Voltage Dependence</strong>
+            </div>
+            <p style="font-size:0.96rem;line-height:1.45;">Because admittance \(B_C = \omega C\) is fixed, reactive power output is proportional to the <strong>square of terminal voltage</strong>:</p>
+            <div class="math-box" style="padding:9px 14px;margin-top:2px;">
+              <div>$$Q_C(V) = V^2 \cdot B_C \implies \text{At } V = 0.70\text{ pu},\; Q_C = 0.70^2 = 0.49\text{ pu } (49\%)$$</div>
+            </div>
+            <p style="font-size:0.93rem;line-height:1.42;">When grid voltage sags during a disturbance, the capacitor loses <strong>51%</strong> of its reactive output right when the network needs maximum voltage support.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--cap);padding:14px 18px;gap:8px;">
+            <div class="apfc-head-row">
+              <strong style="font-size:1.05rem;">Interactive APFC Bank Stages (Click to Toggle):</strong>
+              <span class="apfc-kvar-badge" id="apfc-kvar-meter">Active Output: 200 / 300 kVAR</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="card step-btn" data-cap-step="0" style="padding:8px 14px;flex-direction:row;justify-content:space-between;align-items:center;">
+                <span style="font-size:0.94rem;font-weight:600;">Stage 01 — Contactor Step (100 kVAR)</span><strong class="step-state text-cap" style="font-size:0.95rem;">ON</strong>
+              </div>
+              <div class="card step-btn" data-cap-step="1" style="padding:8px 14px;flex-direction:row;justify-content:space-between;align-items:center;">
+                <span style="font-size:0.94rem;font-weight:600;">Stage 02 — Contactor Step (100 kVAR)</span><strong class="step-state text-cap" style="font-size:0.95rem;">ON</strong>
+              </div>
+              <div class="card step-btn step-off" data-cap-step="2" style="padding:8px 14px;flex-direction:row;justify-content:space-between;align-items:center;">
+                <span style="font-size:0.94rem;font-weight:600;">Stage 03 — Contactor Step (100 kVAR)</span><strong class="step-state text-cap" style="font-size:0.95rem;">OFF</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 11A — Shunt Capacitors: Advantages & Applications      -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-10">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-cap">Shunt Capacitors · Key Strengths &amp; Use Cases</div>
+        <h2 class="slide-title">Shunt Capacitors: Advantages &amp; Applications</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">01</span>
+            <strong>Lowest Capital Cost (CAPEX)</strong>
+          </div>
+          <p>By far the most economical technology per kVAR/MVAR to supply bulk reactive power compensation across industrial plants and distribution feeders.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">02</span>
+            <strong>Extremely Low Operating Losses</strong>
+          </div>
+          <p>Dielectric losses are less than \(0.05\%\text{–}0.1\%\) of rated kVAR — giving shunt capacitors the highest electrical efficiency of all four compensation methods.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">03</span>
+            <strong>Simple &amp; Modular Construction</strong>
+          </div>
+          <p>100% static installation with zero rotating parts or complex gate-drive electronics; faulty capacitor cans are easily replaced and stages can be expanded modularly.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">04</span>
+            <strong>Minimal Routine Maintenance</strong>
+          </div>
+          <p>Requires only periodic visual and thermal inspection of mechanical contactors, HRC protection fuses, discharge resistors, and detuning reactors.</p>
+        </div>
+      </div>
+
+      <div class="card app-bar-card">
+        <span class="app-bar-label">
+          <span class="num-badge" style="color:var(--cap);border-color:var(--cap);background:rgba(2,132,199,0.12);">APP</span>
+          Primary Engineering Applications:
+        </span>
+        <div class="app-tags">
+          <span class="app-tag">Steady Industrial Motor Loads</span>
+          <span class="app-tag">Factory Main Distribution Boards (MDB)</span>
+          <span class="app-tag">Long Radial Distribution Feeders</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 11B — Shunt Capacitors: Disadvantages & Limitations    -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-11">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-cap">Shunt Capacitors · Technical Limitations</div>
+        <h2 class="slide-title">Shunt Capacitors: Disadvantages &amp; Limitations</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">01</span>
+            <strong>Unidirectional (Capacitive Only)</strong>
+          </div>
+          <p>Can only inject leading \(+Q\); cannot absorb excess inductive \(-Q\) during light-load or off-peak conditions, risking severe overvoltage (<strong>Ferranti Effect</strong>).</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">02</span>
+            <strong>Coarse Stepwise Control &amp; Slow Response</strong>
+          </div>
+          <p>Switched in discrete steps by mechanical contactors/breakers taking seconds to minutes, plus a mandatory <strong>\(3\text{–}5\text{ min}\) discharge delay</strong> before re-closing any disconnected stage.</p>
+        </div>
+
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">03</span>
+            <strong>Poor Low-Voltage Performance (\(Q \propto V^2\))</strong>
+          </div>
+          <p>Reactive output collapses with the square of bus voltage during grid sags — losing <strong>\(51\%\)</strong> of rated kVAR at \(V = 0.70\text{ pu}\) right when voltage support is needed most.</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">04</span>
+            <strong>Harmonic Resonance &amp; Switching Transients</strong>
+          </div>
+          <p>Forms a parallel resonant circuit with grid inductance that amplifies harmonics and causes high capacitive inrush currents upon switching:</p>
+          <div class="math-box" style="padding:8px 16px;margin-top:2px;">
+            <div>$$f_r = f_1 \sqrt{\frac{S_{\text{SC}}}{Q_C}}$$</div>
+            <span class="math-note">Requires series detuning reactors (\(5.67\%\text{–}14\%\))</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 13 — Transition to Synchronous Condenser               -->
+  <!-- ============================================================ -->
+  <section class="slide transition-slide" id="slide-12">
+    <div class="slide-inner" style="gap:16px;">
+      <div class="team-header">
+        <span class="team-pill">Technological Evolution · Step 01 → Step 02</span>
+        <h2 class="team-main-title">Why Move Beyond <span>Shunt Capacitors?</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+
+      <!-- 3 Bold High-Contrast Unresolved Limitations Cards -->
+      <div class="trans-limit-grid stagger">
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 01</span>
+          </div>
+          <div class="trans-limit-title">Capacitive Only (\(+Q\))</div>
+          <div class="trans-limit-desc">Cannot absorb excess reactive power (\(-Q\)) during light-load overvoltage conditions (Ferranti effect).</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 02</span>
+          </div>
+          <div class="trans-limit-title">Coarse &amp; Slow Control</div>
+          <div class="trans-limit-desc">Stepped mechanical contactor switching with a mandatory \(3\text{–}5\text{ min}\) discharge delay before re-closing.</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 18l-9.5-9.5-5 5L1 6"/><path d="M17 18h6v-6"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 03</span>
+          </div>
+          <div class="trans-limit-title">Voltage-Sag Collapse (\(Q \propto V^2\))</div>
+          <div class="trans-limit-desc">Loses \(51\%\) output at \(0.70\text{ pu}\) voltage sag and provides zero mechanical inertia (\(H = 0\)).</div>
+        </div>
+      </div>
+
+      <!-- Sleek Directional Connector Arrow -->
+      <div class="trans-down-connector" aria-hidden="true">
+        <div class="trans-down-line"></div>
+        <div class="trans-down-badge">
+          <div class="trans-down-badge-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="var(--sc)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="trans-down-line"></div>
+      </div>
+
+      <!-- Prominent Orange-Accented Next Solution Banner Card -->
+      <div class="trans-next-banner" data-goto="13">
+        <div class="trans-next-left">
+          <div class="trans-next-icon">
+            <svg viewBox="0 0 64 64" width="40" height="40">
+              <circle cx="32" cy="34" r="20" fill="none" stroke="var(--sc)" stroke-width="3.8"/>
+              <circle cx="32" cy="34" r="11" fill="none" stroke="var(--sc)" stroke-width="2.2" stroke-dasharray="4 3"/>
+              <line x1="32" y1="6" x2="32" y2="14" stroke="var(--sc)" stroke-width="3.8" stroke-linecap="round"/>
+              <text x="32" y="39" text-anchor="middle" fill="var(--sc)" font-size="14" font-weight="800">SC</text>
+            </svg>
+          </div>
+          <div>
+            <div class="trans-next-kicker">Next Solution · Generation 02</div>
+            <div class="trans-next-title">Synchronous Condenser (SC)</div>
+          </div>
+        </div>
+        <div class="trans-solve-pills">
+          <span class="trans-solve-pill">Continuous \(\pm Q\) Regulation</span>
+          <span class="trans-solve-pill">True Mechanical Inertia \(H\)</span>
+          <span class="trans-solve-pill">High Fault Current (\(4\text{–}6\text{ pu}\))</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 13 — Section 03: Synchronous Condenser                 -->
+  <!-- ============================================================ -->
+  <section class="slide section-slide" id="slide-13">
+    <div class="slide-inner">
+      <span class="section-badge text-sc">Technology 02 of 04</span>
+      <h2 class="slide-title text-sc" style="font-size:clamp(2.8rem,5vw,4.2rem);">Synchronous Condenser (SC)</h2>
+      <p class="slide-subtitle">Rotating Synchronous Machine Operating at No Mechanical Load for Dynamic VAR &amp; Inertia Support</p>
+      <div class="presented-by-label">Presented By</div>
+      <div class="presenters sec-sc stagger">
+        <div class="presenter-chip">
+          <span class="speaker-name">Hassan Mohamed Abdel Moneim</span>
+          <span class="speaker-id">ID: 20220853</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Moataz Haitham Mohamed</span>
+          <span class="speaker-id">ID: 20220836</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Essam Mohamed Mohamed</span>
+          <span class="speaker-id">ID: 20220989</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 15 — SC: Construction & Operating Principle            -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-14">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-sc">Synchronous Condenser · Construction &amp; Principle</div>
+        <h2 class="slide-title">Construction &amp; Operating Principle</h2>
+      </div>
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <div class="svg-diagram" style="flex:1;display:flex;align-items:center;justify-content:center;padding:14px 16px;">
+            <svg viewBox="0 0 640 246" width="100%" style="max-height:252px;">
+              <defs>
+                <marker id="arrScP" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--p)"/>
+                </marker>
+                <marker id="arrScO" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="var(--sc)"/>
+                </marker>
+              </defs>
+
+              <!-- 1. Left: AC Grid Busbar -->
+              <line x1="42" y1="32" x2="42" y2="214" stroke="var(--p)" stroke-width="5" stroke-linecap="round"/>
+              <text x="42" y="20" text-anchor="middle" fill="var(--p)" font-size="12.5" font-weight="800">AC Bus (<tspan font-style="italic">V</tspan>)</text>
+
+              <!-- 3-Phase Stator Connection with Bidirectional ±Q_SC Flow -->
+              <line x1="42" y1="126" x2="152" y2="126" stroke="var(--p)" stroke-width="3" class="flow-line" marker-start="url(#arrScP)" marker-end="url(#arrScP)"/>
+              <!-- 3-Phase Slash Marks -->
+              <line x1="88" y1="118" x2="96" y2="134" stroke="var(--tx)" stroke-width="1.8"/>
+              <line x1="95" y1="118" x2="103" y2="134" stroke="var(--tx)" stroke-width="1.8"/>
+              <line x1="102" y1="118" x2="110" y2="134" stroke="var(--tx)" stroke-width="1.8"/>
+              <text x="97" y="106" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="800">3-Ph Stator</text>
+              <text x="97" y="152" text-anchor="middle" fill="var(--sc)" font-size="11" font-weight="800">±<tspan font-style="italic">Q</tspan><tspan dy="3" font-size="8.5">SC</tspan><tspan dy="-3"> Exchange</tspan></text>
+
+              <!-- 2. Center: Concentric Stator & 4-Pole Salient DC Rotor -->
+              <!-- Top Label Cleanly Above Stator Outer Ring -->
+              <text x="246" y="22" text-anchor="middle" fill="var(--p)" font-size="12" font-weight="800">Stator 3-Phase Armature Winding</text>
+
+              <!-- Stator Outer Lamination Ring -->
+              <circle cx="246" cy="126" r="88" fill="var(--surf-2)" stroke="var(--p)" stroke-width="3.2"/>
+              <!-- Stator Inner Bore & Winding Slot Ring -->
+              <circle cx="246" cy="126" r="70" fill="var(--bg)" stroke="var(--p)" stroke-width="1.8" stroke-dasharray="6 4"/>
+              <!-- 6 Stator Winding Coils Around Bore -->
+              <circle cx="246" cy="47" r="4.5" fill="var(--p)"/>
+              <circle cx="246" cy="205" r="4.5" fill="var(--p)"/>
+              <circle cx="177" cy="86" r="4.5" fill="var(--p)"/>
+              <circle cx="315" cy="86" r="4.5" fill="var(--p)"/>
+              <circle cx="177" cy="166" r="4.5" fill="var(--p)"/>
+              <circle cx="315" cy="166" r="4.5" fill="var(--p)"/>
+
+              <!-- 4 Salient Rotor Poles Hints -->
+              <rect x="234" y="66" width="24" height="14" rx="4" fill="rgba(234,88,12,0.18)" stroke="var(--sc)" stroke-width="1.5"/>
+              <rect x="234" y="172" width="24" height="14" rx="4" fill="rgba(234,88,12,0.18)" stroke="var(--sc)" stroke-width="1.5"/>
+              <rect x="186" y="114" width="14" height="24" rx="4" fill="rgba(234,88,12,0.18)" stroke="var(--sc)" stroke-width="1.5"/>
+              <rect x="292" y="114" width="14" height="24" rx="4" fill="rgba(234,88,12,0.18)" stroke="var(--sc)" stroke-width="1.5"/>
+
+              <!-- DC Rotor Hub -->
+              <circle cx="246" cy="126" r="47" fill="var(--surf)" stroke="var(--sc)" stroke-width="3"/>
+              <!-- Rotation Speed Arc Inside Rotor -->
+              <path d="M 218,102 A 34,34 0 0 1 274,102" fill="none" stroke="var(--sc)" stroke-width="1.6" stroke-dasharray="3 2" marker-end="url(#arrScO)"/>
+              <text x="246" y="122" text-anchor="middle" fill="var(--sc)" font-size="13.5" font-weight="800">DC Rotor</text>
+              <text x="246" y="141" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="700">Field <tspan font-style="italic">E</tspan><tspan dy="3" font-size="8.5">f</tspan><tspan dy="-3"> (</tspan><tspan font-style="italic">N</tspan><tspan dy="3" font-size="8.5">s</tspan><tspan dy="-3">)</tspan></text>
+
+              <!-- Bottom Label Cleanly Below Stator Outer Ring -->
+              <text x="246" y="232" text-anchor="middle" fill="var(--mut)" font-size="11" font-weight="700">Rotating Mass (<tspan font-style="italic">H</tspan> ≈ 1.2–3.0 s)</text>
+
+              <!-- 3. Mechanical Free Shaft (No Mechanical Load) -->
+              <rect x="334" y="120" width="96" height="12" rx="4" fill="var(--surf-2)" stroke="var(--mut)" stroke-width="2"/>
+              <text x="382" y="108" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="800">Free Shaft</text>
+              <text x="382" y="149" text-anchor="middle" fill="var(--ok)" font-size="10.5" font-weight="700">(No Mech. Load)</text>
+
+              <!-- 4. Right: AVR & Brushless Exciter System -->
+              <rect x="434" y="76" width="186" height="100" rx="14" fill="var(--surf-2)" stroke="var(--sc)" stroke-width="2.6"/>
+              <text x="527" y="105" text-anchor="middle" fill="var(--sc)" font-size="14.5" font-weight="800">AVR &amp; Exciter</text>
+              <text x="527" y="126" text-anchor="middle" fill="var(--tx)" font-size="12" font-weight="700">Regulates DC Field <tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">f</tspan></text>
+              <text x="527" y="146" text-anchor="middle" fill="var(--mut)" font-size="10.5" font-weight="600">Controls Induced EMF <tspan font-style="italic">E</tspan><tspan dy="3" font-size="8">f</tspan></text>
+              <text x="527" y="164" text-anchor="middle" fill="var(--sc)" font-size="10" font-weight="800">Over/Under-Excitation</text>
+
+              <!-- Animated DC Field Current Injection Loop from AVR into Rotor -->
+              <path d="M 434,92 L 352,92 L 312,108" fill="none" stroke="var(--sc)" stroke-width="2.4" class="flow-line" marker-end="url(#arrScO)"/>
+              <text x="384" y="82" text-anchor="middle" fill="var(--sc)" font-size="11" font-weight="800">Injects DC <tspan font-style="italic">I</tspan><tspan dy="3" font-size="8.5">f</tspan></text>
+
+              <!-- Voltage Sensing Feedback Path from AC Bus to AVR -->
+              <path d="M 42,204 L 527,204 L 527,178" fill="none" stroke="var(--p)" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrScP)"/>
+              <text x="435" y="196" text-anchor="middle" fill="var(--p)" font-size="10.5" font-weight="700">Closed-Loop Bus Voltage Sensing (<tspan font-style="italic">V</tspan><tspan dy="2.5" font-size="8">bus</tspan><tspan dy="-2.5">)</tspan></text>
+            </svg>
+          </div>
+          <div class="math-box" style="padding:11px 18px;">
+            <div>$$N_s = \frac{120 f}{P} \qquad Q_{\text{SC}} \approx \frac{V \cdot (E_f - V)}{X_s}$$</div>
+          </div>
+        </div>
+
+        <!-- Right Column: Consolidated from 5 items into 3 Scannable Cards -->
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <!-- Card 1: What It Is + Excitation Control via AVR -->
+          <div class="card" style="border-top-color:var(--sc);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge amber" style="color:var(--sc);border-color:var(--sc);background:rgba(234,88,12,0.12);">01</span>
+              <strong>No-Load Synchronous Machine &amp; AVR Control</strong>
+            </div>
+            <p style="font-size:0.98rem;line-height:1.48;">A 3-phase synchronous machine connected in parallel with the grid running with <strong>no mechanical shaft load</strong> at synchronous speed \(N_s\) (\(1500\text{ rpm}\) at \(50\text{ Hz}\)). An <strong>Automatic Voltage Regulator (AVR)</strong> adjusts DC rotor field current \(I_f\) to vary internal induced EMF \(E_f\).</p>
+          </div>
+
+          <!-- Card 2: Side-by-Side 2-Column Comparison of Over-Excited vs Under-Excited -->
+          <div class="card" style="border-top-color:var(--p);padding:15px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge">02</span>
+              <strong>Bidirectional Operating Modes (\(E_f\) vs. \(V\))</strong>
+            </div>
+            <div class="mini-two-col">
+              <div class="mini-bank-card" style="--card-clr:var(--sc);">
+                <div class="mini-bank-title" style="color:var(--sc);">Over-Excited (\(E_f > V\))</div>
+                <div class="mini-bank-desc">Armature current leads \(V\); acts as a stepless capacitor injecting <strong>\(+Q\)</strong> to raise bus voltage.</div>
+              </div>
+              <div class="mini-bank-card" style="--card-clr:var(--cap);">
+                <div class="mini-bank-title" style="color:var(--cap);">Under-Excited (\(E_f < V\))</div>
+                <div class="mini-bank-desc">Armature current lags \(V\); acts as a variable reactor absorbing <strong>\(-Q\)</strong> to limit high voltage.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Starting & Synchronization -->
+          <div class="card" style="border-top-color:var(--ok);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge ok">03</span>
+              <strong>Starting &amp; Synchronization</strong>
+            </div>
+            <p style="font-size:0.98rem;line-height:1.48;">Because a synchronous rotor has zero starting torque at \(50\text{ Hz}\), it is accelerated to synchronous speed \(N_s\) prior to breaker closure using an auxiliary <strong>Pony Motor</strong> on the shaft or a solid-state <strong>Static Frequency Converter (SFC)</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 16 — SC: Interactive V-Curve & Phasor Diagram          -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-15">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-sc">Synchronous Condenser · Interactive Simulation</div>
+        <h2 class="slide-title">V-Curve &amp; Phasor Diagram Analysis</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-sc-vcurve" class="widget" data-max-h="245"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card" style="border-top-color:var(--sc);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge amber" style="color:var(--sc);border-color:var(--sc);background:rgba(234,88,12,0.12);">01</span>
+              <strong>Understanding the V-Curve</strong>
+            </div>
+            <p style="font-size:0.96rem;line-height:1.45;">Plotting stator armature current \(I_a\) against DC field current \(I_f\) produces the classic <strong>V-Curve</strong>:</p>
+            <p style="font-size:0.94rem;line-height:1.42;">• <strong>Minimum Point (\(E_f \approx V\)):</strong> Unity PF (\(Q = 0\)) — draws only small active current for friction, windage &amp; copper losses.</p>
+            <p style="font-size:0.94rem;line-height:1.42;">• <strong>Right of Minimum (\(I_f \uparrow\)):</strong> Over-excited — injects continuous capacitive \(+Q\).</p>
+            <p style="font-size:0.94rem;line-height:1.42;">• <strong>Left of Minimum (\(I_f \downarrow\)):</strong> Under-excited — absorbs continuous inductive \(-Q\).</p>
+          </div>
+          <div class="card" style="border-top-color:var(--ok);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge ok">02</span>
+              <strong>Unique Advantage in Modern Renewable Grids</strong>
+            </div>
+            <p style="font-size:0.96rem;line-height:1.46;">Unlike power-electronic converters, the heavy steel rotor stores kinetic energy \(E_k = \frac{1}{2}J\omega_m^2\), providing physical <strong>Mechanical Inertia (\(H \approx 1.2\text{–}3.0\text{ s}\))</strong> that limits Rate of Change of Frequency (RoCoF) and injects \(4\text{–}6\text{ pu}\) fault current.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 17A — SC: Advantages & Applications                    -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-16">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-sc">Synchronous Condenser · Key Strengths &amp; Grid Support</div>
+        <h2 class="slide-title">Synchronous Condenser: Advantages &amp; Applications</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">01</span>
+            <strong>Smooth Bidirectional Control (\(+Q\) &amp; \(-Q\))</strong>
+          </div>
+          <p>Continuously regulates reactive power from inductive absorption to capacitive injection via DC field current \(I_f\) with zero switching transients.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">02</span>
+            <strong>Real Mechanical Inertia (\(H\)) &amp; Fault Strength</strong>
+          </div>
+          <p>The <em>only</em> shunt compensator that physically stabilizes grid frequency (limits RoCoF) and supplies \(4\text{–}6\text{ pu}\) short-circuit current to trip protection relays.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">03</span>
+            <strong>Superior Low-Voltage &amp; Overload Capability</strong>
+          </div>
+          <p>Internal EMF \(E_f\) supports bus voltage immediately during grid sags; <em>Field Forcing</em> delivers up to \(2.0\times\) rated MVAR for several seconds during faults.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">04</span>
+            <strong>Pure Sinusoidal Output &amp; Long Lifespan</strong>
+          </div>
+          <p>Generates zero switching harmonics (requiring no harmonic filter yards) and offers a rugged utility service life of \(35\text{–}40+\text{ years}\).</p>
+        </div>
+      </div>
+
+      <div class="card app-bar-card" style="--card-clr:var(--sc);">
+        <span class="app-bar-label">
+          <span class="num-badge amber" style="color:var(--sc);border-color:var(--sc);background:rgba(234,88,12,0.12);">APP</span>
+          Primary Engineering Applications:
+        </span>
+        <div class="app-tags">
+          <span class="app-tag" style="color:var(--sc);background:rgba(234,88,12,0.10);border-color:rgba(234,88,12,0.32);">Weak Renewable Grids (Low SCR / Low Inertia)</span>
+          <span class="app-tag" style="color:var(--sc);background:rgba(234,88,12,0.10);border-color:rgba(234,88,12,0.32);">HVDC Converter Stations</span>
+          <span class="app-tag" style="color:var(--sc);background:rgba(234,88,12,0.10);border-color:rgba(234,88,12,0.32);">Long EHV Transmission Lines</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 17B — SC: Disadvantages & Limitations                  -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-17">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-sc">Synchronous Condenser · Technical &amp; Economic Limitations</div>
+        <h2 class="slide-title">Synchronous Condenser: Disadvantages &amp; Limitations</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">01</span>
+            <strong>Slow Dynamic Response (\(100\text{–}500\text{ ms}\))</strong>
+          </div>
+          <p>Limited by the large magnetic time constant \(T'_{d0}\) of the rotor field winding — too slow to track rapid cycle-by-cycle industrial load fluctuations or arc-furnace flicker.</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">02</span>
+            <strong>Highest Operating Losses (\(1.0\%\text{–}1.5\%\))</strong>
+          </div>
+          <p>Suffers from continuous stator and rotor \(I^2R\) copper losses, iron core losses, bearing friction, windage, and cooling auxiliary power consumption.</p>
+        </div>
+
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">03</span>
+            <strong>Heavy Mechanical Maintenance &amp; Auxiliaries</strong>
+          </div>
+          <p>Rotating shaft, high-speed bearings, lube-oil pumps, brushes/exciters, and air/hydrogen/water cooling systems require frequent scheduled maintenance.</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">04</span>
+            <strong>Complex Starting &amp; High Civil Cost</strong>
+          </div>
+          <p>Requires an auxiliary Pony Motor or Static Frequency Converter (SFC), synchronization equipment, massive reinforced concrete foundations, and acoustic enclosures.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 19 — Transition to SVC                                 -->
+  <!-- ============================================================ -->
+  <section class="slide transition-slide" id="slide-18">
+    <div class="slide-inner" style="gap:16px;">
+      <div class="team-header">
+        <span class="team-pill">Technological Evolution · Step 02 → Step 03</span>
+        <h2 class="team-main-title">Why Move Beyond the <span>Synchronous Condenser?</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+
+      <!-- 3 Bold High-Contrast Unresolved Limitations Cards -->
+      <div class="trans-limit-grid stagger">
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 01</span>
+          </div>
+          <div class="trans-limit-title">Slow Response (\(100\text{–}500\text{ ms}\))</div>
+          <div class="trans-limit-desc">Limited by rotor field time constant \(T'_{d0}\); cannot track rapid cycle-by-cycle arc-furnace flicker.</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 02</span>
+          </div>
+          <div class="trans-limit-title">Highest Losses (\(1.0\%\text{–}1.5\%\)) &amp; Maintenance</div>
+          <div class="trans-limit-desc">Continuous mechanical friction, windage, bearing wear, and cooling auxiliary power consumption.</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 03</span>
+          </div>
+          <div class="trans-limit-title">Complex Starting &amp; Civil Cost</div>
+          <div class="trans-limit-desc">Requires a Pony Motor or SFC starter, synchronization gear, and heavy reinforced concrete foundations.</div>
+        </div>
+      </div>
+
+      <!-- Sleek Directional Connector Arrow -->
+      <div class="trans-down-connector" aria-hidden="true">
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--err), var(--svc));"></div>
+        <div class="trans-down-badge" style="background:linear-gradient(135deg, var(--sc), var(--svc));box-shadow:0 8px 22px rgba(217,119,6,0.25);">
+          <div class="trans-down-badge-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="var(--svc)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--sc), var(--svc));"></div>
+      </div>
+
+      <!-- Prominent Amber-Accented Next Solution Banner Card -->
+      <div class="trans-next-banner" style="--card-clr:var(--svc);--beam-2:var(--sc);" data-goto="19">
+        <div class="trans-next-left">
+          <div class="trans-next-icon" style="background:rgba(217,119,6,0.12);border-color:var(--svc);box-shadow:0 8px 20px rgba(217,119,6,0.22);">
+            <svg viewBox="0 0 64 64" width="40" height="40">
+              <line x1="32" y1="6" x2="32" y2="16" stroke="var(--svc)" stroke-width="3.2" stroke-linecap="round"/>
+              <polygon points="18,16 46,16 32,34" fill="none" stroke="var(--svc)" stroke-width="3.2" stroke-linejoin="round"/>
+              <polygon points="18,52 46,52 32,34" fill="none" stroke="var(--svc)" stroke-width="3.2" stroke-linejoin="round"/>
+              <line x1="16" y1="34" x2="48" y2="34" stroke="var(--svc)" stroke-width="3.2" stroke-linecap="round"/>
+              <line x1="32" y1="52" x2="32" y2="59" stroke="var(--svc)" stroke-width="3.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="trans-next-kicker" style="color:var(--svc);">Next Solution · Generation 03</div>
+            <div class="trans-next-title">Static Var Compensator (SVC)</div>
+          </div>
+        </div>
+        <div class="trans-solve-pills">
+          <span class="trans-solve-pill" style="color:var(--svc);background:rgba(217,119,6,0.11);border-color:rgba(217,119,6,0.35);">1–2 Cycle Response (\(15\text{–}40\text{ ms}\))</span>
+          <span class="trans-solve-pill" style="color:var(--svc);background:rgba(217,119,6,0.11);border-color:rgba(217,119,6,0.35);">Zero Rotating Parts</span>
+          <span class="trans-solve-pill" style="color:var(--svc);background:rgba(217,119,6,0.11);border-color:rgba(217,119,6,0.35);">Solid-State Thyristor Control</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 18 — Section 04: SVC                                   -->
+  <!-- ============================================================ -->
+  <section class="slide section-slide" id="slide-19">
+    <div class="slide-inner">
+      <span class="section-badge text-svc">Technology 03 of 04</span>
+      <h2 class="slide-title text-svc" style="font-size:clamp(2.8rem,5vw,4.2rem);">Static Var Compensator (SVC)</h2>
+      <p class="slide-subtitle">First-Generation Shunt FACTS Controller — Thyristor-Controlled &amp; Switched Susceptance</p>
+      <div class="presented-by-label">Presented By</div>
+      <div class="presenters sec-svc stagger">
+        <div class="presenter-chip">
+          <span class="speaker-name">Hassan Ahmed Hassan</span>
+          <span class="speaker-id">ID: 20220870</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Ahmed Mohamed Abdel-Moaty</span>
+          <span class="speaker-id">ID: 20220967</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 21 — SVC: Architecture & Building Blocks               -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-20">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-svc">Static Var Compensator · Substation Topology</div>
+        <h2 class="slide-title">SVC Architecture &amp; Building Blocks</h2>
+      </div>
+      <div class="two-col">
+        <div class="svg-diagram" style="display:flex;align-items:center;justify-content:center;padding:12px 16px;">
+          <svg viewBox="0 0 660 390" width="100%" style="max-height:365px;">
+            <!-- 1. HV Transmission / Grid Bus -->
+            <line x1="56" y1="28" x2="604" y2="28" stroke="var(--tx)" stroke-width="4" stroke-linecap="round"/>
+            <text x="330" y="17" text-anchor="middle" fill="var(--tx)" font-size="13.5" font-weight="800">HV Transmission / Grid Bus (<tspan font-style="italic">V</tspan><tspan dy="3" font-size="9.5">grid</tspan><tspan dy="-3">)</tspan></text>
+
+            <!-- 2. Step-Down Coupling Transformer (Two Overlapping Circles) -->
+            <line x1="330" y1="28" x2="330" y2="49" stroke="var(--tx)" stroke-width="2.6"/>
+            <circle cx="330" cy="64" r="15" fill="none" stroke="var(--p)" stroke-width="2.8"/>
+            <circle cx="330" cy="86" r="15" fill="none" stroke="var(--svc)" stroke-width="2.8"/>
+            <text x="358" y="73" text-anchor="start" fill="var(--tx)" font-size="12" font-weight="800">Step-Down Coupling Xfmr</text>
+            <text x="358" y="88" text-anchor="start" fill="var(--mut)" font-size="10.5" font-weight="700">(HV → Medium Voltage)</text>
+            <line x1="330" y1="101" x2="330" y2="122" stroke="var(--svc)" stroke-width="2.8"/>
+
+            <!-- 3. SVC Medium-Voltage Bus (MV Bus) -->
+            <line x1="78" y1="122" x2="582" y2="122" stroke="var(--svc)" stroke-width="4" stroke-linecap="round"/>
+            <text x="195" y="114" text-anchor="middle" fill="var(--svc)" font-size="12" font-weight="800">SVC Medium-Voltage Bus (MV Bus)</text>
+
+            <!-- ========================================================== -->
+            <!-- BRANCH 1 (LEFT, x = 140): TCR                              -->
+            <!-- MV Bus -> Anti-Parallel Thyristor Pair (TOP) ->            -->
+            <!-- Air-Core Reactor (Inductor Coils) -> Earth Ground (⏚)     -->
+            <!-- ========================================================== -->
+            <line x1="140" y1="122" x2="140" y2="148" stroke="#D97706" stroke-width="2.5" class="flow-line"/>
+            <!-- Anti-Parallel Thyristor Valve Pair (Side-by-Side Opposite Triangles) -->
+            <line x1="116" y1="148" x2="164" y2="148" stroke="#D97706" stroke-width="2.3"/>
+            <line x1="116" y1="148" x2="116" y2="212" stroke="#D97706" stroke-width="2.2"/>
+            <line x1="164" y1="148" x2="164" y2="212" stroke="#D97706" stroke-width="2.2"/>
+            <!-- Left Thyristor (Pointing DOWN) -->
+            <polygon points="105,166 127,166 116,190" fill="var(--surf-2)" stroke="#D97706" stroke-width="2.2" stroke-linejoin="round"/>
+            <line x1="105" y1="190" x2="127" y2="190" stroke="#D97706" stroke-width="2.5"/>
+            <polyline points="111,190 104,197 98,197" fill="none" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Right Thyristor (Pointing UP) -->
+            <polygon points="153,192 175,192 164,168" fill="var(--surf-2)" stroke="#D97706" stroke-width="2.2" stroke-linejoin="round"/>
+            <line x1="153" y1="168" x2="175" y2="168" stroke="#D97706" stroke-width="2.5"/>
+            <polyline points="169,168 176,161 182,161" fill="none" stroke="#D97706" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="116" y1="212" x2="164" y2="212" stroke="#D97706" stroke-width="2.3"/>
+
+            <!-- Connection to Air-Core Reactor Below -->
+            <line x1="140" y1="212" x2="140" y2="230" stroke="#D97706" stroke-width="2.5"/>
+            <!-- Crisp 4-Loop Inductor Coils (Air-Core Reactor) -->
+            <path d="M 140,230 A 9,8.5 0 0,1 140,247 A 9,8.5 0 0,1 140,264 A 9,8.5 0 0,1 140,281 A 9,8.5 0 0,1 140,298" fill="none" stroke="#D97706" stroke-width="2.8" stroke-linecap="round"/>
+            <text x="95" y="268" text-anchor="end" fill="#D97706" font-size="10.5" font-weight="800"><tspan font-style="italic">L</tspan><tspan dy="2.5" font-size="8">TCR</tspan></text>
+
+            <!-- Independent Earth Ground Symbol (⏚) at Bottom -->
+            <line x1="140" y1="298" x2="140" y2="322" stroke="#D97706" stroke-width="2.5"/>
+            <line x1="122" y1="322" x2="158" y2="322" stroke="var(--mut)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="128" y1="329" x2="152" y2="329" stroke="var(--mut)" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="134" y1="336" x2="146" y2="336" stroke="var(--mut)" stroke-width="2" stroke-linecap="round"/>
+
+            <text x="140" y="360" text-anchor="middle" fill="#D97706" font-size="13.5" font-weight="800">1. TCR Branch</text>
+            <text x="140" y="377" text-anchor="middle" fill="var(--mut)" font-size="11" font-weight="700">Continuous −<tspan font-style="italic">Q</tspan><tspan dy="3" font-size="8.5">L</tspan><tspan dy="-3">(α)</tspan></text>
+
+            <!-- ========================================================== -->
+            <!-- BRANCH 2 (MIDDLE, x = 330): TSC                            -->
+            <!-- MV Bus -> Anti-Parallel Thyristor Pair (TOP) ->            -->
+            <!-- Capacitor Symbol -> Earth Ground (⏚)                      -->
+            <!-- ========================================================== -->
+            <line x1="330" y1="122" x2="330" y2="148" stroke="var(--cap)" stroke-width="2.5" class="flow-line"/>
+            <!-- Anti-Parallel Thyristor Valve Pair (Side-by-Side Opposite Triangles) -->
+            <line x1="306" y1="148" x2="354" y2="148" stroke="var(--cap)" stroke-width="2.3"/>
+            <line x1="306" y1="148" x2="306" y2="212" stroke="var(--cap)" stroke-width="2.2"/>
+            <line x1="354" y1="148" x2="354" y2="212" stroke="var(--cap)" stroke-width="2.2"/>
+            <!-- Left Thyristor (Pointing DOWN) -->
+            <polygon points="295,166 317,166 306,190" fill="var(--surf-2)" stroke="var(--cap)" stroke-width="2.2" stroke-linejoin="round"/>
+            <line x1="295" y1="190" x2="317" y2="190" stroke="var(--cap)" stroke-width="2.5"/>
+            <polyline points="301,190 294,197 288,197" fill="none" stroke="var(--cap)" stroke-width="1.8" stroke-linecap="round"/>
+            <!-- Right Thyristor (Pointing UP) -->
+            <polygon points="343,192 365,192 354,168" fill="var(--surf-2)" stroke="var(--cap)" stroke-width="2.2" stroke-linejoin="round"/>
+            <line x1="343" y1="168" x2="365" y2="168" stroke="var(--cap)" stroke-width="2.5"/>
+            <polyline points="359,168 366,161 372,161" fill="none" stroke="var(--cap)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="306" y1="212" x2="354" y2="212" stroke="var(--cap)" stroke-width="2.3"/>
+
+            <!-- Connection to Capacitor Symbol Below -->
+            <line x1="330" y1="212" x2="330" y2="256" stroke="var(--cap)" stroke-width="2.5"/>
+            <line x1="306" y1="256" x2="354" y2="256" stroke="var(--cap)" stroke-width="4.2" stroke-linecap="round"/>
+            <line x1="306" y1="269" x2="354" y2="269" stroke="var(--cap)" stroke-width="4.2" stroke-linecap="round"/>
+            <text x="364" y="266" text-anchor="start" fill="var(--cap)" font-size="10.5" font-weight="800"><tspan font-style="italic">C</tspan><tspan dy="2.5" font-size="8">TSC</tspan></text>
+
+            <!-- Independent Earth Ground Symbol (⏚) at Bottom -->
+            <line x1="330" y1="269" x2="330" y2="322" stroke="var(--cap)" stroke-width="2.5"/>
+            <line x1="312" y1="322" x2="348" y2="322" stroke="var(--mut)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="318" y1="329" x2="342" y2="329" stroke="var(--mut)" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="324" y1="336" x2="336" y2="336" stroke="var(--mut)" stroke-width="2" stroke-linecap="round"/>
+
+            <text x="330" y="360" text-anchor="middle" fill="var(--cap)" font-size="13.5" font-weight="800">2. TSC Branch</text>
+            <text x="330" y="377" text-anchor="middle" fill="var(--mut)" font-size="11" font-weight="700">Zero-Transient +<tspan font-style="italic">Q</tspan><tspan dy="3" font-size="8.5">C</tspan></text>
+
+            <!-- ========================================================== -->
+            <!-- BRANCH 3 (RIGHT, x = 520): Harmonic Filter / FC            -->
+            <!-- MV Bus -> Tuning Reactor (Inductor TOP) ->                 -->
+            <!-- Capacitor Below -> Earth Ground (⏚)                       -->
+            <!-- ========================================================== -->
+            <line x1="520" y1="122" x2="520" y2="152" stroke="var(--ok)" stroke-width="2.5" class="flow-line"/>
+            <!-- Tuning Reactor (4-Loop Inductor Coils on TOP) -->
+            <path d="M 520,152 A 9,8.5 0 0,1 520,169 A 9,8.5 0 0,1 520,186 A 9,8.5 0 0,1 520,203 A 9,8.5 0 0,1 520,220" fill="none" stroke="var(--ok)" stroke-width="2.8" stroke-linecap="round"/>
+            <text x="540" y="190" text-anchor="start" fill="var(--ok)" font-size="10.5" font-weight="800"><tspan font-style="italic">L</tspan><tspan dy="2.5" font-size="8">F</tspan></text>
+
+            <!-- Connection to Filter Capacitor Below -->
+            <line x1="520" y1="220" x2="520" y2="256" stroke="var(--ok)" stroke-width="2.5"/>
+            <line x1="496" y1="256" x2="544" y2="256" stroke="var(--ok)" stroke-width="4.2" stroke-linecap="round"/>
+            <line x1="496" y1="269" x2="544" y2="269" stroke="var(--ok)" stroke-width="4.2" stroke-linecap="round"/>
+            <text x="554" y="266" text-anchor="start" fill="var(--ok)" font-size="10.5" font-weight="800"><tspan font-style="italic">C</tspan><tspan dy="2.5" font-size="8">F</tspan></text>
+
+            <!-- Independent Earth Ground Symbol (⏚) at Bottom -->
+            <line x1="520" y1="269" x2="520" y2="322" stroke="var(--ok)" stroke-width="2.5"/>
+            <line x1="502" y1="322" x2="538" y2="322" stroke="var(--mut)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="508" y1="329" x2="532" y2="329" stroke="var(--mut)" stroke-width="2.4" stroke-linecap="round"/>
+            <line x1="514" y1="336" x2="526" y2="336" stroke="var(--mut)" stroke-width="2" stroke-linecap="round"/>
+
+            <text x="520" y="360" text-anchor="middle" fill="var(--ok)" font-size="13.5" font-weight="800">3. Tuned Filter / FC</text>
+            <text x="520" y="377" text-anchor="middle" fill="var(--mut)" font-size="11" font-weight="700">5th &amp; 7th Filter (+<tspan font-style="italic">Q</tspan><tspan dy="3" font-size="8.5">C</tspan><tspan dy="-3">)</tspan></text>
+          </svg>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:11px;justify-content:space-between;">
+          <div class="card" style="border-top-color:var(--svc);padding:13px 18px;gap:5px;">
+            <div class="card-head">
+              <span class="num-badge amber">01</span>
+              <strong>Thyristor-Controlled Reactor (TCR)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.45;">Anti-parallel thyristor valve pair at the top in series with an air-core reactor \(L_{\text{TCR}}\). Phase-controlling firing angle \(\alpha \in [90^\circ, 180^\circ]\) absorbs variable inductive reactive power \(-Q_L(\alpha)\) smoothly.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--cap);padding:13px 18px;gap:5px;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--cap);border-color:var(--cap);background:rgba(2,132,199,0.12);">02</span>
+              <strong>Thyristor-Switched Capacitor (TSC)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.45;">Anti-parallel thyristor valve pair switches capacitor bank \(C_{\text{TSC}}\) strictly <strong>ON or OFF</strong> at zero valve voltage (\(v_T = 0\)) to supply discrete capacitive steps \(+Q_C\) with zero inrush transients.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--ok);padding:13px 18px;gap:5px;">
+            <div class="card-head">
+              <span class="num-badge ok">03</span>
+              <strong>Harmonic Filters &amp; Fixed Capacitors (FC)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.45;">Series tuning reactor \(L_F\) on top of capacitor \(C_F\) absorbs \(5\text{th}\) &amp; \(7\text{th}\) odd harmonics generated by the TCR (while 3rd harmonics are trapped in \(\Delta\)) and provides base capacitive \(+Q_C\).</p>
+          </div>
+
+          <div class="math-box" style="padding:10px 16px;margin-top:0;">
+            <div>$$B_{\text{SVC}}(\alpha) = B_C - B_{\text{TCR}}(\alpha) \qquad Q_{\text{SVC}} = -V^2 \cdot B_{\text{SVC}}(\alpha)$$</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 22 — SVC: TCR Firing Angle & Oscilloscope              -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-21">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-svc">Static Var Compensator · Interactive Waveform Simulation</div>
+        <h2 class="slide-title">TCR Firing Angle (\(\alpha\)) &amp; Conduction Control</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-tcr-scope" class="widget" data-max-h="240"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card" style="border-top-color:var(--svc);padding:14px 18px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge amber">01</span>
+              <strong>Mathematical Equations of the TCR</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.44;">Delaying the thyristor gate trigger pulse from \(\alpha = 90^\circ\) (full conduction, \(\sigma = 180^\circ\)) to \(\alpha = 180^\circ\) (zero conduction, \(\sigma = 0^\circ\)) controls fundamental inductive susceptance:</p>
+            <div class="math-box" style="padding:8px 14px;margin-top:2px;">
+              <div>$$i_{\text{TCR}}(\theta) = \frac{V_m}{\omega L}\left(\cos\alpha - \cos\theta\right), \quad \sigma = 2(\pi - \alpha)$$</div>
+            </div>
+            <div class="math-box" style="padding:8px 14px;margin-top:2px;">
+              <div>$$B_{\text{TCR}}(\alpha) = B_{L,\max}\!\left(2 - \frac{2\alpha}{\pi} + \frac{\sin(2\alpha)}{\pi}\right)$$</div>
+            </div>
+          </div>
+          <div class="card" style="border-top-color:var(--ok);padding:14px 18px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge ok">02</span>
+              <strong>Why TCRs Are Connected in Delta (\(\Delta\))</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.45;">In a balanced 3-phase \(\Delta\)-connected TCR, all <strong>triplen harmonics (\(3\text{rd}, 9\text{th}, 15\text{th}\))</strong> circulate inside the closed \(\Delta\) loop and never enter the utility grid — so only \(5\text{th}\) and \(7\text{th}\) tuned filters are needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 23 — SVC: V-I Characteristic                           -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-22">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-svc">Static Var Compensator · Closed-Loop Voltage Regulation</div>
+        <h2 class="slide-title">SVC V–I Characteristic &amp; Operating Zones</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-svc-vi" class="widget" data-max-h="230"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <div class="card" style="border-top-color:var(--ok);padding:13px 18px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge ok">01</span>
+              <strong>Linear Voltage Control Droop Zone</strong>
+            </div>
+            <p style="font-size:0.94rem;line-height:1.44;">Between \(I_{C,\max}\) and \(I_{L,\max}\), the PI controller continuously adjusts \(\alpha\) to hold bus voltage along a slight droop slope \(X_{\text{SL}} \approx 2\%\text{–}5\%\):</p>
+            <div class="math-box" style="padding:8px 14px;margin-top:2px;">
+              <div>$$V = V_{\text{ref}} + X_{\text{SL}} \cdot I_{\text{SVC}}$$</div>
+            </div>
+          </div>
+
+          <div class="card" style="border-top-color:var(--cap);padding:13px 18px;gap:5px;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--cap);border-color:var(--cap);background:rgba(2,132,199,0.12);">02</span>
+              <strong>Full Capacitive Limit (\(V &lt; V_{\min}\))</strong>
+            </div>
+            <p style="font-size:0.94rem;line-height:1.44;">All TSCs are ON and the TCR is fully OFF (\(\alpha = 180^\circ\)). The SVC acts as a <strong>fixed capacitor \(B_{C,\max}\)</strong>, so maximum reactive output drops with \(Q_{\max} = V^2 B_{C,\max}\).</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--sc);padding:13px 18px;gap:5px;">
+            <div class="card-head">
+              <span class="num-badge amber">03</span>
+              <strong>Full Inductive Limit (\(V &gt; V_{\max}\))</strong>
+            </div>
+            <p style="font-size:0.94rem;line-height:1.44;">All TSCs are OFF and the TCR conducts fully (\(\alpha = 90^\circ\)), acting as a fixed reactor \(B_{L,\max}\) to absorb excess \(-Q\) during overvoltages.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 24A — SVC: Advantages & Applications                   -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-23">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-svc">Static Var Compensator · Key Strengths &amp; Industrial Use Cases</div>
+        <h2 class="slide-title">SVC: Advantages &amp; Applications</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">01</span>
+            <strong>Fast Cycle-by-Cycle Response (\(15\text{–}40\text{ ms}\))</strong>
+          </div>
+          <p>Solid-state thyristor phase control responds within \(1\text{–}2\text{ cycles}\), tracking rapid industrial load swings and suppressing arc-furnace voltage flicker.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">02</span>
+            <strong>Continuous Bidirectional Control (\(+Q\) &amp; \(-Q\))</strong>
+          </div>
+          <p>Combines zero-transient TSC/FC capacitive banks with vernier TCR inductive phase control for smooth, stepless reactive power regulation.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">03</span>
+            <strong>100% Static — Zero Rotating Parts</strong>
+          </div>
+          <p>Eliminates rotating shafts, pony motors, bearing wear, and synchronization gear, greatly reducing mechanical maintenance compared to synchronous condensers.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">04</span>
+            <strong>Mature, Proven &amp; Cost-Effective FACTS</strong>
+          </div>
+          <p>Decades of proven high-power utility reliability with rugged line-commutated thyristors at a lower capital cost than VSC-based STATCOMs.</p>
+        </div>
+      </div>
+
+      <div class="card app-bar-card" style="--card-clr:var(--svc);">
+        <span class="app-bar-label">
+          <span class="num-badge amber">APP</span>
+          Primary Engineering Applications:
+        </span>
+        <div class="app-tags">
+          <span class="app-tag" style="color:var(--svc);background:rgba(217,119,6,0.10);border-color:rgba(217,119,6,0.32);">Electric Arc Furnaces (EAF Flicker Mitigation)</span>
+          <span class="app-tag" style="color:var(--svc);background:rgba(217,119,6,0.10);border-color:rgba(217,119,6,0.32);">Heavy Steel Rolling Mills</span>
+          <span class="app-tag" style="color:var(--svc);background:rgba(217,119,6,0.10);border-color:rgba(217,119,6,0.32);">Transmission Midpoint Voltage Support</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 24B — SVC: Disadvantages & Limitations                 -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-24">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-svc">Static Var Compensator · Technical Limitations</div>
+        <h2 class="slide-title">SVC: Disadvantages &amp; Limitations</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">01</span>
+            <strong>Low-Voltage Degradation (\(Q \propto V^2\))</strong>
+          </div>
+          <p>Once pushed to its capacitive limit during a deep voltage sag, the SVC becomes a fixed capacitor \(B_{C,\max}\) — losing <strong>\(51\%\)</strong> of its reactive output at \(V = 0.70\text{ pu}\).</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">02</span>
+            <strong>Harmonic Generation (\(5\text{th}, 7\text{th}, 11\text{th}, 13\text{th}\))</strong>
+          </div>
+          <p>Phase-controlled TCRs chop the sinusoidal current waveform and inject odd harmonics into the MV bus, requiring large, mandatory passive LC filter banks.</p>
+        </div>
+
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">03</span>
+            <strong>Largest Physical Footprint (\(2\text{–}3\times\) STATCOM)</strong>
+          </div>
+          <p>Large air-core reactors, TSC capacitor banks, and dedicated passive harmonic filter yards occupy \(2\times\) to \(3\times\) the substation land area of an equivalent STATCOM.</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">04</span>
+            <strong>Zero Inertia (\(H = 0\)) &amp; Resonance Risk</strong>
+          </div>
+          <p>Provides no physical mechanical inertia to limit frequency RoCoF, and its large shunt capacitance can trigger LC resonance in weak grids (low ESCR).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 26 — Transition to STATCOM                             -->
+  <!-- ============================================================ -->
+  <section class="slide transition-slide" id="slide-25">
+    <div class="slide-inner" style="gap:16px;">
+      <div class="team-header">
+        <span class="team-pill">Technological Evolution · Step 03 → Step 04</span>
+        <h2 class="team-main-title">Why Move Beyond the <span>Static Var Compensator?</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+
+      <!-- 3 Bold High-Contrast Unresolved Limitations Cards -->
+      <div class="trans-limit-grid stagger">
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 18l-9.5-9.5-5 5L1 6"/><path d="M17 18h6v-6"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 01</span>
+          </div>
+          <div class="trans-limit-title">Voltage-Sag Collapse (\(Q \propto V^2\))</div>
+          <div class="trans-limit-desc">Loses \(51\%\) capacitive output at \(0.70\text{ pu}\) voltage sag, just like fixed shunt capacitors.</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 02</span>
+          </div>
+          <div class="trans-limit-title">Huge Footprint (\(2\text{–}3\times\) STATCOM)</div>
+          <div class="trans-limit-desc">Requires bulky air-core reactors and large passive LC harmonic filter yards.</div>
+        </div>
+
+        <div class="trans-limit-card">
+          <div class="trans-limit-top">
+            <div class="trans-warn-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+              </svg>
+            </div>
+            <span class="trans-limit-tag">Unresolved Limitation 03</span>
+          </div>
+          <div class="trans-limit-title">Semi-Controlled Delay (\(15\text{–}40\text{ ms}\))</div>
+          <div class="trans-limit-desc">Thyristors cannot turn off via gate; must wait for natural current zero-crossing.</div>
+        </div>
+      </div>
+
+      <!-- Sleek Directional Connector Arrow -->
+      <div class="trans-down-connector" aria-hidden="true">
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--err), var(--stat));"></div>
+        <div class="trans-down-badge" style="background:linear-gradient(135deg, var(--svc), var(--stat));box-shadow:0 8px 22px rgba(124,58,237,0.25);">
+          <div class="trans-down-badge-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="var(--stat)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--svc), var(--stat));"></div>
+      </div>
+
+      <!-- Prominent Purple-Accented Next Solution Banner Card -->
+      <div class="trans-next-banner" style="--card-clr:var(--stat);--beam-2:var(--p);" data-goto="26">
+        <div class="trans-next-left">
+          <div class="trans-next-icon" style="background:rgba(124,58,237,0.12);border-color:var(--stat);box-shadow:0 8px 20px rgba(124,58,237,0.22);">
+            <svg viewBox="0 0 64 64" width="40" height="40">
+              <rect x="10" y="12" width="44" height="40" rx="8" fill="none" stroke="var(--stat)" stroke-width="3.4"/>
+              <line x1="14" y1="48" x2="50" y2="16" stroke="var(--stat)" stroke-width="2.6"/>
+              <text x="22" y="28" text-anchor="middle" fill="var(--stat)" font-size="13" font-weight="800">≈</text>
+              <text x="42" y="45" text-anchor="middle" fill="var(--stat)" font-size="12" font-weight="800">=</text>
+            </svg>
+          </div>
+          <div>
+            <div class="trans-next-kicker" style="color:var(--stat);">Next Solution · Generation 04</div>
+            <div class="trans-next-title">STATCOM (Voltage-Source Converter)</div>
+          </div>
+        </div>
+        <div class="trans-solve-pills">
+          <span class="trans-solve-pill" style="color:var(--stat);background:rgba(124,58,237,0.11);border-color:rgba(124,58,237,0.35);">&lt; 5–10 ms Sub-Cycle Response</span>
+          <span class="trans-solve-pill" style="color:var(--stat);background:rgba(124,58,237,0.11);border-color:rgba(124,58,237,0.35);">Linear \(Q \propto V\) Sag Support</span>
+          <span class="trans-solve-pill" style="color:var(--stat);background:rgba(124,58,237,0.11);border-color:rgba(124,58,237,0.35);">Compact Footprint</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 24 — Section 05: STATCOM                               -->
+  <!-- ============================================================ -->
+  <section class="slide section-slide" id="slide-26">
+    <div class="slide-inner">
+      <span class="section-badge text-stat">Technology 04 of 04</span>
+      <h2 class="slide-title text-stat" style="font-size:clamp(2.8rem,5vw,4.2rem);">STATCOM</h2>
+      <p class="slide-subtitle">Static Synchronous Compensator — Gate-Commutated IGBT Voltage-Source Converter (VSC)</p>
+      <div class="presented-by-label">Presented By</div>
+      <div class="presenters sec-stat stagger">
+        <div class="presenter-chip">
+          <span class="speaker-name">Abdo Bakhit Abdel-Hafiz</span>
+          <span class="speaker-id">ID: 20220825</span>
+        </div>
+        <div class="presenter-chip">
+          <span class="speaker-name">Taha Tarek Taha</span>
+          <span class="speaker-id">ID: 20220960</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 28 — STATCOM: Architecture & Principle                 -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-27">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM · Converter Topology</div>
+        <h2 class="slide-title">STATCOM Architecture &amp; Main Components</h2>
+      </div>
+      <div class="two-col">
+        <div class="svg-diagram" style="display:flex;align-items:center;justify-content:center;padding:12px 16px;">
+          <svg viewBox="0 0 650 376" width="100%" style="max-height:355px;">
+            <!-- 1. AC Grid Bus -->
+            <line x1="44" y1="30" x2="606" y2="30" stroke="var(--tx)" stroke-width="4" stroke-linecap="round"/>
+            <text x="325" y="18" text-anchor="middle" fill="var(--tx)" font-size="13.5" font-weight="800">AC Grid Bus (<tspan font-style="italic">V</tspan><tspan dy="3" font-size="9.5">grid</tspan><tspan dy="-3">)</tspan></text>
+
+            <!-- 2. Coupling Transformer & LCL Filter (X_L) -->
+            <line x1="230" y1="30" x2="230" y2="54" stroke="var(--tx)" stroke-width="2.6"/>
+            <circle cx="230" cy="69" r="14.5" fill="none" stroke="var(--stat)" stroke-width="2.8"/>
+            <circle cx="230" cy="91" r="14.5" fill="none" stroke="var(--p)" stroke-width="2.8"/>
+            <text x="258" y="75" text-anchor="start" fill="var(--tx)" font-size="12.5" font-weight="800">Coupling Transformer &amp; LCL Filter (<tspan font-style="italic">X</tspan><tspan dy="3" font-size="9">L</tspan><tspan dy="-3">)</tspan></text>
+            <text x="258" y="92" text-anchor="start" fill="var(--mut)" font-size="10.5" font-weight="700">Provides Reactance <tspan font-style="italic">X</tspan><tspan dy="2.5" font-size="8">L</tspan><tspan dy="-2.5"> &amp; Harmonic Filtering</tspan></text>
+            <line x1="230" y1="106" x2="230" y2="136" stroke="var(--stat)" stroke-width="2.8" class="flow-line"/>
+
+            <!-- 3. Voltage-Source Inverter (VSI) Box — Generous Width + DC/AC Symbol -->
+            <rect x="76" y="136" width="316" height="128" rx="14" fill="var(--surf-2)" stroke="var(--stat)" stroke-width="3"/>
+            <!-- Embedded DC/AC Converter Symbol Inside VSI Box (Left Side) -->
+            <rect x="94" y="164" width="54" height="54" rx="10" fill="var(--surf)" stroke="var(--stat)" stroke-width="2.2"/>
+            <line x1="100" y1="212" x2="142" y2="170" stroke="var(--stat)" stroke-width="2"/>
+            <text x="111" y="185" text-anchor="middle" fill="var(--stat)" font-size="14" font-weight="800">≈</text>
+            <text x="132" y="206" text-anchor="middle" fill="var(--p)" font-size="13" font-weight="800">=</text>
+            <text x="121" y="234" text-anchor="middle" fill="var(--mut)" font-size="9.5" font-weight="800">AC / DC</text>
+
+            <!-- VSI Text Cleanly Aligned to Right of Symbol (Zero Overflow) -->
+            <text x="268" y="164" text-anchor="middle" fill="var(--stat)" font-size="14.5" font-weight="800">Voltage-Source Inverter (VSI)</text>
+            <text x="268" y="187" text-anchor="middle" fill="var(--tx)" font-size="12.5" font-weight="700">6 High-Speed IGBT Switches</text>
+            <text x="268" y="210" text-anchor="middle" fill="var(--p)" font-size="11.5" font-weight="800">Synthesizes 3-Ph AC Voltage <tspan font-style="italic">V</tspan><tspan dy="3" font-size="8.5">conv</tspan></text>
+            <text x="268" y="232" text-anchor="middle" fill="var(--mut)" font-size="10.5" font-weight="700">Sinusoidal PWM (SPWM) Control</text>
+
+            <!-- 4. DC-Link Capacitor Branch (Right Side) -->
+            <line x1="392" y1="170" x2="490" y2="170" stroke="var(--p)" stroke-width="2.6"/>
+            <text x="440" y="161" text-anchor="middle" fill="var(--p)" font-size="10.5" font-weight="800">+DC Bus</text>
+            <line x1="392" y1="232" x2="490" y2="232" stroke="var(--mut)" stroke-width="2.6"/>
+            <text x="440" y="247" text-anchor="middle" fill="var(--mut)" font-size="10.5" font-weight="700">−DC Bus</text>
+            <line x1="490" y1="170" x2="490" y2="194" stroke="var(--p)" stroke-width="2.6"/>
+            <line x1="468" y1="194" x2="512" y2="194" stroke="var(--stat)" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="468" y1="208" x2="512" y2="208" stroke="var(--stat)" stroke-width="4.5" stroke-linecap="round"/>
+            <line x1="490" y1="208" x2="490" y2="232" stroke="var(--mut)" stroke-width="2.6"/>
+            <text x="568" y="196" text-anchor="middle" fill="var(--stat)" font-size="13.5" font-weight="800">DC Capacitor (<tspan font-style="italic">C</tspan><tspan dy="3" font-size="9">dc</tspan><tspan dy="-3">)</tspan></text>
+            <text x="568" y="216" text-anchor="middle" fill="var(--p)" font-size="12" font-weight="800"><tspan font-style="italic">V</tspan><tspan dy="3" font-size="9">dc</tspan><tspan dy="-3"> = 800 V</tspan></text>
+
+            <!-- 5. Digital Decoupled dq0 Controller (Bottom) -->
+            <rect x="96" y="296" width="458" height="60" rx="12" fill="var(--surf-2)" stroke="var(--p)" stroke-width="2.2" stroke-dasharray="6 4"/>
+            <text x="325" y="321" text-anchor="middle" fill="var(--p)" font-size="13" font-weight="800">Digital Decoupled <tspan font-style="italic">dq</tspan>0 Controller</text>
+            <text x="325" y="342" text-anchor="middle" fill="var(--tx)" font-size="11.5" font-weight="700">PLL → Park (<tspan font-style="italic">abc</tspan> → <tspan font-style="italic">dq</tspan>0) → Decoupled PI Loops → SPWM Gate Pulses</text>
+            <line x1="230" y1="296" x2="230" y2="264" stroke="var(--p)" stroke-width="2.4" class="flow-line"/>
+          </svg>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <div class="card" style="border-top-color:var(--stat);padding:15px 20px;gap:6px;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--stat);border-color:var(--stat);background:rgba(124,58,237,0.12);">01</span>
+              <strong>Solid-State Synchronous Voltage Source</strong>
+            </div>
+            <p style="font-size:0.96rem;line-height:1.48;">Unlike an SVC (which switches passive capacitors and reactors), a STATCOM uses a <strong>Voltage-Source Inverter (VSI)</strong> built with self-commutated <strong>IGBT switches</strong> to synthesize a controllable 3-phase AC voltage \(V_{\text{conv}}\) from a regulated DC-link capacitor.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--p);padding:15px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge">02</span>
+              <strong>4 Core STATCOM Subsystems</strong>
+            </div>
+            <div class="mini-two-col">
+              <div class="mini-bank-card" style="--card-clr:var(--stat);">
+                <div class="mini-bank-title" style="color:var(--stat);">1. IGBT Bridge (VSI)</div>
+                <div class="mini-bank-desc">Converts DC voltage into synchronized 3-phase AC waveforms \(V_{\text{conv}}\).</div>
+              </div>
+              <div class="mini-bank-card" style="--card-clr:var(--p);">
+                <div class="mini-bank-title" style="color:var(--p);">2. DC-Link Capacitor</div>
+                <div class="mini-bank-desc">Energy storage capacitor \(C_{\text{dc}}\) maintaining constant \(V_{\text{dc}} = 800\text{ V}\).</div>
+              </div>
+              <div class="mini-bank-card" style="--card-clr:var(--cap);">
+                <div class="mini-bank-title" style="color:var(--cap);">3. Coupling &amp; LCL (\(X_L\))</div>
+                <div class="mini-bank-desc">Provides coupling reactance \(X_L\) and filters high-frequency PWM ripples.</div>
+              </div>
+              <div class="mini-bank-card" style="--card-clr:var(--ok);">
+                <div class="mini-bank-title" style="color:var(--ok);">4. \(dq0\) + SPWM Control</div>
+                <div class="mini-bank-desc">Decoupled PI loops regulate \(V_{\text{dc}}\) and reactive current \(I_q\) in sub-cycle time.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 29 — STATCOM: Operating Principle & Phasors            -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-28">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM · Interactive Phasor &amp; PWM Simulation</div>
+        <h2 class="slide-title">How STATCOM Controls Reactive Power</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-statcom-phasors" class="widget" data-max-h="238"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="math-box" style="padding:9px 14px;margin-top:0;">
+            <div>$$I_q = \frac{V_{\text{conv}} - V_{\text{grid}}}{X_L} \qquad Q_{\text{STAT}} = V_{\text{grid}} \cdot I_q = \frac{V_{\text{grid}}\left(V_{\text{conv}} - V_{\text{grid}}\right)}{X_L}$$</div>
+          </div>
+
+          <div class="card" style="border-top-color:var(--cap);padding:12px 18px;gap:4px;">
+            <strong class="text-cap" style="font-size:1.02rem;">1. Capacitive Mode (\(V_{\text{conv}} &gt; V_{\text{grid}}\)) vs. Inductive Mode (\(V_{\text{conv}} &lt; V_{\text{grid}}\))</strong>
+            <p style="font-size:0.92rem;line-height:1.42;">• When \(V_{\text{conv}} &gt; V_{\text{grid}}\): current leads grid voltage by \(90^\circ\) and <strong>injects capacitive \(+Q\)</strong> into the bus.<br>• When \(V_{\text{conv}} &lt; V_{\text{grid}}\): current lags by \(90^\circ\) and <strong>absorbs inductive \(-Q\)</strong> from the grid.</p>
+          </div>
+
+          <div class="card" style="border-top-color:var(--ok);padding:12px 18px;gap:6px;">
+            <strong style="color:var(--ok);font-size:1.02rem;">2. Why STATCOM Beats SVC at Low Voltage (\(Q \propto V\))</strong>
+            <p style="font-size:0.92rem;line-height:1.42;">The IGBT bridge acts as a <strong>constant current source \(I_{\max}\)</strong> independent of grid voltage sag:</p>
+            <div class="math-box" style="padding:8px 12px;margin-top:2px;">
+              <div>$$Q_{\max,\text{STAT}} = V_{\text{grid}} \cdot I_{\max} \propto V \quad \text{vs.} \quad Q_{\max,\text{SVC}} = V_{\text{grid}}^2 \cdot B_C \propto V^2$$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 30 — STATCOM Simulink (Part 1: Power Circuit & Scopes) -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-29">
+    <div class="slide-inner" style="gap:12px;">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM MATLAB/Simulink Model · Part 01 (Click Any Diagram to Zoom)</div>
+        <h2 class="slide-title">Simulink Power Circuit &amp; P/Q Monitoring</h2>
+      </div>
+      <div class="two-col" style="align-items:stretch;">
+        <div style="display:flex;flex-direction:column;gap:10px;justify-content:space-between;">
+          <div class="sim-frame">
+            <img src="assets/statcom/image1.png" alt="STATCOM Simulink Power Circuit">
+            <div class="sim-caption">
+              <span>Fig. 1 — Complete 3-Phase STATCOM Power Circuit in Simulink</span>
+              <span class="text-stat">Click to Enlarge</span>
+            </div>
+          </div>
+          <div class="sim-frame">
+            <img src="assets/statcom/image21.png" alt="STATCOM P and Q Monitoring Subsystem">
+            <div class="sim-caption">
+              <span>Fig. 2 — Instantaneous Active (P) &amp; Reactive (Q) Power Monitoring</span>
+              <span class="text-stat">Click to Enlarge</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <div class="card" style="border-top-color:var(--stat);padding:16px 20px;gap:8px;flex:1;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--stat);border-color:var(--stat);background:rgba(124,58,237,0.12);">01</span>
+              <strong>Power Circuit Stage (Fig. 1)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>Three-Phase Source &amp; Parallel RLC Load:</strong> Models the utility grid feeding an inductive industrial load with three-phase V–I measurement blocks (<span class="sig-pill">Vabc</span>, <span class="sig-pill">Iabcl</span>, <span class="sig-pill">Iabcs</span>).</p>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>LCL Filter:</strong> Series inductors and shunt capacitor bank connecting the VSI bridge to the PCC — smooths converter current and blocks high-frequency PWM switching harmonics.</p>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>Universal Bridge (IGBT VSI) &amp; DC Link:</strong> Six-switch IGBT bridge fed by an \(800\text{ V}\) DC energy-storage capacitor (<span class="sig-pill">vdc</span>).</p>
+          </div>
+          <div class="card" style="border-top-color:var(--p);padding:16px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge">02</span>
+              <strong>P &amp; Q Measurement Stage (Fig. 2)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.46;">Computes instantaneous 3-phase active power \(P\) and reactive power \(Q\) for the <strong>Grid</strong> (<span class="sig-pill">pgrid</span>, <span class="sig-pill">qgrid</span>), <strong>Load</strong> (<span class="sig-pill">pload</span>, <span class="sig-pill">qload</span>), and <strong>STATCOM</strong> (<span class="sig-pill">pstat</span>, <span class="sig-pill">qstat</span>), passes them through 1st-order low-pass filters, and displays real-time compensation on Scopes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 31 — STATCOM Simulink (Part 2: dq0 Control & SPWM)     -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-30">
+    <div class="slide-inner" style="gap:12px;">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM MATLAB/Simulink Model · Part 02 (Click Any Diagram to Zoom)</div>
+        <h2 class="slide-title">Decoupled \(dq0\) Control &amp; SPWM Pulse Generation</h2>
+      </div>
+      <div class="two-col" style="align-items:stretch;">
+        <div style="display:flex;flex-direction:column;gap:10px;justify-content:space-between;">
+          <div class="sim-frame">
+            <img src="assets/statcom/image12.png" alt="PLL and Park abc to dq0 Transformation">
+            <div class="sim-caption">
+              <span>Fig. 3 — 3-Phase PLL &amp; Park Transformation (abc → dq0)</span>
+              <span class="text-stat">Click to Enlarge</span>
+            </div>
+          </div>
+          <div class="sim-frame">
+            <img src="assets/statcom/image30.png" alt="Decoupled dq0 PI Controller and SPWM Generator">
+            <div class="sim-caption">
+              <span>Fig. 4 — Decoupled d-q PI Loops &amp; SPWM Gate Pulse Generator</span>
+              <span class="text-stat">Click to Enlarge</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:space-between;">
+          <div class="card" style="border-top-color:var(--p);padding:16px 20px;gap:8px;">
+            <div class="card-head">
+              <span class="num-badge">03</span>
+              <strong>PLL &amp; Park Transformation Stage (Fig. 3)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.46;">A 3-phase <strong>Phase-Locked Loop (PLL)</strong> extracts synchronous grid angle <span class="sig-pill">wt</span> (\(\omega t\)). Three <strong>Park Transform (<span class="sig-pill">abc → dq0</span>)</strong> blocks convert oscillating 3-phase AC signals (<span class="sig-pill">Vabc</span>, <span class="sig-pill">Iabcl</span>, <span class="sig-pill">Iabcs</span>) into DC quantities (<span class="sig-pill">vd, vq</span>, <span class="sig-pill">idl, iql</span>, <span class="sig-pill">ids, iqs</span>) in the rotating synchronous frame.</p>
+          </div>
+          <div class="card" style="border-top-color:var(--stat);padding:16px 20px;gap:8px;flex:1;">
+            <div class="card-head">
+              <span class="num-badge" style="color:var(--stat);border-color:var(--stat);background:rgba(124,58,237,0.12);">04</span>
+              <strong>Decoupled \(d\)–\(q\) Loops &amp; SPWM Stage (Fig. 4)</strong>
+            </div>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>Upper Loop (\(d\)-axis):</strong> Cascaded PI controllers regulate DC capacitor voltage at \(V_{\text{dc,ref}} = 800\text{ V}\) by controlling active current <span class="sig-pill">ids</span>.</p>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>Lower Loop (\(q\)-axis):</strong> PI controller tracks load reactive current <span class="sig-pill">iql</span> so the STATCOM injects the exact required \(Q\).</p>
+            <p style="font-size:0.95rem;line-height:1.46;">• <strong>SPWM Generator:</strong> Inverse <span class="sig-pill">dq0 → abc</span> reference waves are compared against a high-frequency triangular carrier with complementary <span class="sig-pill">NOT</span> gates to generate the 6 IGBT gate pulses <span class="sig-pill">[p11]</span>–<span class="sig-pill">[p32]</span>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 32A — STATCOM: Advantages & Applications               -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-31">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM · Key Strengths &amp; Modern Grid Applications</div>
+        <h2 class="slide-title">STATCOM: Advantages &amp; Applications</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">01</span>
+            <strong>Fastest Sub-Cycle Response (\(&lt; 5\text{–}10\text{ ms}\))</strong>
+          </div>
+          <p>High-frequency self-commutated IGBT PWM switching responds in less than half a grid cycle — eliminating voltage flicker and stabilizing fast transients.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">02</span>
+            <strong>Superior Low-Voltage Support (\(Q \propto V\))</strong>
+          </div>
+          <p>Maintains full rated converter current \(I_{\max}\) even during severe grid faults — delivering <strong>\(70\%\)</strong> of rated \(Q\) at \(V = 0.70\text{ pu}\) (vs. \(49\%\) for SVC).</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">03</span>
+            <strong>Symmetric Bidirectional Capability (\(+Q / -Q\))</strong>
+          </div>
+          <p>Synthesizes both leading capacitive and lagging inductive reactive power seamlessly using the same compact VSI bridge without bulky reactor or capacitor yards.</p>
+        </div>
+
+        <div class="card eval-card pro">
+          <div class="card-head">
+            <span class="num-badge ok">04</span>
+            <strong>Smallest Footprint &amp; Low Harmonics</strong>
+          </div>
+          <p>Saves \(50\%\text{–}60\%\) of substation land area compared to an SVC, while high-frequency SPWM/MMC modulation requires minimal harmonic filtering.</p>
+        </div>
+      </div>
+
+      <div class="card app-bar-card" style="--card-clr:var(--stat);">
+        <span class="app-bar-label">
+          <span class="num-badge" style="color:var(--stat);border-color:var(--stat);background:rgba(124,58,237,0.12);">APP</span>
+          Primary Engineering Applications:
+        </span>
+        <div class="app-tags">
+          <span class="app-tag" style="color:var(--stat);background:rgba(124,58,237,0.10);border-color:rgba(124,58,237,0.32);">Wind &amp; Solar Farm LVRT Compliance</span>
+          <span class="app-tag" style="color:var(--stat);background:rgba(124,58,237,0.10);border-color:rgba(124,58,237,0.32);">Space-Constrained Urban Substations</span>
+          <span class="app-tag" style="color:var(--stat);background:rgba(124,58,237,0.10);border-color:rgba(124,58,237,0.32);">Fast Dynamic Industrial Loads</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 32B — STATCOM: Disadvantages & Limitations             -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-32">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker text-stat">STATCOM · Technical &amp; Economic Trade-Offs</div>
+        <h2 class="slide-title">STATCOM: Disadvantages &amp; Limitations</h2>
+      </div>
+      <div class="eval-grid-2x2 stagger">
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">01</span>
+            <strong>Highest Capital Cost (CAPEX)</strong>
+          </div>
+          <p>High-voltage IGBT power modules, isolated gate drivers, DC-link capacitors, LCL filters, and liquid/forced-air cooling make STATCOM the most expensive technology upfront.</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">02</span>
+            <strong>Higher Switching Losses (\(0.5\%\text{–}0.8\%\))</strong>
+          </div>
+          <p>Continuous multi-kilohertz PWM hard switching across IGBT/diode junctions produces higher operating power losses than line-commutated TSC/TCR valves.</p>
+        </div>
+
+        <div class="card eval-card con">
+          <div class="card-head">
+            <span class="num-badge warn">03</span>
+            <strong>Limited Short-Term Overload (\(\sim 1.1\text{–}1.2\text{ pu}\))</strong>
+          </div>
+          <p>Semiconductor silicon junctions have minuscule thermal mass and overheat within milliseconds if fault current exceeds \(1.1\text{–}1.2\text{ pu}\) (unlike SC's \(2.0\times\) field forcing).</p>
+        </div>
+
+        <div class="card eval-card con-amber">
+          <div class="card-head">
+            <span class="num-badge warn">04</span>
+            <strong>Zero Inertia (\(H = 0\)) &amp; Control Complexity</strong>
+          </div>
+          <p>Standard STATCOMs provide no mechanical rotor inertia (\(H = 0\text{ s}\)) and rely on complex digital PLL, \(dq0\) decoupling, and high-speed protection algorithms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 34 — Transition to Master Comparison (Synthesis)       -->
+  <!-- ============================================================ -->
+  <section class="slide transition-slide" id="slide-33">
+    <div class="slide-inner" style="gap:16px;">
+      <div class="team-header">
+        <span class="team-pill">Section 06 · Comprehensive Engineering Synthesis</span>
+        <h2 class="team-main-title">Four Generations Analyzed — <span>How Do They Compare?</span></h2>
+        <div class="team-title-bar"></div>
+      </div>
+
+      <!-- Sleek 4-Step Horizontal Recap Strip -->
+      <div class="recap-strip-4 stagger">
+        <div class="recap-tech-card" style="--card-clr:var(--cap);" data-goto="7">
+          <span class="recap-gen-badge">01 · Passive Bank</span>
+          <div class="recap-tech-name text-cap">Shunt Capacitors</div>
+          <div class="recap-tech-key">Lowest Cost &amp; Losses · Stepped \(+Q\) · \(Q \propto V^2\)</div>
+        </div>
+
+        <div class="evo-arrow" style="--c1:var(--cap); --c2:var(--sc);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--sc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="recap-tech-card" style="--card-clr:var(--sc);" data-goto="13">
+          <span class="recap-gen-badge">02 · Rotating Machine</span>
+          <div class="recap-tech-name text-sc">Synchronous Condenser</div>
+          <div class="recap-tech-key">True Inertia \(H\) · \(4\text{–}6\text{ pu}\) Fault Current · Slow</div>
+        </div>
+
+        <div class="evo-arrow" style="--c1:var(--sc); --c2:var(--svc);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--svc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="recap-tech-card" style="--card-clr:var(--svc);" data-goto="19">
+          <span class="recap-gen-badge">03 · FACTS Gen-1</span>
+          <div class="recap-tech-name text-svc">SVC (TCR / TSC)</div>
+          <div class="recap-tech-key">\(1\text{–}2\) Cycle Speed · Static \(\pm Q\) · Cost-Effective</div>
+        </div>
+
+        <div class="evo-arrow" style="--c1:var(--svc); --c2:var(--stat);" aria-hidden="true">
+          <div class="evo-arrow-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="var(--stat)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="recap-tech-card" style="--card-clr:var(--stat);" data-goto="26">
+          <span class="recap-gen-badge">04 · FACTS Gen-2</span>
+          <div class="recap-tech-name text-stat">STATCOM (VSI)</div>
+          <div class="recap-tech-key">Sub-Cycle Speed · \(Q \propto V\) Resilience · Compact</div>
+        </div>
+      </div>
+
+      <!-- Directional Connector Arrow -->
+      <div class="trans-down-connector" aria-hidden="true">
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--stat), var(--ok));"></div>
+        <div class="trans-down-badge" style="background:linear-gradient(135deg, var(--p), var(--ok));box-shadow:0 8px 22px rgba(16,185,129,0.25);">
+          <div class="trans-down-badge-inner">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="var(--ok)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="trans-down-line" style="background:linear-gradient(180deg, var(--p), var(--ok));"></div>
+      </div>
+
+      <!-- Prominent Next Banner Card -->
+      <div class="trans-next-banner" style="--card-clr:var(--ok);--beam-2:var(--p);" data-goto="34">
+        <div class="trans-next-left">
+          <div class="trans-next-icon" style="background:rgba(16,185,129,0.12);border-color:var(--ok);box-shadow:0 8px 20px rgba(16,185,129,0.22);">
+            <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="var(--ok)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+            </svg>
+          </div>
+          <div>
+            <div class="trans-next-kicker" style="color:var(--ok);">Section 06 · Final Synthesis &amp; Decision Guide</div>
+            <div class="trans-next-title">Next: 11-Criterion Master Comparison &amp; Selection Guide</div>
+          </div>
+        </div>
+        <div class="trans-solve-pills">
+          <span class="trans-solve-pill" style="color:var(--ok);background:rgba(16,185,129,0.11);border-color:rgba(16,185,129,0.35);">Part 1 &amp; 2 Matrices</span>
+          <span class="trans-solve-pill" style="color:var(--ok);background:rgba(16,185,129,0.11);border-color:rgba(16,185,129,0.35);">Voltage-Sag Benchmark</span>
+          <span class="trans-solve-pill" style="color:var(--ok);background:rgba(16,185,129,0.11);border-color:rgba(16,185,129,0.35);">Selection Scenarios</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 35 — Master Comparison (Part 1: Physics & Dynamics)    -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-34">
+    <div class="slide-inner" style="gap:16px;">
+      <div>
+        <div class="slide-kicker">Section 06 · Master Comparison (Part 1 of 2)</div>
+        <h2 class="slide-title">Physics &amp; Dynamic Performance</h2>
+      </div>
+      <div class="cmp-scroll">
+        <table class="cmp-table spacious">
+          <thead>
+            <tr>
+              <th>Comparison Criterion</th>
+              <th class="text-cap">1. Shunt Capacitors</th>
+              <th class="text-sc">2. Sync. Condenser</th>
+              <th class="text-svc">3. SVC (TCR / TSC)</th>
+              <th class="text-stat">4. STATCOM (VSC)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. Core Physical Principle</td>
+              <td><span class="cmp-pill neutral">Passive Capacitance C</span></td>
+              <td><span class="cmp-pill neutral">Rotating Sync. Machine</span></td>
+              <td><span class="cmp-pill neutral">Thyristor Susceptance B(α)</span></td>
+              <td><span class="cmp-pill neutral">IGBT VSI Source</span></td>
+            </tr>
+            <tr>
+              <td>2. Reactive Power Direction</td>
+              <td><span class="cmp-pill weak">Capacitive +Q Only</span></td>
+              <td><span class="cmp-pill best">Bidirectional (±Q)</span></td>
+              <td><span class="cmp-pill best">Bidirectional (±Q)</span></td>
+              <td><span class="cmp-pill best">Symmetric (±Q)</span></td>
+            </tr>
+            <tr>
+              <td>3. Control Continuity</td>
+              <td><span class="cmp-pill weak">Coarse Discrete Steps</span></td>
+              <td><span class="cmp-pill best">Continuous Smooth</span></td>
+              <td><span class="cmp-pill best">Continuous Smooth</span></td>
+              <td><span class="cmp-pill best">Continuous Ultra-Precise</span></td>
+            </tr>
+            <tr>
+              <td>4. Response Time</td>
+              <td><span class="cmp-pill weak">Slow (Sec – Min)</span></td>
+              <td><span class="cmp-pill mod">Moderate (100–500 ms)</span></td>
+              <td><span class="cmp-pill good">Fast (15–40 ms)</span></td>
+              <td><span class="cmp-pill best">Fastest (&lt; 5–10 ms)</span></td>
+            </tr>
+            <tr>
+              <td>5. Low-Voltage Sag Behavior</td>
+              <td><span class="cmp-pill weak">Q ∝ V² (49% at 0.7 pu)</span></td>
+              <td><span class="cmp-pill best">Field Forcing (~200%)</span></td>
+              <td><span class="cmp-pill weak">Q ∝ V² (49% at 0.7 pu)</span></td>
+              <td><span class="cmp-pill best">Q ∝ V (70% at 0.7 pu)</span></td>
+            </tr>
+            <tr>
+              <td>6. Inertia (H) &amp; Fault Current</td>
+              <td><span class="cmp-pill weak">H = 0 · 0 pu Fault</span></td>
+              <td><span class="cmp-pill best">H = 1.2–3 s · 4–6 pu</span></td>
+              <td><span class="cmp-pill weak">H = 0 · 0 pu Fault</span></td>
+              <td><span class="cmp-pill mod">H = 0 · ~1.1 pu IGBT</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 36 — Master Comparison (Part 2: Quality & Economics)   -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-35">
+    <div class="slide-inner" style="gap:16px;">
+      <div>
+        <div class="slide-kicker">Section 06 · Master Comparison (Part 2 of 2)</div>
+        <h2 class="slide-title">Power Quality, Footprint &amp; Economics</h2>
+      </div>
+      <div class="cmp-scroll">
+        <table class="cmp-table spacious">
+          <thead>
+            <tr>
+              <th>Comparison Criterion</th>
+              <th class="text-cap">1. Shunt Capacitors</th>
+              <th class="text-sc">2. Sync. Condenser</th>
+              <th class="text-svc">3. SVC (TCR / TSC)</th>
+              <th class="text-stat">4. STATCOM (VSC)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>7. Harmonic Generation</td>
+              <td><span class="cmp-pill mod">Zero (Resonance Risk)</span></td>
+              <td><span class="cmp-pill best">Zero (Pure Sine)</span></td>
+              <td><span class="cmp-pill weak">High Odd (5th, 7th)</span></td>
+              <td><span class="cmp-pill best">Very Low (PWM / MMC)</span></td>
+            </tr>
+            <tr>
+              <td>8. Operating Losses</td>
+              <td><span class="cmp-pill best">Lowest (&lt; 0.1%)</span></td>
+              <td><span class="cmp-pill weak">Highest (1.0%–1.5%)</span></td>
+              <td><span class="cmp-pill mod">Moderate (0.3%–0.6%)</span></td>
+              <td><span class="cmp-pill mod">Medium (0.5%–0.8%)</span></td>
+            </tr>
+            <tr>
+              <td>9. Substation Footprint</td>
+              <td><span class="cmp-pill best">Small Modular Panels</span></td>
+              <td><span class="cmp-pill mod">Large Machine Hall</span></td>
+              <td><span class="cmp-pill weak">Largest (2–3× STATCOM)</span></td>
+              <td><span class="cmp-pill best">Smallest (40%–50% SVC)</span></td>
+            </tr>
+            <tr>
+              <td>10. Capital Cost (CAPEX)</td>
+              <td><span class="cmp-pill best">Lowest Cost</span></td>
+              <td><span class="cmp-pill weak">High + Civil Cost</span></td>
+              <td><span class="cmp-pill mod">Medium FACTS Cost</span></td>
+              <td><span class="cmp-pill weak">Highest Cost (VSC)</span></td>
+            </tr>
+            <tr>
+              <td>11. Ideal Use Case</td>
+              <td><span class="cmp-plain">Steady factory motors</span></td>
+              <td><span class="cmp-plain">Weak renewable grids</span></td>
+              <td><span class="cmp-plain">Arc furnaces &amp; steel mills</span></td>
+              <td><span class="cmp-plain">Urban grids &amp; Wind LVRT</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 37 — Interactive Voltage Sag & Response Race           -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-36">
+    <div class="slide-inner" style="gap:14px;">
+      <div>
+        <div class="slide-kicker">Section 06 · Interactive Benchmark</div>
+        <h2 class="slide-title">Voltage Sag Performance &amp; Response Time Race</h2>
+      </div>
+      <div class="two-col" style="align-items:start;">
+        <div>
+          <div id="widget-voltage-sag" class="widget" data-max-h="325"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="card" style="border-top-color:var(--p);padding:18px 22px;gap:10px;">
+            <strong>Why Does SVC Drop to 49% While STATCOM Keeps 70% at 0.7 pu Voltage?</strong>
+            <p>At maximum capacitive output, an SVC turns ON all capacitors and turns OFF its TCR, becoming a fixed susceptance \(B_{C,\max}\). Its current falls with \(V\), so reactive power falls with \(V^2\):</p>
+            <div class="math-box" style="padding:10px 14px;">
+              <div>$$Q_{\text{SVC}} = V^2 B_{C,\max} \implies (0.70)^2 = 0.49\text{ pu}$$</div>
+            </div>
+            <p>In contrast, a STATCOM is a current-controlled voltage source converter that maintains its full rated current \(I_{\max}\) regardless of grid voltage sag:</p>
+            <div class="math-box" style="padding:10px 14px;">
+              <div>$$Q_{\text{STAT}} = V \cdot I_{\max} \implies 0.70 \times 1.0 = 0.70\text{ pu}$$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 38 — Engineering Selection Guide (Flip Cards)          -->
+  <!-- ============================================================ -->
+  <section class="slide" id="slide-37">
+    <div class="slide-inner">
+      <div>
+        <div class="slide-kicker">Section 06 · Decision Matrix (Click Cards to Reveal)</div>
+        <h2 class="slide-title">When to Choose Which Technology?</h2>
+      </div>
+      <div class="scenario-grid stagger">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-front" style="border-top-color:var(--cap);">
+              <span class="num-badge" style="color:var(--cap);border-color:var(--cap);">Scenario 01</span>
+              <strong>Steady Industrial Factory</strong>
+              <p>Induction motors with slowly varying load profile and tight budget.</p>
+              <span class="slide-kicker" style="margin-top:8px;">Click to Flip</span>
+            </div>
+            <div class="flip-back">
+              <strong class="text-cap">Best Choice: Shunt Capacitors</strong>
+              <p>Lowest cost and lowest losses (\(&lt;0.1\%\)). Fast dynamic response is unnecessary for steady motor loads.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-front" style="border-top-color:var(--sc);">
+              <span class="num-badge amber">Scenario 02</span>
+              <strong>Weak Renewable Grid</strong>
+              <p>High solar/wind penetration with low mechanical inertia and low short-circuit ratio (SCR).</p>
+              <span class="slide-kicker" style="margin-top:8px;">Click to Flip</span>
+            </div>
+            <div class="flip-back">
+              <strong class="text-sc">Best Choice: Synchronous Condenser</strong>
+              <p>The only device that supplies real rotating inertia \(H\) to stabilize frequency and \(4\text{–}6\text{ pu}\) fault current.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-front" style="border-top-color:var(--svc);">
+              <span class="num-badge amber">Scenario 03</span>
+              <strong>Steel Mill / Arc Furnace</strong>
+              <p>Rapid, random reactive power swings causing severe voltage flicker where land is available.</p>
+              <span class="slide-kicker" style="margin-top:8px;">Click to Flip</span>
+            </div>
+            <div class="flip-back">
+              <strong class="text-svc">Best Choice: SVC (TCR / TSC)</strong>
+              <p>Fast \(1\text{–}2\text{ cycle}\) response eliminates flicker with proven thyristor reliability at lower cost than STATCOM.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-front" style="border-top-color:var(--stat);">
+              <span class="num-badge" style="color:var(--stat);border-color:var(--stat);">Scenario 04</span>
+              <strong>Urban Substation / Wind LVRT</strong>
+              <p>Severe space constraints and strict low-voltage ride-through requirements during grid faults.</p>
+              <span class="slide-kicker" style="margin-top:8px;">Click to Flip</span>
+            </div>
+            <div class="flip-back">
+              <strong class="text-stat">Best Choice: STATCOM</strong>
+              <p>Sub-cycle speed, \(50\%\) smaller footprint, and linear low-voltage capability (\(Q \propto V\)).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 39 — Thank You (Clean Centered Final Slide)            -->
+  <!-- ============================================================ -->
+  <section class="slide thankyou" id="slide-38">
+    <div class="cover-wave">
+      <svg width="100%" height="100%" preserveAspectRatio="none">
+        <path data-wave data-w="900" data-h="500" data-amp="45" data-freq="2" data-off="0" data-mid="250"
+              fill="none" stroke="var(--p)" stroke-width="2.2" opacity="0.35"/>
+        <path data-wave data-w="900" data-h="500" data-amp="32" data-freq="3" data-off="1.4" data-mid="250"
+              fill="none" stroke="var(--s)" stroke-width="2" opacity="0.28"/>
+      </svg>
+    </div>
+    <div class="slide-inner cover-content" style="gap:24px;">
+      <div class="inst-badge">
+        <div class="inst-seal">
+          <img src="assets/logo-clean.png" alt="Science Valley Academy">
+        </div>
+        <div class="inst-text">
+          <div class="inst-name">SCIENCE VALLEY ACADEMY (SVA)</div>
+          <div class="inst-dept">Department of Electrical Power Engineering</div>
+        </div>
+      </div>
+
+      <h1 class="cover-title" style="font-size:clamp(3.6rem,6.5vw,5.4rem);margin-top:4px;">
+        Thank You
+      </h1>
+      <p class="slide-subtitle" style="font-size:1.65rem;color:var(--p);font-weight:700;">
+        We Welcome Your Questions &amp; Discussion
+      </p>
+    </div>
+  </section>
+
+</div><!-- /deck -->
+
+<!-- Bottom Pill: Page Number, Color Switcher, Fullscreen -->
+<div id="hud">
+  <span id="slide-counter" title="Click or press G for Slide Overview">Page 1</span>
+  <button id="theme-toggle" title="Click to switch color palette">Color: Aurora</button>
+  <button id="fullscreen-btn" title="Hide browser tabs &amp; fill screen (F or F11)">Fullscreen (F)</button>
+</div>
+
+<!-- Navigation Arrows -->
+<button id="btn-prev" class="nav-btn" title="Previous Slide (←)">‹</button>
+<button id="btn-next" class="nav-btn" title="Next Slide (→)">›</button>
+
+<!-- Overview Thumbnail Grid -->
+<div id="overview"></div>
+
+<!-- Lightbox for Full-Screen Simulink Diagram Inspection -->
+<div id="lightbox" title="Click anywhere or press Esc to close">
+  <img src="" alt="Enlarged Diagram">
+</div>
+
+<script src="js/engine.js"></script>
+<script src="js/widgets.js"></script>
+</body>
+</html>
