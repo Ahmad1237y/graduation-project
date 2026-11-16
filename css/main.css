@@ -480,7 +480,9 @@ code, .mono {
 .loc-pill::before,
 .trans-limit-card::before,
 .trans-next-banner::before,
-.recap-tech-card::before {
+.recap-tech-card::before,
+.why-svc-hero::before,
+.why-svc-card::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1647,10 +1649,7 @@ code, .mono {
 }
 
 @keyframes card-pulse {
-  0%   { scale: 1; }
-  40%  { scale: 0.95; }
-  75%  { scale: 1.06; }
-  100% { scale: 1; }
+  0%, 100% { opacity: 1; translate: 0 0; scale: 1; }
 }
 
 .stagger > * {
@@ -2137,4 +2136,175 @@ code, .mono {
   background: var(--p);
   color: #FFFFFF;
   transform: translateY(-1px);
+}
+
+/* ==========================================================
+   SECTION 07 — WHY WE SELECTED THE SVC (HERO + 3×2 GRID)
+   ========================================================== */
+.why-svc-hero {
+  position: relative;
+  --card-clr: var(--svc);
+  --beam-2: var(--p);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 15px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.why-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 380px;
+}
+.why-hero-emblem {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(217, 119, 6, 0.13);
+  border: 1.5px solid var(--svc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.22);
+}
+.why-hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--svc);
+  margin-bottom: 3px;
+}
+.why-hero-headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.06rem, 1.35vw, 1.26rem);
+  font-weight: 800;
+  color: var(--tx);
+  line-height: 1.28;
+}
+
+.why-svc-loop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.why-loop-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6px 11px;
+  border-radius: 10px;
+  background: var(--surf-2);
+  border: 1px solid var(--line-bright);
+  min-width: 96px;
+}
+.why-loop-step {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--mut);
+}
+.why-loop-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--tx);
+  white-space: nowrap;
+}
+.why-loop-arrow {
+  color: var(--svc);
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.why-svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  align-items: stretch;
+}
+.why-svc-card {
+  position: relative;
+  --card-clr: var(--svc);
+  --card-glow: rgba(217, 119, 6, 0.24);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 16px;
+  padding: 16px 20px 15px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-theme="pearl"] .why-svc-card,
+[data-theme="pearl"] .why-svc-hero {
+  background: rgba(255, 255, 255, 0.94);
+}
+.why-svc-card:hover {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow:
+    0 18px 34px -6px var(--card-glow),
+    0 0 20px 0 var(--card-glow);
+}
+.why-svc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.why-svc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--surf-2);
+  border: 1.5px solid var(--card-clr);
+  color: var(--card-clr);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 5px 14px var(--card-glow);
+}
+.why-svc-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--card-clr);
+  background: var(--surf-2);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.why-svc-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.08rem, 1.32vw, 1.24rem);
+  font-weight: 800;
+  color: var(--tx);
+  line-height: 1.22;
+}
+.why-svc-desc {
+  font-size: clamp(0.9rem, 1.05vw, 0.99rem);
+  line-height: 1.46;
+  color: var(--tx-body);
 }
