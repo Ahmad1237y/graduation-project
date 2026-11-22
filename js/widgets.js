@@ -1724,7 +1724,7 @@
       min: 0.5,
       max: 1.0,
       step: 0.01,
-      value: 0.70,
+      value: 0.7,
       label: "V_grid",
       unit: " pu",
     });
@@ -1771,10 +1771,34 @@
     }
 
     const devices = [
-      { key: "cap",  name: "Shunt Cap.",  speedLabel: "Sec – Min",  q: qCap,  themeKey: "cap"  },
-      { key: "sc",   name: "Sync. Cond.", speedLabel: "100–500 ms", q: qSC,   themeKey: "sc"   },
-      { key: "svc",  name: "SVC (TCR)",   speedLabel: "15–40 ms",   q: qSVC,  themeKey: "svc"  },
-      { key: "stat", name: "STATCOM",     speedLabel: "< 10 ms",    q: qSTAT, themeKey: "stat" },
+      {
+        key: "cap",
+        name: "Shunt Cap.",
+        speedLabel: "Sec – Min",
+        q: qCap,
+        themeKey: "cap",
+      },
+      {
+        key: "sc",
+        name: "Sync. Cond.",
+        speedLabel: "100–500 ms",
+        q: qSC,
+        themeKey: "sc",
+      },
+      {
+        key: "svc",
+        name: "SVC (TCR)",
+        speedLabel: "15–40 ms",
+        q: qSVC,
+        themeKey: "svc",
+      },
+      {
+        key: "stat",
+        name: "STATCOM",
+        speedLabel: "< 10 ms",
+        q: qSTAT,
+        themeKey: "stat",
+      },
     ];
 
     function draw() {
@@ -2352,6 +2376,1941 @@
   }
 
   /* ================================================================
+   *  Widget 8 — PFC Calculator: Constant P vs. Constant S (#widget-pfc-calc)
+   * ================================================================ */
+
+  function initPFCCalculator() {
+    const root = document.getElementById("widget-pfc-calc");
+    if (!root) return;
+
+    const presets = {
+      excel: {
+        name: "Excel Plant (100 kW · 380 V)",
+        P: 100.0,
+        V: 380,
+        pf1: 0.8,
+        pf2: 0.92,
+      },
+      sim: {
+        name: "Simulink Plant (6.25 kW · 400 V)",
+        P: 6.252,
+        V: 400,
+        pf1: 0.4252,
+        pf2: 1.0,
+      },
+    };
+    let curPreset = "excel";
+    let mode = "both"; // 'both' | 'constP' | 'constS'
+
+    // Top control bar: Preset & Mode pills
+    const topBar = document.createElement("div");
+    topBar.className = "w-pill-row";
+    topBar.style.justifyContent = "space-between";
+    topBar.innerHTML =
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+      '<button class="w-pill active" data-pfc-pre="excel">Excel Plant (100 kW, 380 V)</button>' +
+      '<button class="w-pill" data-pfc-pre="sim">Simulink Plant (6.25 kW, 400 V)</button>' +
+      "</div>" +
+      '<div style="display:flex;gap:5px;flex-wrap:wrap;">' +
+      '<button class="w-pill active" data-pfc-mode="both">Compare Both</button>' +
+      '<button class="w-pill" data-pfc-mode="constP">Const P</button>' +
+      '<button class="w-pill" data-pfc-mode="constS">Const S</button>' +
+      "</div>";
+    root.appendChild(topBar);
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    const slider = createSlider(root, {
+      min: 0.82,
+      max: 1.0,
+      step: 0.01,
+      value: 0.92,
+      label: "Target PF₂",
+      unit: "",
+    });
+
+    const kpiStrip = document.createElement("div");
+    kpiStrip.className = "cap-kpi-strip";
+    kpiStrip.style.gridTemplateColumns = "repeat(4, 1fr)";
+    kpiStrip.innerHTML =
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Const P · <i>Q</i><sub>C</sub></span><span class="cap-kpi-val" id="pfc-qcp">32.40 kVAR</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Const S · <i>Q</i><sub>C</sub></span><span class="cap-kpi-val" id="pfc-qcs">26.01 kVAR</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Const P · Loss ↓</span><span class="cap-kpi-val" id="pfc-loss">−24.39%</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Const S · Δ<i>P</i> ↑</span><span class="cap-kpi-val" id="pfc-dp">+15.00 kW</span></div>';
+    root.appendChild(kpiStrip);
+
+    const elQcP = kpiStrip.querySelector("#pfc-qcp");
+    const elQcS = kpiStrip.querySelector("#pfc-qcs");
+    const elLoss = kpiStrip.querySelector("#pfc-loss");
+    const elDp = kpiStrip.querySelector("#pfc-dp");
+
+    let theme = getTheme();
+    let active = false;
+
+    function draw() {
+      const { w, h } = fitCanvas(canvas, 2.05);
+      const d = DPR;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const pr = presets[curPreset];
+      const pf1 = pr.pf1;
+      const pf2 = Math.max(pf1 + 0.01, Math.min(1.0, +slider.value));
+      const phi1 = Math.acos(pf1);
+      const phi2 = Math.acos(Math.min(pf2, 0.999999));
+
+      const P1 = pr.P;
+      const S1 = P1 / pf1;
+      const Q1 = P1 * Math.tan(phi1);
+
+      // Constant P
+      const Q2P = P1 * Math.tan(phi2);
+      const QcP = Q1 - Q2P;
+      const lossSave = (1 - (pf1 / pf2) * (pf1 / pf2)) * 100;
+      const curRed = (1 - pf1 / pf2) * 100;
+      const CdeltaP = ((QcP * 1000) / (2 * PI * 50 * 3 * pr.V * pr.V)) * 1e6;
+
+      // Constant S
+      const P2S = S1 * pf2;
+      const Q2S = S1 * Math.sin(phi2);
+      const QcS = Q1 - Q2S;
+      const dP = P2S - P1;
+
+      // Update KPI strip
+      elQcP.textContent = QcP.toFixed(2) + " kVAR";
+      elQcP.style.color = theme.ok;
+      elQcS.textContent = QcS.toFixed(2) + " kVAR";
+      elQcS.style.color = theme.cap;
+      elLoss.textContent =
+        "−" + lossSave.toFixed(1) + "% (I −" + curRed.toFixed(1) + "%)";
+      elLoss.style.color = theme.ok;
+      elDp.textContent = "+" + dP.toFixed(2) + " kW";
+      elDp.style.color = theme.cap;
+
+      // Update external sync cells if present on Slide 33
+      const syncCd = document.getElementById("pfc-live-cdelta");
+      if (syncCd) syncCd.textContent = CdeltaP.toFixed(1) + " µF";
+
+      // Coordinate system
+      const ox = 46 * d;
+      const oy = h * d - 38 * d;
+      const maxX = w * d - ox - 125 * d;
+      const maxY = oy - 30 * d;
+
+      const maxP = Math.max(P2S, P1) * 1.05;
+      const maxQ = Math.max(Q1, 1) * 1.12;
+      const sc = Math.min(maxX / maxP, maxY / maxQ);
+
+      // Axes
+      ctx.strokeStyle = theme.mut;
+      ctx.lineWidth = 1.2 * d;
+      ctx.beginPath();
+      ctx.moveTo(ox, 16 * d);
+      ctx.lineTo(ox, oy);
+      ctx.lineTo(w * d - 20 * d, oy);
+      ctx.stroke();
+
+      setFont(ctx, 10, "700");
+      ctx.fillStyle = theme.mut;
+      ctx.textAlign = "right";
+      ctx.fillText("Active Power P (kW)", w * d - 22 * d, oy + 26 * d);
+      ctx.textAlign = "left";
+      ctx.fillText("Q (kVAR)", ox + 6 * d, 24 * d);
+
+      // Constant-S circular arc (radius = S1 * sc)
+      if (mode === "both" || mode === "constS") {
+        ctx.save();
+        ctx.setLineDash([4 * d, 4 * d]);
+        ctx.strokeStyle = theme.cap;
+        ctx.globalAlpha = 0.55;
+        ctx.lineWidth = 1.4 * d;
+        ctx.beginPath();
+        ctx.arc(ox, oy, S1 * sc, -phi1, 0);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // 1. Original Uncompensated Triangle (Red/Amber dashed)
+      const p1x = ox + P1 * sc;
+      const q1y = oy - Q1 * sc;
+      ctx.save();
+      ctx.fillStyle = theme.err;
+      ctx.globalAlpha = 0.08;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(p1x, oy);
+      ctx.lineTo(p1x, q1y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.globalAlpha = 0.88;
+      ctx.setLineDash([5 * d, 4 * d]);
+      ctx.strokeStyle = theme.err;
+      ctx.lineWidth = 2.1 * d;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(p1x, q1y);
+      ctx.lineTo(p1x, oy);
+      ctx.stroke();
+      ctx.restore();
+
+      setFont(ctx, 10.2, "800");
+      ctx.fillStyle = theme.err;
+      ctx.textAlign = "right";
+      ctx.fillText(
+        "Before: S₁=" + S1.toFixed(1) + " kVA, Q₁=" + Q1.toFixed(1) + " kVAR",
+        w * d - 10 * d,
+        Math.max(q1y + 4 * d, 24 * d),
+      );
+
+      // 2. Constant P Compensated Triangle (Emerald Green)
+      if (mode === "both" || mode === "constP") {
+        const q2py = oy - Q2P * sc;
+        ctx.save();
+        ctx.fillStyle = theme.ok;
+        ctx.globalAlpha = 0.14;
+        ctx.beginPath();
+        ctx.moveTo(ox, oy);
+        ctx.lineTo(p1x, oy);
+        ctx.lineTo(p1x, q2py);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        drawArrow(ctx, ox, oy, p1x, q2py, theme.ok, 2.8 * d, 9 * d);
+        // QcP downward arrow
+        if (Math.abs(q2py - q1y) > 8 * d) {
+          drawArrow(ctx, p1x, q1y, p1x, q2py, theme.svc, 2.6 * d, 8 * d);
+        }
+        setFont(ctx, 10.5, "800");
+        ctx.fillStyle = theme.ok;
+        ctx.textAlign = "left";
+        ctx.fillText(
+          "Const P: S₂=" + (P1 / pf2).toFixed(1) + " kVA",
+          ox + P1 * sc * 0.34,
+          Math.min(oy - 10 * d, (oy + q2py) / 2 - 4 * d),
+        );
+      }
+
+      // 3. Constant S Compensated Triangle (Cyan)
+      if (mode === "both" || mode === "constS") {
+        const p2sx = ox + P2S * sc;
+        const q2sy = oy - Q2S * sc;
+        ctx.save();
+        ctx.fillStyle = theme.cap;
+        ctx.globalAlpha = 0.12;
+        ctx.beginPath();
+        ctx.moveTo(ox, oy);
+        ctx.lineTo(p2sx, oy);
+        ctx.lineTo(p2sx, q2sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        drawArrow(ctx, ox, oy, p2sx, q2sy, theme.cap, 2.8 * d, 9 * d);
+        // ΔP extension arrow along P axis
+        if (p2sx - p1x > 6 * d) {
+          drawArrow(ctx, p1x, oy, p2sx, oy, theme.cap, 3.2 * d, 8 * d);
+          setFont(ctx, 10, "800");
+          ctx.fillStyle = theme.cap;
+          ctx.textAlign = "center";
+          ctx.fillText("+ΔP", (p1x + p2sx) / 2, oy + 15 * d);
+        }
+        setFont(ctx, 10.5, "800");
+        ctx.fillStyle = theme.cap;
+        ctx.textAlign = "left";
+        ctx.fillText(
+          "Const S: P₂=" + P2S.toFixed(1) + " kW",
+          Math.min(p2sx + 6 * d, w * d - 130 * d),
+          Math.min(oy - 8 * d, q2sy + 4 * d),
+        );
+      }
+
+      // Base P1 label
+      setFont(ctx, 10.5, "800");
+      ctx.fillStyle = theme.tx;
+      ctx.textAlign = "center";
+      ctx.fillText(
+        "P₁ = " + P1.toFixed(curPreset === "sim" ? 2 : 0) + " kW",
+        (ox + p1x) / 2,
+        oy + 16 * d,
+      );
+    }
+
+    topBar.querySelectorAll("[data-pfc-pre]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        topBar
+          .querySelectorAll("[data-pfc-pre]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        curPreset = btn.getAttribute("data-pfc-pre");
+        slider.min = curPreset === "sim" ? "0.50" : "0.82";
+        slider.value = presets[curPreset].pf2;
+        updateSliderLabel(slider, slider.value);
+        draw();
+      });
+    });
+
+    topBar.querySelectorAll("[data-pfc-mode]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        topBar
+          .querySelectorAll("[data-pfc-mode]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        mode = btn.getAttribute("data-pfc-mode");
+        draw();
+      });
+    });
+
+    slider.addEventListener("input", () => {
+      updateSliderLabel(slider, slider.value);
+      draw();
+    });
+    window.addEventListener("resize", () => {
+      if (active) draw();
+    });
+    window.addEventListener("themechange", () => {
+      theme = getTheme();
+      if (active) draw();
+    });
+    bindSlideLifecycle(
+      root,
+      () => {
+        active = true;
+        draw();
+      },
+      () => {
+        active = false;
+      },
+    );
+    draw();
+  }
+
+  /* ================================================================
+   *  Widget 9 — FC-TCR Q(α) Sizing Curve (#widget-fctcr-curve)
+   * ================================================================ */
+
+  function initFCTCRCurve() {
+    const root = document.getElementById("widget-fctcr-curve");
+    if (!root) return;
+
+    const snapBar = document.createElement("div");
+    snapBar.className = "w-pill-row";
+    snapBar.innerHTML =
+      '<button class="w-pill" data-snap-a="90">α = 90° (Cancel)</button>' +
+      '<button class="w-pill" data-snap-a="103.75">α = 103.75° (Motor OFF)</button>' +
+      '<button class="w-pill active" data-snap-a="130.10">α = 130.10° (Motor ON)</button>' +
+      '<button class="w-pill" data-snap-a="180">α = 180° (Cap Only)</button>';
+    root.appendChild(snapBar);
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    const slider = createSlider(root, {
+      min: 90,
+      max: 180,
+      step: 0.05,
+      value: 130.1,
+      label: "Firing Angle α",
+      unit: "°",
+    });
+
+    const kpiStrip = document.createElement("div");
+    kpiStrip.className = "cap-kpi-strip";
+    kpiStrip.innerHTML =
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Factor <i>k</i>(α) &amp; σ</span><span class="cap-kpi-val" id="fc-kpi-k">0.205 · 99.8°</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">TCR Absorbs (+<i>Q</i><sub>TCR</sub>)</span><span class="cap-kpi-val" id="fc-kpi-tcr">+3.43 kVAR</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Net SVC Injects (<i>Q</i><sub>SVC</sub>)</span><span class="cap-kpi-val" id="fc-kpi-net">−13.31 kVAR</span></div>';
+    root.appendChild(kpiStrip);
+
+    const elK = kpiStrip.querySelector("#fc-kpi-k");
+    const elTcr = kpiStrip.querySelector("#fc-kpi-tcr");
+    const elNet = kpiStrip.querySelector("#fc-kpi-net");
+
+    let theme = getTheme();
+    let active = false;
+    const QMAX = 16.74;
+
+    function kFactor(deg) {
+      const a = deg * DEG;
+      return Math.max(0, Math.min(1, (2 * (PI - a) + Math.sin(2 * a)) / PI));
+    }
+
+    function draw() {
+      const { w, h } = fitCanvas(canvas, 2.0);
+      const d = DPR;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const alphaDeg = +slider.value;
+      const k = kFactor(alphaDeg);
+      const sigma = 2 * (180 - alphaDeg);
+      const qtcr = QMAX * k;
+      const qsvc = -QMAX + qtcr;
+
+      elK.textContent = k.toFixed(3) + " · σ=" + sigma.toFixed(1) + "°";
+      elK.style.color = theme.p;
+      elTcr.textContent = "+" + qtcr.toFixed(2) + " kVAR";
+      elTcr.style.color = theme.svc;
+      elNet.textContent = qsvc.toFixed(2) + " kVAR";
+      elNet.style.color = theme.cap;
+
+      const ml = 62 * d,
+        mr = 24 * d,
+        mt = 24 * d,
+        mb = 40 * d;
+      const gw = w * d - ml - mr;
+      const gh = h * d - mt - mb;
+      const px = (deg) => ml + ((deg - 90) / 90) * gw;
+      const py = (q) => mt + ((18 - q) / 36) * gh; // range -18 to +18 kVAR
+
+      // Grid lines
+      ctx.strokeStyle = theme.surf;
+      ctx.lineWidth = 0.8 * d;
+      for (let q = -16; q <= 16; q += 8) {
+        ctx.beginPath();
+        ctx.moveTo(ml, py(q));
+        ctx.lineTo(ml + gw, py(q));
+        ctx.stroke();
+      }
+      // Zero line
+      ctx.strokeStyle = theme.mut;
+      ctx.lineWidth = 1.4 * d;
+      ctx.beginPath();
+      ctx.moveTo(ml, py(0));
+      ctx.lineTo(ml + gw, py(0));
+      ctx.stroke();
+      // Left axis
+      ctx.beginPath();
+      ctx.moveTo(ml, mt);
+      ctx.lineTo(ml, mt + gh);
+      ctx.stroke();
+
+      // Axis ticks
+      setFont(ctx, 10, "700");
+      ctx.fillStyle = theme.mut;
+      ctx.textAlign = "right";
+      [-16.74, -8, 0, 8, 16.74].forEach((v) => {
+        ctx.fillText(
+          (v > 0 ? "+" : "") + v.toFixed(v % 1 ? 1 : 0),
+          ml - 7 * d,
+          py(v) + 4 * d,
+        );
+      });
+      ctx.textAlign = "center";
+      [90, 105, 120, 135, 150, 165, 180].forEach((deg) => {
+        ctx.fillText(deg + "°", px(deg), mt + gh + 16 * d);
+      });
+      ctx.fillText(
+        "TCR Firing Angle α (degrees)",
+        ml + gw / 2,
+        mt + gh + 33 * d,
+      );
+
+      // Fixed Cap horizontal dashed line (-16.74 kVAR)
+      ctx.save();
+      ctx.setLineDash([5 * d, 4 * d]);
+      ctx.strokeStyle = theme.cap;
+      ctx.globalAlpha = 0.65;
+      ctx.lineWidth = 1.5 * d;
+      ctx.beginPath();
+      ctx.moveTo(ml, py(-QMAX));
+      ctx.lineTo(ml + gw, py(-QMAX));
+      ctx.stroke();
+      ctx.restore();
+
+      // Curve 1: +Q_TCR(alpha) (Amber)
+      ctx.beginPath();
+      ctx.strokeStyle = theme.svc;
+      ctx.lineWidth = 2.6 * d;
+      for (let deg = 90; deg <= 180; deg += 0.5) {
+        const x = px(deg),
+          y = py(QMAX * kFactor(deg));
+        if (deg === 90) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Curve 2: Net Q_SVC(alpha) = -16.74 + Q_TCR (Cyan/Emerald)
+      ctx.beginPath();
+      ctx.strokeStyle = theme.ok;
+      ctx.lineWidth = 3 * d;
+      for (let deg = 90; deg <= 180; deg += 0.5) {
+        const x = px(deg),
+          y = py(-QMAX + QMAX * kFactor(deg));
+        if (deg === 90) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Operating point markers: Motor ON (130.10, -13.31) & Motor OFF (103.75, -5.00)
+      const pts = [
+        { deg: 130.1, q: -13.31, lbl: "Motor ON (130.1°)", clr: theme.ok },
+        { deg: 103.75, q: -5.0, lbl: "Motor OFF (103.8°)", clr: theme.p },
+      ];
+      pts.forEach((pt) => {
+        const cx = px(pt.deg),
+          cy = py(pt.q);
+        ctx.beginPath();
+        ctx.arc(cx, cy, 4.5 * d, 0, TAU);
+        ctx.fillStyle = pt.clr;
+        ctx.fill();
+        setFont(ctx, 9.5, "800");
+        ctx.fillStyle = pt.clr;
+        ctx.textAlign = "left";
+        ctx.fillText(pt.lbl, cx + 8 * d, cy + 4 * d);
+      });
+
+      // Vertical cursor for current alpha
+      const ax = px(alphaDeg);
+      ctx.save();
+      ctx.setLineDash([3 * d, 3 * d]);
+      ctx.strokeStyle = theme.tx;
+      ctx.globalAlpha = 0.6;
+      ctx.lineWidth = 1.3 * d;
+      ctx.beginPath();
+      ctx.moveTo(ax, mt);
+      ctx.lineTo(ax, mt + gh);
+      ctx.stroke();
+      ctx.restore();
+
+      // Live dots on both curves
+      [
+        { y: py(qtcr), clr: theme.svc },
+        { y: py(qsvc), clr: theme.ok },
+      ].forEach((dot) => {
+        ctx.beginPath();
+        ctx.arc(ax, dot.y, 6.5 * d, 0, TAU);
+        ctx.fillStyle = dot.clr;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(ax, dot.y, 3 * d, 0, TAU);
+        ctx.fillStyle = theme.bg;
+        ctx.fill();
+      });
+
+      // Legend top right
+      setFont(ctx, 10, "800");
+      ctx.textAlign = "right";
+      ctx.fillStyle = theme.svc;
+      ctx.fillText("— Q_TCR(α) Absorbed (+kVAR)", ml + gw - 4 * d, mt + 12 * d);
+      ctx.fillStyle = theme.ok;
+      ctx.fillText(
+        "— Net Q_SVC(α) Injected (−kVAR)",
+        ml + gw - 4 * d,
+        mt + 26 * d,
+      );
+    }
+
+    snapBar.querySelectorAll("[data-snap-a]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        snapBar
+          .querySelectorAll("[data-snap-a]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        slider.value = btn.getAttribute("data-snap-a");
+        updateSliderLabel(slider, slider.value);
+        draw();
+      });
+    });
+    slider.addEventListener("input", () => {
+      updateSliderLabel(slider, slider.value);
+      snapBar
+        .querySelectorAll("[data-snap-a]")
+        .forEach((b) => b.classList.remove("active"));
+      draw();
+    });
+    window.addEventListener("resize", () => {
+      if (active) draw();
+    });
+    window.addEventListener("themechange", () => {
+      theme = getTheme();
+      if (active) draw();
+    });
+    bindSlideLifecycle(
+      root,
+      () => {
+        active = true;
+        draw();
+      },
+      () => {
+        active = false;
+      },
+    );
+    draw();
+  }
+
+  /* ================================================================
+   *  Widget 10 — Live 300 Hz Ripple & LPF Visualizer (#widget-lpf-ripple)
+   * ================================================================ */
+
+  function initLPFRipple() {
+    const root = document.getElementById("widget-lpf-ripple");
+    if (!root) return;
+
+    const topBar = document.createElement("div");
+    topBar.className = "w-pill-row";
+    topBar.style.justifyContent = "space-between";
+    topBar.style.alignItems = "center";
+    topBar.innerHTML =
+      '<div style="display:flex;gap:6px;">' +
+      '<button class="w-pill active" data-lpf-on="1">LPF Active (τ = 20 ms)</button>' +
+      '<button class="w-pill" data-lpf-on="0">Bypass LPF (Raw Ripple!)</button>' +
+      "</div>" +
+      '<span class="mono" id="lpf-rej-badge" style="font-size:0.78rem;font-weight:800;color:var(--ok);">Rejection @ 300 Hz: 97.35% · f_c = 7.96 Hz</span>';
+    root.appendChild(topBar);
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    const slider = createSlider(root, {
+      min: 1,
+      max: 40,
+      step: 1,
+      value: 20,
+      label: "LPF τ (ms)",
+      unit: " ms",
+    });
+
+    const rejBadge = topBar.querySelector("#lpf-rej-badge");
+    let lpfEnabled = true;
+    let theme = getTheme();
+    let active = false;
+    let rafId = null;
+    let tShift = 0;
+
+    function drawFrame() {
+      const { w, h } = fitCanvas(canvas, 2.75);
+      const d = DPR;
+      const tau = +slider.value / 1000;
+      const fc = 1 / (2 * PI * tau);
+      const gain300 = lpfEnabled
+        ? 1 / Math.sqrt(1 + Math.pow(2 * PI * 300 * tau, 2))
+        : 1.0;
+      const phase300 = lpfEnabled ? Math.atan(2 * PI * 300 * tau) : 0;
+      const gain600 = lpfEnabled
+        ? 1 / Math.sqrt(1 + Math.pow(2 * PI * 600 * tau, 2))
+        : 1.0;
+      const rejPct = (1 - gain300) * 100;
+
+      if (rejBadge) {
+        rejBadge.textContent = lpfEnabled
+          ? "300 Hz Rejection: " +
+            rejPct.toFixed(2) +
+            "% · f_c = " +
+            fc.toFixed(2) +
+            " Hz"
+          : "LPF BYPASSED — ±1,150 VAR Jitter Enters PI!";
+        rejBadge.style.color = lpfEnabled ? theme.ok : theme.err;
+      }
+
+      // Dark phosphor scope
+      ctx.fillStyle = "#090D16";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const ml = 50 * d,
+        mr = 14 * d,
+        mt = 18 * d,
+        mb = 22 * d;
+      const gw = w * d - ml - mr;
+      const gh = h * d - mt - mb;
+      const cy = mt + gh / 2;
+
+      // Grid
+      ctx.strokeStyle = "rgba(255,255,255,0.08)";
+      ctx.lineWidth = 0.8 * d;
+      for (let i = 0; i <= 8; i++) {
+        const x = ml + (i / 8) * gw;
+        ctx.beginPath();
+        ctx.moveTo(x, mt);
+        ctx.lineTo(x, mt + gh);
+        ctx.stroke();
+      }
+      for (let j = 0; j <= 4; j++) {
+        const y = mt + (j / 4) * gh;
+        ctx.beginPath();
+        ctx.moveTo(ml, y);
+        ctx.lineTo(ml + gw, y);
+        ctx.stroke();
+      }
+      // Zero reference line
+      ctx.strokeStyle = "rgba(255,255,255,0.22)";
+      ctx.beginPath();
+      ctx.moveTo(ml, cy);
+      ctx.lineTo(ml + gw, cy);
+      ctx.stroke();
+
+      // Y ticks
+      setFont(ctx, 9, "700");
+      ctx.fillStyle = "#94A3B8";
+      ctx.textAlign = "right";
+      ctx.fillText("+1.2k", ml - 6 * d, mt + 7 * d);
+      ctx.fillText("0 VAR", ml - 6 * d, cy + 3 * d);
+      ctx.fillText("−1.2k", ml - 6 * d, mt + gh);
+
+      const yScale = (gh * 0.43) / 1350;
+      const spanSec = 0.02; // 20 ms = 1 full 50 Hz cycle = 6 ripple peaks (300 Hz)
+      const N = 220;
+
+      // Trace 1: Raw Q_raw(t) (300 Hz ripple)
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(251, 113, 133, 0.72)";
+      ctx.lineWidth = 1.8 * d;
+      for (let i = 0; i <= N; i++) {
+        const frac = i / N;
+        const t = frac * spanSec + tShift;
+        const qRaw =
+          1150 * Math.sin(TAU * 300 * t) + 180 * Math.sin(TAU * 600 * t + 0.5);
+        const x = ml + frac * gw;
+        const y = cy - qRaw * yScale;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Trace 2: Filtered Q_grid_meas(t)
+      ctx.beginPath();
+      ctx.strokeStyle = lpfEnabled ? "#34D399" : "#FBBF24";
+      ctx.lineWidth = 2.6 * d;
+      for (let i = 0; i <= N; i++) {
+        const frac = i / N;
+        const t = frac * spanSec + tShift;
+        const qFilt =
+          -4.3 +
+          1150 * gain300 * Math.sin(TAU * 300 * t - phase300) +
+          180 * gain600 * Math.sin(TAU * 600 * t + 0.5 - phase300);
+        const x = ml + frac * gw;
+        const y = cy - qFilt * yScale;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Scope legends
+      setFont(ctx, 9.2, "800");
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#FB7185";
+      ctx.fillText("— Q_raw (300 Hz, ±1150 VAR)", ml + 6 * d, mt + 11 * d);
+      ctx.textAlign = "right";
+      ctx.fillStyle = lpfEnabled ? "#34D399" : "#FBBF24";
+      ctx.fillText(
+        lpfEnabled
+          ? "— Q_grid_meas (Filtered ≈ −4.3 VAR)"
+          : "— Q_grid_meas (UNFILTERED!)",
+        ml + gw - 6 * d,
+        mt + 11 * d,
+      );
+      ctx.fillStyle = "#94A3B8";
+      ctx.fillText(
+        "Window = 20 ms (1 Grid Cycle = 6 Ripples)",
+        ml + gw - 4 * d,
+        mt + gh + 14 * d,
+      );
+    }
+
+    function loop() {
+      if (!active) return;
+      tShift += 0.00018;
+      drawFrame();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    topBar.querySelectorAll("[data-lpf-on]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        topBar
+          .querySelectorAll("[data-lpf-on]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        lpfEnabled = btn.getAttribute("data-lpf-on") === "1";
+        if (lpfEnabled) {
+          slider.value = 20;
+          updateSliderLabel(slider, 20);
+        }
+        drawFrame();
+      });
+    });
+
+    slider.addEventListener("input", () => {
+      updateSliderLabel(slider, slider.value);
+      lpfEnabled = true;
+      topBar
+        .querySelectorAll("[data-lpf-on]")
+        .forEach((b) =>
+          b.classList.toggle("active", b.getAttribute("data-lpf-on") === "1"),
+        );
+      drawFrame();
+    });
+
+    window.addEventListener("resize", () => {
+      if (active) drawFrame();
+    });
+    window.addEventListener("themechange", () => {
+      theme = getTheme();
+      if (active) drawFrame();
+    });
+    bindSlideLifecycle(
+      root,
+      () => {
+        active = true;
+        if (!rafId) loop();
+      },
+      () => {
+        active = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      },
+    );
+    drawFrame();
+  }
+
+  /* ================================================================
+   *  Widget 11 — CROWN JEWEL: Luxury SCADA & Keysight 5-Case Switchboard
+   * ================================================================ */
+
+  function initSimSwitchboard() {
+    const root = document.getElementById("widget-sim-switchboard");
+    if (!root) return;
+
+    // Exact MATLAB steady-state telemetry table from sim_results_5cases.mat
+    const CASES = {
+      case1: {
+        label: "Case 1 · Auto PI (Motor ON)",
+        motor: true,
+        cap: true,
+        auto: true,
+        alpha: 130.09,
+        P: 6252.2,
+        Q: -4.3,
+        PF: 1.0,
+        regime: "UNITY PF · OPTIMAL",
+        badge: "✓ OPTIMAL",
+        cls: "",
+        thd: 16.28,
+        verdict:
+          "<strong>Case 1 (Closed-Loop Full Load):</strong> PI locks <strong>α = 130.09°</strong> (theory 130.10°), absorbing +3.43 kVAR surplus so <strong>Q_grid = −4.30 VAR ≈ 0</strong> and <strong>PF = 1.0000 Unity</strong>.",
+      },
+      case2: {
+        label: "Case 2 · Auto PI (Motor OFF)",
+        motor: false,
+        cap: true,
+        auto: true,
+        alpha: 103.8,
+        P: 4460.5,
+        Q: -3.34,
+        PF: 1.0,
+        regime: "UNITY PF · LIGHT LOAD",
+        badge: "✓ OPTIMAL",
+        cls: "",
+        thd: 29.83,
+        verdict:
+          "<strong>Case 2 (Motor Isolated):</strong> Load drops 62.4% to +5.00 kVAR; PI lowers <strong>α → 103.80°</strong> (σ = 152.4°) so TCR absorbs the full +11.74 kVAR surplus and holds <strong>PF = 1.0000 Unity</strong>.",
+      },
+      case3a: {
+        label: "Case 3A · Uncomp (ON)",
+        motor: true,
+        cap: false,
+        auto: false,
+        alpha: 180.0,
+        P: 6187.8,
+        Q: 12605.2,
+        PF: 0.4407,
+        regime: "LAGGING PENALTY!",
+        badge: "✕ UNCOMPENSATED",
+        cls: "bad",
+        thd: 1.64,
+        verdict:
+          "<strong>Case 3A (Before Compensation — Full Load):</strong> Grid supplies full +12.61 kVAR inductive load. Line current surges to <strong>20.27 A</strong> (2.25× compensated), collapsing <strong>PF = 0.4407 Lag</strong>.",
+      },
+      case3b: {
+        label: "Case 3B · Uncomp (OFF)",
+        motor: false,
+        cap: false,
+        auto: false,
+        alpha: 180.0,
+        P: 4418.3,
+        Q: 4920.4,
+        PF: 0.6681,
+        regime: "LAGGING PENALTY",
+        badge: "⚠ LAGGING",
+        cls: "warn",
+        thd: 0.0,
+        verdict:
+          "<strong>Case 3B (Before Compensation — Light Load):</strong> Static RL load alone draws +4.92 kVAR from utility grid, yielding <strong>PF = 0.6681 Lag</strong> — far below the 0.92 utility threshold.",
+      },
+      case4a: {
+        label: "Case 4A · Cap Only (ON)",
+        motor: true,
+        cap: true,
+        auto: false,
+        alpha: 180.0,
+        P: 6206.1,
+        Q: -4054.3,
+        PF: 0.8372,
+        regime: "LEADING OVER-COMP",
+        badge: "⚠ OVER-COMP",
+        cls: "warn",
+        thd: 0.0,
+        verdict:
+          "<strong>Case 4A (Fixed Cap Only, TCR Blocked):</strong> Without TCR absorption, the −16.74 kVAR capacitor bank over-compensates +13.31 kVAR load, exporting −4.05 kVAR to grid (<strong>PF = 0.8372 Lead</strong>).",
+      },
+      case4b: {
+        label: "Case 4B · Cap Only (OFF!)",
+        motor: false,
+        cap: true,
+        auto: false,
+        alpha: 180.0,
+        P: 4449.3,
+        Q: -11876.8,
+        PF: 0.3508,
+        regime: "SEVERE LEADING DISASTER!",
+        badge: "✕ OVERVOLTAGE RISK",
+        cls: "bad",
+        thd: 0.98,
+        verdict:
+          "<strong>Case 4B (Why Fixed Cap Alone Fails!):</strong> At light load, fixed −16.74 kVAR dumps <strong>−11.88 kVAR</strong> backward into transformer! <strong>PF plunges to 0.3508 Lead</strong> (Ferranti overvoltage hazard).",
+      },
+      case5: {
+        label: "Case 5 · α = 90° Cancel",
+        motor: false,
+        cap: true,
+        auto: false,
+        alpha: 90.0,
+        P: 4471.9,
+        Q: 4963.3,
+        PF: 0.6694,
+        regime: "100% FC–TCR CANCEL",
+        badge: "★ SIZING PROOF",
+        cls: "warn",
+        thd: 2.34,
+        verdict:
+          "<strong>Case 5 (Sizing Proof at α = 90°):</strong> TCR conducts full 180° sinusoid (+16.74 kVAR), canceling 100% of −16.74 kVAR Cap bank (Q_SVC = 0). Grid sees exact RL load (+4.96 kVAR, PF = 0.6694) matching Case 3B!",
+      },
+    };
+
+    const state = {
+      motor: true,
+      cap: true,
+      auto: true,
+      manualAlpha: 130.09,
+      activePreset: "case1",
+      frozen: false,
+    };
+
+    const ARC_LEN = 270.18; // pi * r (r = 86)
+
+    root.innerHTML =
+      '<div class="sb-root">' +
+      '  <div class="sb-presets" id="sb-preset-bar">' +
+      '    <button class="sb-preset-btn active" data-case="case1"><i class="sb-pdot ok"></i>Case 1 · Auto PI (ON)</button>' +
+      '    <button class="sb-preset-btn" data-case="case2"><i class="sb-pdot ok"></i>Case 2 · Auto PI (OFF)</button>' +
+      '    <button class="sb-preset-btn danger" data-case="case3a"><i class="sb-pdot bad"></i>Case 3A · Uncomp (ON)</button>' +
+      '    <button class="sb-preset-btn warn" data-case="case3b"><i class="sb-pdot warn"></i>Case 3B · Uncomp (OFF)</button>' +
+      '    <button class="sb-preset-btn warn" data-case="case4a"><i class="sb-pdot warn"></i>Case 4A · Cap Only (ON)</button>' +
+      '    <button class="sb-preset-btn danger" data-case="case4b"><i class="sb-pdot bad"></i>Case 4B · Cap Only (OFF!)</button>' +
+      '    <button class="sb-preset-btn warn" data-case="case5"><i class="sb-pdot warn"></i>Case 5 · α=90° Cancel</button>' +
+      "  </div>" +
+      '  <div class="sb-main-grid">' +
+      '    <div class="sb-panel sb-panel-sw" style="--card-clr:var(--svc);">' +
+      '      <div class="sb-panel-title"><span>SIMULINK SWITCHES</span><span class="sb-chip">3 MANUAL</span></div>' +
+      '      <div class="sb-switch-card">' +
+      '        <div class="sb-sw-head"><span class="sb-sw-name">Motor_ON_OFF_Switch</span><span class="sb-sw-area">Area 2</span></div>' +
+      '        <div class="sb-rocker">' +
+      '          <button class="sb-tog on-green" id="sw-mot-on"><i class="sb-led"></i>1 · Motor ON</button>' +
+      '          <button class="sb-tog" id="sw-mot-off"><i class="sb-led"></i>0 · Motor OFF</button>' +
+      "        </div>" +
+      "      </div>" +
+      '      <div class="sb-switch-card">' +
+      '        <div class="sb-sw-head"><span class="sb-sw-name">Cap_ON_OFF_Switch</span><span class="sb-sw-area">Area 3</span></div>' +
+      '        <div class="sb-rocker">' +
+      '          <button class="sb-tog on-green" id="sw-cap-on"><i class="sb-led"></i>1 · Cap ON</button>' +
+      '          <button class="sb-tog" id="sw-cap-off"><i class="sb-led"></i>0 · Cap OFF</button>' +
+      "        </div>" +
+      "      </div>" +
+      '      <div class="sb-switch-card">' +
+      '        <div class="sb-sw-head"><span class="sb-sw-name">Manual_Auto_Switch</span><span class="sb-sw-area">Area 6</span></div>' +
+      '        <div class="sb-rocker">' +
+      '          <button class="sb-tog on-amber" id="sw-mode-auto"><i class="sb-led"></i>0 · Auto PI</button>' +
+      '          <button class="sb-tog" id="sw-mode-man"><i class="sb-led"></i>1 · Manual α</button>' +
+      "        </div>" +
+      "      </div>" +
+      '      <div class="sb-switch-card" id="sb-alpha-box">' +
+      '        <div class="sb-sw-head"><span class="sb-sw-name">Alpha_Manual_deg</span><span class="mono sb-alpha-read" id="sb-alpha-lbl">130.09° (PI)</span></div>' +
+      '        <input type="range" class="sb-alpha-slider" id="sb-alpha-rng" min="90" max="180" step="0.5" value="130">' +
+      '        <div class="sb-alpha-ticks">' +
+      '          <button type="button" class="sb-tick" data-snap="90">90°</button>' +
+      '          <button type="button" class="sb-tick" data-snap="103.8">103.8°</button>' +
+      '          <button type="button" class="sb-tick" data-snap="130.1">130.1°</button>' +
+      '          <button type="button" class="sb-tick" data-snap="180">180°</button>' +
+      "        </div>" +
+      "      </div>" +
+      "    </div>" +
+      '    <div class="sb-panel sb-panel-scada" style="--card-clr:var(--ok);">' +
+      '      <div class="sb-panel-title"><span>SCADA METERS</span><span class="sb-chip">400 V RMS</span></div>' +
+      '      <div class="sb-pf-gauge-card">' +
+      '        <svg class="sb-pf-svg" viewBox="0 0 220 112" aria-label="Power Factor Gauge">' +
+      '          <path class="sb-arc-bg" d="M 24 96 A 86 86 0 0 1 196 96" />' +
+      '          <path class="sb-arc-fill" id="sb-pf-arc" d="M 24 96 A 86 86 0 0 1 196 96" stroke-dasharray="270.18" stroke-dashoffset="0" />' +
+      '          <text x="110" y="64" text-anchor="middle" class="sb-svg-pf-val" id="lcd-pf">1.0000</text>' +
+      '          <text x="110" y="83" text-anchor="middle" class="sb-svg-pf-dir" id="lcd-pf-dir">UNITY PF · cos φ</text>' +
+      '          <text x="24" y="109" text-anchor="middle" class="sb-arc-lbl">0.0</text>' +
+      '          <text x="196" y="109" text-anchor="middle" class="sb-arc-lbl">1.0</text>' +
+      "        </svg>" +
+      '        <div class="sb-pf-meta-row"><span id="lcd-il">I_line = 9.02 A rms</span><span id="lcd-sig">σ = 99.8°</span></div>' +
+      '        <div class="sb-status-pill" id="sb-regime">UNITY PF · OPTIMAL</div>' +
+      "      </div>" +
+      '      <div class="sb-meter-grid">' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Active P_grid</span><strong class="sb-mval" id="lcd-p">6,252.2 W</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Reactive Q_grid</span><strong class="sb-mval" id="lcd-q">−4.3 VAR</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Firing Angle α</span><strong class="sb-mval accent-amber" id="lcd-alpha">130.09°</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Grid Line THD</span><strong class="sb-mval accent-cyan" id="lcd-thd">16.28%</strong></div>' +
+      "      </div>" +
+      '      <div class="sb-qbal-card">' +
+      '        <div class="sb-qbal-head"><span>Q-BALANCE (kVAR)</span><span id="sb-qbal-net">Net: −4.3 VAR</span></div>' +
+      '        <div class="sb-qbal-row"><span>Load</span><div class="sb-qbar-track"><i class="sb-qbar-fill load" id="qbar-load" style="width:79%;"></i></div><strong id="qval-load">+13.31</strong></div>' +
+      '        <div class="sb-qbal-row"><span>Δ Cap</span><div class="sb-qbar-track"><i class="sb-qbar-fill cap" id="qbar-cap" style="width:100%;"></i></div><strong id="qval-cap">−16.74</strong></div>' +
+      '        <div class="sb-qbal-row"><span>Δ TCR</span><div class="sb-qbar-track"><i class="sb-qbar-fill tcr" id="qbar-tcr" style="width:20%;"></i></div><strong id="qval-tcr">+3.43</strong></div>' +
+      "      </div>" +
+      "    </div>" +
+      '    <div class="sb-panel sb-panel-scope" style="--card-clr:var(--cap);padding:10px 12px;">' +
+      '      <div class="sb-scope-bezel-head">' +
+      '        <div class="sb-scope-tags">' +
+      '          <span class="sb-live-dot" id="sb-live-badge"><i></i>LIVE 50 Hz</span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#38BDF8;">Ch1: V_a</span>' +
+      '          <span class="sb-ch-pill" id="sb-ch-ia" style="--ch-c:#34D399;">10·I_a</span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#0EA5E9;">Ch2: I_Cap</span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#FBBF24;">I_TCR</span>' +
+      "        </div>" +
+      '        <div class="sb-scope-actions">' +
+      '          <span class="sb-phi-pill" id="sb-phi-read">φ = 0.0°</span>' +
+      '          <button type="button" class="sb-freeze-btn" id="sb-freeze-btn" title="Freeze / Resume Live Scope">⏸ Freeze</button>' +
+      "        </div>" +
+      "      </div>" +
+      '      <div id="sb-canvas-host" data-max-h="332" style="flex:1;width:100%;min-width:0;display:flex;align-items:center;"><canvas id="sb-scope-canvas"></canvas></div>' +
+      "    </div>" +
+      "  </div>" +
+      '  <div class="sb-verdict" id="sb-verdict-box">' +
+      '    <span class="sb-verdict-badge" id="sb-v-badge">✓ OPTIMAL</span>' +
+      '    <p class="sb-verdict-text" id="sb-v-text"></p>' +
+      "  </div>" +
+      "</div>";
+
+    const canvas = root.querySelector("#sb-scope-canvas");
+    const ctx = canvas.getContext("2d");
+    const swMotOn = root.querySelector("#sw-mot-on");
+    const swMotOff = root.querySelector("#sw-mot-off");
+    const swCapOn = root.querySelector("#sw-cap-on");
+    const swCapOff = root.querySelector("#sw-cap-off");
+    const swAuto = root.querySelector("#sw-mode-auto");
+    const swMan = root.querySelector("#sw-mode-man");
+    const alphaRng = root.querySelector("#sb-alpha-rng");
+    const alphaLbl = root.querySelector("#sb-alpha-lbl");
+    const pfArc = root.querySelector("#sb-pf-arc");
+    const lcdP = root.querySelector("#lcd-p");
+    const lcdQ = root.querySelector("#lcd-q");
+    const lcdPF = root.querySelector("#lcd-pf");
+    const lcdPFDir = root.querySelector("#lcd-pf-dir");
+    const lcdIL = root.querySelector("#lcd-il");
+    const lcdAlpha = root.querySelector("#lcd-alpha");
+    const lcdThd = root.querySelector("#lcd-thd");
+    const lcdSig = root.querySelector("#lcd-sig");
+    const regimeEl = root.querySelector("#sb-regime");
+    const qbarLoad = root.querySelector("#qbar-load");
+    const qbarCap = root.querySelector("#qbar-cap");
+    const qbarTcr = root.querySelector("#qbar-tcr");
+    const qvalLoad = root.querySelector("#qval-load");
+    const qvalCap = root.querySelector("#qval-cap");
+    const qvalTcr = root.querySelector("#qval-tcr");
+    const qbalNet = root.querySelector("#sb-qbal-net");
+    const chIaPill = root.querySelector("#sb-ch-ia");
+    const phiRead = root.querySelector("#sb-phi-read");
+    const liveBadge = root.querySelector("#sb-live-badge");
+    const freezeBtn = root.querySelector("#sb-freeze-btn");
+    const verdictBox = root.querySelector("#sb-verdict-box");
+    const vBadge = root.querySelector("#sb-v-badge");
+    const vText = root.querySelector("#sb-v-text");
+    const presetBtns = Array.from(root.querySelectorAll(".sb-preset-btn"));
+
+    let active = false;
+    let rafId = null;
+    let animPhase = 0;
+
+    function kFactor(deg) {
+      const a = deg * DEG;
+      return Math.max(0, Math.min(1, (2 * (PI - a) + Math.sin(2 * a)) / PI));
+    }
+
+    function computeTelemetry() {
+      const Qload_k = state.motor ? 13.31 : 5.0;
+      const Qc_k = state.cap ? 16.74 : 0.0;
+
+      if (state.activePreset && CASES[state.activePreset]) {
+        const c = CASES[state.activePreset];
+        const k = kFactor(c.alpha);
+        let qtcr = 16.74 * k;
+        if (state.activePreset === "case1") qtcr = 3.43;
+        if (state.activePreset === "case2") qtcr = 11.74;
+        const S = Math.sqrt(c.P * c.P + c.Q * c.Q);
+        const IL = S / (Math.sqrt(3) * 400);
+        return {
+          ...c,
+          qload: Qload_k,
+          qc: Qc_k,
+          qtcr,
+          sigma: 2 * (180 - c.alpha),
+          IL,
+        };
+      }
+
+      const Qload = Qload_k * 1000;
+      const Pload = state.motor ? 6252.2 : 4460.5;
+      const Qc = Qc_k * 1000;
+
+      let alpha;
+      if (state.auto) {
+        alpha = state.cap ? (state.motor ? 130.09 : 103.8) : 180.0;
+      } else {
+        alpha = state.manualAlpha;
+      }
+
+      const k = kFactor(alpha);
+      const Qtcr = 16740 * k;
+      let Qgrid = Qload - Qc + Qtcr;
+      if (state.auto && state.cap) Qgrid = state.motor ? -4.3 : -3.34;
+      const S = Math.sqrt(Pload * Pload + Qgrid * Qgrid);
+      const PF = Math.min(1.0, Pload / Math.max(S, 1));
+      const IL = S / (Math.sqrt(3) * 400);
+
+      const aRad = alpha * DEG;
+      let harmSq = 0;
+      const ImaxBranch = 13.95;
+      [5, 7, 11, 13].forEach((n) => {
+        const ih =
+          ((4 * ImaxBranch) / PI) *
+          Math.abs(
+            Math.sin((n + 1) * aRad) / (2 * (n + 1)) +
+              Math.sin((n - 1) * aRad) / (2 * (n - 1)) -
+              (Math.cos(aRad) * Math.sin(n * aRad)) / n,
+          );
+        const lineH = ih * Math.sqrt(3) * 0.68;
+        harmSq += lineH * lineH;
+      });
+      const thd = Math.min(45, (Math.sqrt(harmSq) / Math.max(IL, 1)) * 100);
+
+      let regime = "UNITY PF · OPTIMAL";
+      let badge = "✓ OPTIMAL";
+      let cls = "";
+      if (PF < 0.72) {
+        regime = Qgrid < 0 ? "SEVERE LEADING HAZARD!" : "POOR LAGGING PF!";
+        badge = Qgrid < 0 ? "✕ LEADING HAZARD" : "✕ POOR PF";
+        cls = "bad";
+      } else if (PF < 0.92) {
+        regime = Qgrid < 0 ? "LEADING OVER-COMP" : "LAGGING PENALTY (< 0.92)";
+        badge = Qgrid < 0 ? "⚠ LEADING" : "⚠ LAGGING";
+        cls = "warn";
+      }
+      const dir = Math.abs(Qgrid) < 50 ? "Unity" : Qgrid > 0 ? "Lag" : "Lead";
+      const verdict =
+        "<strong>Custom State (" +
+        (state.auto ? "Auto PI" : "Manual α = " + alpha.toFixed(1) + "°") +
+        "):</strong> Q_load = +" +
+        Qload_k.toFixed(2) +
+        " kVAR, Q_C = −" +
+        Qc_k.toFixed(2) +
+        " kVAR, Q_TCR = +" +
+        (Qtcr / 1000).toFixed(2) +
+        " kVAR → <strong>Q_grid = " +
+        (Qgrid >= 0 ? "+" : "−") +
+        Math.abs(Qgrid).toFixed(0) +
+        " VAR (" +
+        dir +
+        ", PF = " +
+        PF.toFixed(4) +
+        ")</strong>.";
+
+      return {
+        P: Pload,
+        Q: Qgrid,
+        PF,
+        alpha,
+        thd,
+        qload: Qload_k,
+        qc: Qc_k,
+        qtcr: Qtcr / 1000,
+        sigma: 2 * (180 - alpha),
+        IL,
+        regime,
+        badge,
+        cls,
+        verdict,
+      };
+    }
+
+    function syncUI() {
+      const tel = computeTelemetry();
+      const statusCol =
+        tel.cls === "bad"
+          ? "#F43F5E"
+          : tel.cls === "warn"
+            ? "#F59E0B"
+            : "#10B981";
+      const statusVar =
+        tel.cls === "bad"
+          ? "var(--err)"
+          : tel.cls === "warn"
+            ? "var(--svc)"
+            : "var(--ok)";
+
+      // Rocker switch LEDs
+      swMotOn.className = "sb-tog" + (state.motor ? " on-green" : "");
+      swMotOff.className = "sb-tog" + (!state.motor ? " on-red" : "");
+      swCapOn.className = "sb-tog" + (state.cap ? " on-green" : "");
+      swCapOff.className = "sb-tog" + (!state.cap ? " on-red" : "");
+      swAuto.className = "sb-tog" + (state.auto ? " on-amber" : "");
+      swMan.className = "sb-tog" + (!state.auto ? " on-amber" : "");
+
+      alphaRng.disabled = state.auto;
+      alphaRng.style.opacity = state.auto ? "0.45" : "1";
+      alphaRng.value = tel.alpha;
+      alphaLbl.textContent =
+        tel.alpha.toFixed(2) + "°" + (state.auto ? " (PI)" : " (Man)");
+
+      // Radial PF Arc Gauge (SVG text cleanly centered with ZERO overlap!)
+      if (pfArc) {
+        pfArc.style.strokeDashoffset = (ARC_LEN * (1 - tel.PF)).toFixed(1);
+        pfArc.style.stroke = statusCol;
+      }
+      lcdPF.textContent = tel.PF.toFixed(4);
+      lcdPF.style.fill = statusVar;
+      lcdPFDir.textContent =
+        Math.abs(tel.Q) < 50
+          ? "UNITY PF · cos φ"
+          : tel.Q > 0
+            ? "LAGGING · cos φ"
+            : "LEADING · cos φ";
+      lcdIL.textContent = "I_line = " + tel.IL.toFixed(2) + " A rms";
+      lcdSig.textContent = "σ = " + tel.sigma.toFixed(1) + "°";
+
+      // Unified 2x2 Precision Telemetry Grid (Zero overflow!)
+      lcdP.textContent =
+        tel.P.toLocaleString("en-US", {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        }) + " W";
+      const qSign = tel.Q >= 0 ? "+" : "−";
+      const qFmt =
+        Math.abs(tel.Q) >= 1000
+          ? qSign + (Math.abs(tel.Q) / 1000).toFixed(2) + " kVAR"
+          : qSign + Math.abs(tel.Q).toFixed(1) + " VAR";
+      lcdQ.textContent = qFmt;
+      lcdQ.style.color = Math.abs(tel.Q) < 60 ? "var(--ok)" : statusVar;
+      lcdAlpha.textContent = tel.alpha.toFixed(2) + "°";
+      lcdThd.textContent = tel.thd.toFixed(2) + "%";
+
+      // Live Q-Balance Bars (max scale 16.74 kVAR)
+      qbarLoad.style.width =
+        Math.min(100, (tel.qload / 16.74) * 100).toFixed(1) + "%";
+      qbarCap.style.width =
+        Math.min(100, (tel.qc / 16.74) * 100).toFixed(1) + "%";
+      qbarTcr.style.width =
+        Math.min(100, (tel.qtcr / 16.74) * 100).toFixed(1) + "%";
+      qvalLoad.textContent = "+" + tel.qload.toFixed(2);
+      qvalCap.textContent = tel.qc > 0 ? "−" + tel.qc.toFixed(2) : "0.00";
+      qvalTcr.textContent = "+" + tel.qtcr.toFixed(2);
+      qbalNet.textContent = "Net: " + qFmt;
+      qbalNet.style.color = statusVar;
+
+      // Phase angle & scope legend color
+      const phiDeg = Math.atan2(tel.Q, tel.P) / DEG;
+      const phiStr =
+        Math.abs(phiDeg) < 0.3
+          ? "φ = 0.0° (In Phase)"
+          : phiDeg > 0
+            ? "φ = −" + phiDeg.toFixed(1) + "° Lag"
+            : "φ = +" + Math.abs(phiDeg).toFixed(1) + "° Lead";
+      phiRead.textContent = phiStr;
+      phiRead.className = "sb-phi-pill" + (tel.cls ? " " + tel.cls : "");
+      chIaPill.style.setProperty("--ch-c", statusCol);
+
+      regimeEl.textContent = tel.regime;
+      regimeEl.className = "sb-status-pill" + (tel.cls ? " " + tel.cls : "");
+
+      vBadge.textContent = tel.badge;
+      vBadge.className = "sb-verdict-badge" + (tel.cls ? " " + tel.cls : "");
+      vText.innerHTML = tel.verdict;
+      verdictBox.style.setProperty("--card-clr", statusVar);
+
+      presetBtns.forEach((b) =>
+        b.classList.toggle(
+          "active",
+          b.getAttribute("data-case") === state.activePreset,
+        ),
+      );
+      return tel;
+    }
+
+    function drawScope(tel) {
+      const { w, h } = fitCanvas(canvas, 1.85);
+      const d = DPR;
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // Deep Keysight phosphor screen backdrop
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+      bgGrad.addColorStop(0, "#080E1B");
+      bgGrad.addColorStop(1, "#050912");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Partition: Left 75% = Dual-Channel Scope, Right 25% = Live Vector Phasor
+      const phasorW = Math.max(115 * d, W * 0.25);
+      const scopeEnd = W - phasorW - 8 * d;
+      const ml = 36 * d,
+        mt = 10 * d,
+        mb = 14 * d;
+      const gw = Math.max(120 * d, scopeEnd - ml);
+      const totalH = H - mt - mb;
+      const gap = 12 * d;
+      const chH = (totalH - gap) / 2;
+
+      const ch1Top = mt;
+      const ch1Mid = ch1Top + chH / 2;
+      const ch2Top = mt + chH + gap;
+      const ch2Mid = ch2Top + chH / 2;
+
+      function drawGrid(yTop) {
+        ctx.strokeStyle = "rgba(148,163,184,0.08)";
+        ctx.lineWidth = 0.8 * d;
+        for (let i = 1; i < 8; i++) {
+          const x = ml + (i / 8) * gw;
+          ctx.beginPath();
+          ctx.moveTo(x, yTop);
+          ctx.lineTo(x, yTop + chH);
+          ctx.stroke();
+        }
+        for (let j = 1; j < 4; j++) {
+          if (j === 2) continue;
+          const y = yTop + (j / 4) * chH;
+          ctx.beginPath();
+          ctx.moveTo(ml, y);
+          ctx.lineTo(ml + gw, y);
+          ctx.stroke();
+        }
+        // Center zero axis
+        ctx.strokeStyle = "rgba(148,163,184,0.22)";
+        ctx.beginPath();
+        ctx.moveTo(ml, yTop + chH / 2);
+        ctx.lineTo(ml + gw, yTop + chH / 2);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(148,163,184,0.18)";
+        ctx.strokeRect(ml, yTop, gw, chH);
+      }
+      drawGrid(ch1Top);
+      drawGrid(ch2Top);
+
+      const N = 260;
+      const cycles = 2; // 40 ms
+      const phi = Math.atan2(tel.Q, tel.P); // +lagging, -leading
+      const iPeakScaled = Math.min(310, tel.IL * Math.sqrt(2) * 10);
+      const harmAmp = (tel.thd / 100) * iPeakScaled * 0.45;
+      const vScale = (chH * 0.43) / 350;
+      const iCol =
+        tel.cls === "bad"
+          ? "#FB7185"
+          : tel.cls === "warn"
+            ? "#FBBF24"
+            : "#34D399";
+
+      // CH1: V_a (glowing cyan)
+      ctx.save();
+      ctx.shadowColor = "#38BDF8";
+      ctx.shadowBlur = 6 * d;
+      ctx.beginPath();
+      ctx.strokeStyle = "#38BDF8";
+      ctx.lineWidth = 1.9 * d;
+      for (let i = 0; i <= N; i++) {
+        const th = (i / N) * cycles * TAU + animPhase;
+        const x = ml + (i / N) * gw;
+        const y = ch1Mid - 326.6 * Math.sin(th) * vScale;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // CH1: 10*I_a (status-colored neon phosphor)
+      ctx.shadowColor = iCol;
+      ctx.shadowBlur = 7 * d;
+      ctx.beginPath();
+      ctx.strokeStyle = iCol;
+      ctx.lineWidth = 2.3 * d;
+      for (let i = 0; i <= N; i++) {
+        const th = (i / N) * cycles * TAU + animPhase;
+        const x = ml + (i / N) * gw;
+        const iVal =
+          iPeakScaled * Math.sin(th - phi) +
+          harmAmp * 0.45 * Math.sin(5 * (th - phi)) +
+          harmAmp * 0.72 * Math.sin(7 * (th - phi));
+        const y = ch1Mid - iVal * vScale;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // CH2: I_Cap_AB (sky blue) & Chopped I_TCR_AB (amber + translucent conduction fill!)
+      const iScale = (chH * 0.42) / 22;
+      const aRad = tel.alpha * DEG;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.strokeStyle = state.cap ? "#0EA5E9" : "rgba(148,163,184,0.32)";
+      ctx.lineWidth = 1.9 * d;
+      if (state.cap) {
+        ctx.shadowColor = "#0EA5E9";
+        ctx.shadowBlur = 5 * d;
+      }
+      for (let i = 0; i <= N; i++) {
+        const th = (i / N) * cycles * TAU + animPhase;
+        const x = ml + (i / N) * gw;
+        const ic = state.cap ? 19.73 * Math.cos(th) : 0;
+        const y = ch2Mid - ic * iScale;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Compute TCR points once for both translucent fill + glowing stroke
+      const tcrPts = [];
+      for (let i = 0; i <= N; i++) {
+        const thRaw = (i / N) * cycles * TAU + animPhase;
+        const th = ((thRaw % TAU) + TAU) % TAU;
+        let itcr = 0;
+        if (tel.alpha < 179.5) {
+          if (th >= aRad && th <= TAU - aRad) {
+            itcr = 19.73 * (Math.cos(aRad) - Math.cos(th));
+          } else {
+            const th2 = (th + PI) % TAU;
+            if (th2 >= aRad && th2 <= TAU - aRad) {
+              itcr = -19.73 * (Math.cos(aRad) - Math.cos(th2));
+            }
+          }
+        }
+        tcrPts.push([ml + (i / N) * gw, ch2Mid - itcr * iScale]);
+      }
+
+      // Shaded TCR conduction pulse fill
+      if (tel.alpha < 179.5) {
+        ctx.beginPath();
+        ctx.moveTo(tcrPts[0][0], ch2Mid);
+        for (let i = 0; i < tcrPts.length; i++)
+          ctx.lineTo(tcrPts[i][0], tcrPts[i][1]);
+        ctx.lineTo(tcrPts[tcrPts.length - 1][0], ch2Mid);
+        ctx.closePath();
+        ctx.fillStyle = "rgba(251, 191, 36, 0.16)";
+        ctx.fill();
+      }
+
+      ctx.save();
+      ctx.shadowColor = "#FBBF24";
+      ctx.shadowBlur = 7 * d;
+      ctx.beginPath();
+      ctx.strokeStyle = "#FBBF24";
+      ctx.lineWidth = 2.3 * d;
+      for (let i = 0; i < tcrPts.length; i++) {
+        if (i === 0) ctx.moveTo(tcrPts[i][0], tcrPts[i][1]);
+        else ctx.lineTo(tcrPts[i][0], tcrPts[i][1]);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Vertical dashed Firing Angle α Trigger Cursor on Ch2 (tracks first ignition instant!)
+      if (tel.alpha < 179.5) {
+        const relA = (((aRad - animPhase) % TAU) + TAU) % TAU;
+        const triggerX = ml + (relA / (cycles * TAU)) * gw;
+        if (triggerX > ml + 8 * d && triggerX < ml + gw - 8 * d) {
+          ctx.save();
+          ctx.setLineDash([4 * d, 3 * d]);
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.72)";
+          ctx.lineWidth = 1.2 * d;
+          ctx.beginPath();
+          ctx.moveTo(triggerX, ch2Top + 2 * d);
+          ctx.lineTo(triggerX, ch2Top + chH - 2 * d);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          setFont(ctx, 8.5, "800");
+          ctx.fillStyle = "#FDE68A";
+          ctx.textAlign = triggerX > ml + gw - 54 * d ? "right" : "left";
+          ctx.fillText(
+            "α=" + tel.alpha.toFixed(0) + "°",
+            triggerX + (triggerX > ml + gw - 54 * d ? -4 * d : 4 * d),
+            ch2Top + 11 * d,
+          );
+          ctx.restore();
+        }
+      }
+
+      // Clean Channel Tags on left margin (never overlapping waves!)
+      setFont(ctx, 9, "800");
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#94A3B8";
+      ctx.fillText("Ch1", ml - 6 * d, ch1Mid + 3 * d);
+      ctx.fillText("Ch2", ml - 6 * d, ch2Mid + 3 * d);
+
+      // ─── RIGHT PANEL INSIDE SCOPE: LIVE VECTOR PHASOR (V_a vs I_a) ───
+      const pX0 = scopeEnd + 8 * d;
+      const pBoxW = W - pX0 - 6 * d;
+      const pCx = pX0 + pBoxW / 2;
+      const pCy = mt + totalH / 2 + 4 * d;
+      const pR = Math.min(pBoxW * 0.4, totalH * 0.34);
+
+      ctx.strokeStyle = "rgba(148,163,184,0.16)";
+      ctx.lineWidth = 1 * d;
+      ctx.strokeRect(pX0, mt, pBoxW, totalH);
+
+      setFont(ctx, 8.5, "800");
+      ctx.fillStyle = "#94A3B8";
+      ctx.textAlign = "center";
+      ctx.fillText("LIVE PHASOR", pCx, mt + 13 * d);
+
+      // Polar circle & quadrature crosshairs
+      ctx.strokeStyle = "rgba(148,163,184,0.18)";
+      ctx.beginPath();
+      ctx.arc(pCx, pCy, pR, 0, TAU);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(pCx, pCy, pR * 0.55, 0, TAU);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pCx - pR - 4 * d, pCy);
+      ctx.lineTo(pCx + pR + 4 * d, pCy);
+      ctx.moveTo(pCx, pCy - pR - 4 * d);
+      ctx.lineTo(pCx, pCy + pR + 4 * d);
+      ctx.stroke();
+
+      setFont(ctx, 7.5, "700");
+      ctx.fillStyle = "rgba(148,163,184,0.65)";
+      ctx.fillText("+90° Lead", pCx, pCy - pR - 7 * d);
+      ctx.fillText("−90° Lag", pCx, pCy + pR + 13 * d);
+
+      // Draw shaded phase-angle arc φ between V_a (0°) and I_a (-phi in canvas coords: lag is downward!)
+      // In phasor convention: V_a = 0° (+X). Lagging current (Q>0, phi>0) lags clockwise -> +y in canvas (+phi angle).
+      // Leading current (Q<0, phi<0) leads counter-clockwise -> -y in canvas (phi < 0).
+      if (Math.abs(phi) > 0.04) {
+        ctx.beginPath();
+        ctx.moveTo(pCx, pCy);
+        ctx.arc(pCx, pCy, pR * 0.45, 0, phi, phi < 0);
+        ctx.closePath();
+        ctx.fillStyle =
+          tel.cls === "bad" ? "rgba(244,63,94,0.28)" : "rgba(251,191,36,0.26)";
+        ctx.fill();
+      }
+
+      // Helper to draw glowing arrow vector with collision-free labels
+      function drawVector(ang, len, col, label, labelOffsetY) {
+        const ex = pCx + Math.cos(ang) * len;
+        const ey = pCy + Math.sin(ang) * len;
+        ctx.save();
+        ctx.shadowColor = col;
+        ctx.shadowBlur = 7 * d;
+        ctx.strokeStyle = col;
+        ctx.fillStyle = col;
+        ctx.lineWidth = 2.4 * d;
+        ctx.beginPath();
+        ctx.moveTo(pCx, pCy);
+        ctx.lineTo(ex, ey);
+        ctx.stroke();
+        const ah = 7 * d;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(
+          ex - ah * Math.cos(ang - 0.42),
+          ey - ah * Math.sin(ang - 0.42),
+        );
+        ctx.lineTo(
+          ex - ah * Math.cos(ang + 0.42),
+          ey - ah * Math.sin(ang + 0.42),
+        );
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        setFont(ctx, 9, "800");
+        ctx.fillStyle = col;
+        ctx.textAlign = "center";
+        if (labelOffsetY !== undefined) {
+          ctx.fillText(label, pCx + len * 0.62, pCy + labelOffsetY * d);
+        } else {
+          ctx.fillText(
+            label,
+            pCx + Math.cos(ang) * (len + 13 * d),
+            pCy + Math.sin(ang) * (len + 13 * d) + 3 * d,
+          );
+        }
+      }
+
+      const nearInPhase = Math.abs(phi) < 0.28;
+      // Reference Voltage Vector V_a (fixed at 0°)
+      drawVector(0, pR * 0.88, "#38BDF8", "V_a", nearInPhase ? -10 : -11);
+      // Live Current Vector I_a (scales cleanly with feeder current I_L!)
+      const iLen = pR * Math.min(0.92, Math.max(0.48, (tel.IL / 21) * 0.9));
+      drawVector(phi, iLen, iCol, "I_a", nearInPhase ? 16 : undefined);
+
+      // Bottom readout inside phasor box
+      setFont(ctx, 8.5, "800");
+      ctx.fillStyle = iCol;
+      ctx.textAlign = "center";
+      ctx.fillText("PF = " + tel.PF.toFixed(3), pCx, mt + totalH - 7 * d);
+    }
+
+    function applyPreset(key) {
+      const c = CASES[key];
+      if (!c) return;
+      state.motor = c.motor;
+      state.cap = c.cap;
+      state.auto = c.auto;
+      state.manualAlpha = c.alpha;
+      state.activePreset = key;
+      const tel = syncUI();
+      drawScope(tel);
+    }
+
+    function detectMatchingPreset() {
+      if (state.auto && state.cap && state.motor) return "case1";
+      if (state.auto && state.cap && !state.motor) return "case2";
+      if (
+        !state.auto &&
+        !state.cap &&
+        state.motor &&
+        Math.abs(state.manualAlpha - 180) < 0.6
+      )
+        return "case3a";
+      if (
+        !state.auto &&
+        !state.cap &&
+        !state.motor &&
+        Math.abs(state.manualAlpha - 180) < 0.6
+      )
+        return "case3b";
+      if (
+        !state.auto &&
+        state.cap &&
+        state.motor &&
+        Math.abs(state.manualAlpha - 180) < 0.6
+      )
+        return "case4a";
+      if (
+        !state.auto &&
+        state.cap &&
+        !state.motor &&
+        Math.abs(state.manualAlpha - 180) < 0.6
+      )
+        return "case4b";
+      if (
+        !state.auto &&
+        state.cap &&
+        !state.motor &&
+        Math.abs(state.manualAlpha - 90) < 0.6
+      )
+        return "case5";
+      return null;
+    }
+
+    presetBtns.forEach((btn) =>
+      btn.addEventListener("click", () =>
+        applyPreset(btn.getAttribute("data-case")),
+      ),
+    );
+    swMotOn.addEventListener("click", () => {
+      state.motor = true;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    swMotOff.addEventListener("click", () => {
+      state.motor = false;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    swCapOn.addEventListener("click", () => {
+      state.cap = true;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    swCapOff.addEventListener("click", () => {
+      state.cap = false;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    swAuto.addEventListener("click", () => {
+      state.auto = true;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    swMan.addEventListener("click", () => {
+      state.auto = false;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    alphaRng.addEventListener("input", () => {
+      state.auto = false;
+      state.manualAlpha = +alphaRng.value;
+      state.activePreset = detectMatchingPreset();
+      drawScope(syncUI());
+    });
+    // Clickable snap tick labels on alpha slider
+    root.querySelectorAll(".sb-tick").forEach((tk) => {
+      tk.addEventListener("click", () => {
+        state.auto = false;
+        state.manualAlpha = +tk.getAttribute("data-snap");
+        state.activePreset = detectMatchingPreset();
+        drawScope(syncUI());
+      });
+    });
+    // Freeze / Resume oscilloscope button
+    freezeBtn.addEventListener("click", () => {
+      state.frozen = !state.frozen;
+      freezeBtn.textContent = state.frozen ? "▶ Resume" : "⏸ Freeze";
+      freezeBtn.classList.toggle("is-frozen", state.frozen);
+      liveBadge.classList.toggle("is-frozen", state.frozen);
+      liveBadge.innerHTML = state.frozen ? "<i></i>HOLD" : "<i></i>LIVE 50 Hz";
+    });
+
+    function loop() {
+      if (!active) return;
+      if (!state.frozen) {
+        animPhase += 0.042;
+        drawScope(computeTelemetry());
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("resize", () => {
+      if (active) drawScope(computeTelemetry());
+    });
+    bindSlideLifecycle(
+      root,
+      () => {
+        active = true;
+        drawScope(syncUI());
+        if (!rafId) loop();
+      },
+      () => {
+        active = false;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      },
+    );
+    drawScope(syncUI());
+  }
+
+  /* ================================================================
+   *  Widget 12 — Interactive FFT & Delta Trap Visualizer (#widget-fft-trap)
+   * ================================================================ */
+
+  function initFFTTrapVisualizer() {
+    const root = document.getElementById("widget-fft-trap");
+    if (!root) return;
+
+    const topBar = document.createElement("div");
+    topBar.className = "w-pill-row";
+    topBar.style.justifyContent = "space-between";
+    topBar.innerHTML =
+      '<div style="display:flex;gap:5px;flex-wrap:wrap;">' +
+      '<button class="w-pill active" data-fft-mode="both">Δ-Branch vs. Grid Line</button>' +
+      '<button class="w-pill" data-fft-mode="branch">Inside Δ (No Trap)</button>' +
+      '<button class="w-pill" data-fft-mode="line">Grid Line (Δ-Trapped)</button>' +
+      "</div>" +
+      '<button class="zoom-btn" data-lightbox-src="assets/svc_sim/fig_ch3_fft_harmonics.png" style="padding:4px 11px;font-size:0.74rem;">MATLAB FFT Plot</button>';
+    root.appendChild(topBar);
+
+    const canvas = document.createElement("canvas");
+    root.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+
+    const kpiStrip = document.createElement("div");
+    kpiStrip.className = "cap-kpi-strip";
+    kpiStrip.innerHTML =
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Inside Δ Branch THD</span><span class="cap-kpi-val" style="color:var(--err);">54.18% (3rd: 52.9%)</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Grid Line Current THD</span><span class="cap-kpi-val" style="color:var(--cap);">16.28% (−70.0% ↓)</span></div>' +
+      '<div class="cap-kpi-pill"><span class="cap-kpi-label">Triplens (3, 9, 15)</span><span class="cap-kpi-val" style="color:var(--ok);">0.00% Trapped!</span></div>';
+    root.appendChild(kpiStrip);
+
+    // Exact Case 1 (alpha = 130.09 deg) MATLAB FFT percentages from Table 3.12
+    const orders = [3, 5, 7, 9, 11, 13, 15];
+    const branchPct = [52.9, 3.62, 9.74, 1.51, 4.42, 2.61, 1.48];
+    const linePct = [0.0, 2.34, 6.93, 0.0, 4.15, 3.28, 0.0];
+
+    let viewMode = "both";
+    let theme = getTheme();
+    let active = false;
+
+    function draw() {
+      const { w, h } = fitCanvas(canvas, 1.88);
+      const d = DPR;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const ml = 46 * d,
+        mr = 14 * d,
+        mt = 28 * d,
+        mb = 36 * d;
+      const gw = w * d - ml - mr;
+      const gh = h * d - mt - mb;
+      const maxVal = 62;
+      const py = (v) => mt + gh - (v / maxVal) * gh;
+
+      // Grid
+      ctx.strokeStyle = theme.surf;
+      ctx.lineWidth = 0.8 * d;
+      for (let v = 0; v <= 60; v += 15) {
+        const y = py(v);
+        ctx.beginPath();
+        ctx.moveTo(ml, y);
+        ctx.lineTo(ml + gw, y);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = theme.mut;
+      ctx.lineWidth = 1.4 * d;
+      ctx.beginPath();
+      ctx.moveTo(ml, mt);
+      ctx.lineTo(ml, mt + gh);
+      ctx.lineTo(ml + gw, mt + gh);
+      ctx.stroke();
+
+      setFont(ctx, 9.5, "700");
+      ctx.fillStyle = theme.mut;
+      ctx.textAlign = "right";
+      [0, 15, 30, 45, 60].forEach((v) =>
+        ctx.fillText(v + "%", ml - 6 * d, py(v) + 3 * d),
+      );
+
+      const slotW = gw / orders.length;
+      const barW = viewMode === "both" ? slotW * 0.34 : slotW * 0.52;
+
+      orders.forEach((ord, i) => {
+        const cx = ml + (i + 0.5) * slotW;
+        const isTriplen = ord % 3 === 0;
+        const bVal = branchPct[i];
+        const lVal = linePct[i];
+
+        if (viewMode === "both" || viewMode === "branch") {
+          const bx = viewMode === "both" ? cx - barW - 2 * d : cx - barW / 2;
+          const bh = (bVal / maxVal) * gh;
+          ctx.fillStyle = isTriplen ? theme.err : theme.sc;
+          ctx.beginPath();
+          ctx.roundRect(bx, mt + gh - bh, barW, bh, [4 * d, 4 * d, 0, 0]);
+          ctx.fill();
+          setFont(ctx, 8.8, "800");
+          ctx.fillStyle = isTriplen ? theme.err : theme.sc;
+          ctx.textAlign = "center";
+          ctx.fillText(
+            bVal.toFixed(1) + "%",
+            bx + barW / 2,
+            mt + gh - bh - 4 * d,
+          );
+        }
+
+        if (viewMode === "both" || viewMode === "line") {
+          const lx = viewMode === "both" ? cx + 2 * d : cx - barW / 2;
+          if (isTriplen) {
+            setFont(ctx, 8, "800");
+            ctx.fillStyle = theme.ok;
+            ctx.textAlign = "center";
+            ctx.fillText("0.0%", lx + barW / 2, mt + gh - 14 * d);
+            ctx.fillText("TRAP", lx + barW / 2, mt + gh - 4 * d);
+          } else {
+            const lh = (lVal / maxVal) * gh;
+            ctx.fillStyle = theme.cap;
+            ctx.beginPath();
+            ctx.roundRect(lx, mt + gh - lh, barW, lh, [4 * d, 4 * d, 0, 0]);
+            ctx.fill();
+            setFont(ctx, 8.8, "800");
+            ctx.fillStyle = theme.cap;
+            ctx.textAlign = "center";
+            ctx.fillText(
+              lVal.toFixed(1) + "%",
+              lx + barW / 2,
+              mt + gh - lh - 4 * d,
+            );
+          }
+        }
+
+        // X axis label
+        setFont(ctx, 9.5, "800");
+        ctx.fillStyle = isTriplen ? theme.ok : theme.tx;
+        ctx.textAlign = "center";
+        ctx.fillText(ord === 3 ? "3rd" : ord + "th", cx, mt + gh + 14 * d);
+        setFont(ctx, 8, "600");
+        ctx.fillStyle = theme.mut;
+        ctx.fillText(ord * 50 + " Hz", cx, mt + gh + 27 * d);
+      });
+
+      // Legend top-right
+      setFont(ctx, 9.5, "800");
+      ctx.textAlign = "right";
+      ctx.fillStyle = theme.err;
+      ctx.fillText(
+        "■ Inside Δ-Branch I_TCR (Case 1, α=130.09°)",
+        ml + gw - 4 * d,
+        mt + 4 * d,
+      );
+      ctx.fillStyle = theme.cap;
+      ctx.fillText(
+        "■ Grid Line I_a (3rd, 9th, 15th = 0.00%)",
+        ml + gw - 4 * d,
+        mt + 18 * d,
+      );
+    }
+
+    topBar.querySelectorAll("[data-fft-mode]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        topBar
+          .querySelectorAll("[data-fft-mode]")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        viewMode = btn.getAttribute("data-fft-mode");
+        draw();
+      });
+    });
+
+    // Wire lightbox button created inside widget
+    const lbBtn = topBar.querySelector("[data-lightbox-src]");
+    if (lbBtn) {
+      lbBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const lb = document.getElementById("lightbox");
+        if (lb) {
+          const img = lb.querySelector("img");
+          if (img) img.src = lbBtn.getAttribute("data-lightbox-src");
+          lb.classList.add("open");
+        }
+      });
+    }
+
+    window.addEventListener("resize", () => {
+      if (active) draw();
+    });
+    window.addEventListener("themechange", () => {
+      theme = getTheme();
+      if (active) draw();
+    });
+    bindSlideLifecycle(
+      root,
+      () => {
+        active = true;
+        draw();
+      },
+      () => {
+        active = false;
+      },
+    );
+    draw();
+  }
+
+  /* ================================================================
    *  Public init — mounts all widgets
    * ================================================================ */
 
@@ -2363,6 +4322,11 @@
     initSTATCOMPhasors();
     initVoltageSagTest();
     initSCVCurve();
+    initPFCCalculator();
+    initFCTCRCurve();
+    initLPFRipple();
+    initSimSwitchboard();
+    initFFTTrapVisualizer();
   }
 
   window.initWidgets = initWidgets;
