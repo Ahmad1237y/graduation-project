@@ -3177,7 +3177,7 @@
     // Exact MATLAB steady-state telemetry table from sim_results_5cases.mat
     const CASES = {
       case1: {
-        label: "Case 1 · Auto PI (Motor ON)",
+        label: "Case 1 · Full SVC (PI) — RL + Motor",
         motor: true,
         cap: true,
         auto: true,
@@ -3190,10 +3190,10 @@
         cls: "",
         thd: 16.28,
         verdict:
-          "<strong>Case 1 (Closed-Loop Full Load):</strong> PI locks <strong>α = 130.09°</strong> (theory 130.10°), absorbing +3.43 kVAR surplus so <strong>Q_grid = −4.30 VAR ≈ 0</strong> and <strong>PF = 1.0000 Unity</strong>.",
+          "<strong>Case 1 (Full SVC Auto PI — RL + Motor):</strong> PI locks <strong>α = 130.09°</strong> (theory 130.10°), absorbing +3.43 kVAR surplus so <strong>Q_grid = −4.30 VAR ≈ 0</strong> and <strong>PF = 1.0000 Unity</strong>.",
       },
       case2: {
-        label: "Case 2 · Auto PI (Motor OFF)",
+        label: "Case 2 · Full SVC (PI) — RL Only",
         motor: false,
         cap: true,
         auto: true,
@@ -3206,10 +3206,10 @@
         cls: "",
         thd: 29.83,
         verdict:
-          "<strong>Case 2 (Motor Isolated):</strong> Load drops 62.4% to +5.00 kVAR; PI lowers <strong>α → 103.80°</strong> (σ = 152.4°) so TCR absorbs the full +11.74 kVAR surplus and holds <strong>PF = 1.0000 Unity</strong>.",
+          "<strong>Case 2 (Full SVC Auto PI — RL Only, Motor OFF):</strong> Load drops 62.4% to +5.00 kVAR (Base RL only); PI lowers <strong>α → 103.80°</strong> (σ = 152.4°) so TCR absorbs +11.74 kVAR surplus and holds <strong>PF = 1.0000 Unity</strong>.",
       },
       case3a: {
-        label: "Case 3A · Uncomp (ON)",
+        label: "Case 3A · No SVC — RL + Motor",
         motor: true,
         cap: false,
         auto: false,
@@ -3222,10 +3222,10 @@
         cls: "bad",
         thd: 1.64,
         verdict:
-          "<strong>Case 3A (Before Compensation — Full Load):</strong> Grid supplies full +12.61 kVAR inductive load. Line current surges to <strong>20.27 A</strong> (2.25× compensated), collapsing <strong>PF = 0.4407 Lag</strong>.",
+          "<strong>Case 3A (No SVC — RL + Motor Full Load):</strong> Grid supplies full +12.61 kVAR inductive load. Line current surges to <strong>20.27 A</strong> (2.25× compensated), collapsing <strong>PF = 0.4407 Lag</strong>.",
       },
       case3b: {
-        label: "Case 3B · Uncomp (OFF)",
+        label: "Case 3B · No SVC — RL Only",
         motor: false,
         cap: false,
         auto: false,
@@ -3238,10 +3238,10 @@
         cls: "warn",
         thd: 0.0,
         verdict:
-          "<strong>Case 3B (Before Compensation — Light Load):</strong> Static RL load alone draws +4.92 kVAR from utility grid, yielding <strong>PF = 0.6681 Lag</strong> — far below the 0.92 utility threshold.",
+          "<strong>Case 3B (No SVC — RL Base Load Only):</strong> Motor is OFF; permanent RL load alone draws +4.92 kVAR from utility grid, yielding <strong>PF = 0.6681 Lag</strong> — far below the 0.92 utility threshold.",
       },
       case4a: {
-        label: "Case 4A · Cap Only (ON)",
+        label: "Case 4A · Fixed Cap Only — RL + Motor",
         motor: true,
         cap: true,
         auto: false,
@@ -3254,10 +3254,10 @@
         cls: "warn",
         thd: 0.0,
         verdict:
-          "<strong>Case 4A (Fixed Cap Only, TCR Blocked):</strong> Without TCR absorption, the −16.74 kVAR capacitor bank over-compensates +13.31 kVAR load, exporting −4.05 kVAR to grid (<strong>PF = 0.8372 Lead</strong>).",
+          "<strong>Case 4A (Fixed Cap Only, TCR OFF — RL + Motor):</strong> Without TCR absorption, the −16.74 kVAR capacitor bank over-compensates +13.31 kVAR load, exporting −4.05 kVAR to grid (<strong>PF = 0.8372 Lead</strong>).",
       },
       case4b: {
-        label: "Case 4B · Cap Only (OFF!)",
+        label: "Case 4B · Fixed Cap Only — RL Only (Over-Comp!)",
         motor: false,
         cap: true,
         auto: false,
@@ -3270,10 +3270,10 @@
         cls: "bad",
         thd: 0.98,
         verdict:
-          "<strong>Case 4B (Why Fixed Cap Alone Fails!):</strong> At light load, fixed −16.74 kVAR dumps <strong>−11.88 kVAR</strong> backward into transformer! <strong>PF plunges to 0.3508 Lead</strong> (Ferranti overvoltage hazard).",
+          "<strong>Case 4B (Fixed Cap Only, Motor OFF — Over-Comp Disaster!):</strong> With only Base RL (+5 kVAR) running, fixed −16.74 kVAR dumps <strong>−11.88 kVAR</strong> backward into transformer! <strong>PF plunges to 0.3508 Lead</strong> (worse than No SVC 0.6681!).",
       },
       case5: {
-        label: "Case 5 · α = 90° Cancel",
+        label: "Case 5 · Full Cancel (α = 90°) — RL Only",
         motor: false,
         cap: true,
         auto: false,
@@ -3286,7 +3286,7 @@
         cls: "warn",
         thd: 2.34,
         verdict:
-          "<strong>Case 5 (Sizing Proof at α = 90°):</strong> TCR conducts full 180° sinusoid (+16.74 kVAR), canceling 100% of −16.74 kVAR Cap bank (Q_SVC = 0). Grid sees exact RL load (+4.96 kVAR, PF = 0.6694) matching Case 3B!",
+          "<strong>Case 5 (Full Cancel Proof at α = 90° — RL Only):</strong> TCR conducts full 180° (+16.74 kVAR), canceling 100% of −16.74 kVAR Cap bank (Q_SVC = 0). Grid sees exact Base RL load (+4.96 kVAR, PF = 0.6694) matching Case 3B!",
       },
     };
 
@@ -3304,23 +3304,24 @@
     root.innerHTML =
       '<div class="sb-root">' +
       '  <div class="sb-presets" id="sb-preset-bar">' +
-      '    <button class="sb-preset-btn active" data-case="case1"><i class="sb-pdot ok"></i>Case 1 · Auto PI (ON)</button>' +
-      '    <button class="sb-preset-btn" data-case="case2"><i class="sb-pdot ok"></i>Case 2 · Auto PI (OFF)</button>' +
-      '    <button class="sb-preset-btn danger" data-case="case3a"><i class="sb-pdot bad"></i>Case 3A · Uncomp (ON)</button>' +
-      '    <button class="sb-preset-btn warn" data-case="case3b"><i class="sb-pdot warn"></i>Case 3B · Uncomp (OFF)</button>' +
-      '    <button class="sb-preset-btn warn" data-case="case4a"><i class="sb-pdot warn"></i>Case 4A · Cap Only (ON)</button>' +
-      '    <button class="sb-preset-btn danger" data-case="case4b"><i class="sb-pdot bad"></i>Case 4B · Cap Only (OFF!)</button>' +
-      '    <button class="sb-preset-btn warn" data-case="case5"><i class="sb-pdot warn"></i>Case 5 · α=90° Cancel</button>' +
+      '    <button class="sb-preset-btn active" data-case="case1"><span class="sb-p-top"><i class="sb-pdot ok"></i>Case 1 · Full SVC (PI)</span><span class="sb-p-sub">RL + Motor (Full Load)</span></button>' +
+      '    <button class="sb-preset-btn" data-case="case2"><span class="sb-p-top"><i class="sb-pdot ok"></i>Case 2 · Full SVC (PI)</span><span class="sb-p-sub">RL Only (Motor OFF)</span></button>' +
+      '    <button class="sb-preset-btn danger" data-case="case3a"><span class="sb-p-top"><i class="sb-pdot bad"></i>Case 3A · No SVC</span><span class="sb-p-sub">RL + Motor (Full Load)</span></button>' +
+      '    <button class="sb-preset-btn warn" data-case="case3b"><span class="sb-p-top"><i class="sb-pdot warn"></i>Case 3B · No SVC</span><span class="sb-p-sub">RL Only (Motor OFF)</span></button>' +
+      '    <button class="sb-preset-btn warn" data-case="case4a"><span class="sb-p-top"><i class="sb-pdot warn"></i>Case 4A · Cap Only</span><span class="sb-p-sub">RL + Motor (TCR OFF)</span></button>' +
+      '    <button class="sb-preset-btn danger" data-case="case4b"><span class="sb-p-top"><i class="sb-pdot bad"></i>Case 4B · Cap Only</span><span class="sb-p-sub">RL Only (Over-Comp!)</span></button>' +
+      '    <button class="sb-preset-btn warn" data-case="case5"><span class="sb-p-top"><i class="sb-pdot warn"></i>Case 5 · α=90° Cancel</span><span class="sb-p-sub">RL Only (Cap+TCR=0)</span></button>' +
       "  </div>" +
       '  <div class="sb-main-grid">' +
       '    <div class="sb-panel sb-panel-sw" style="--card-clr:var(--svc);">' +
       '      <div class="sb-panel-title"><span>SIMULINK SWITCHES</span><span class="sb-chip">3 MANUAL</span></div>' +
       '      <div class="sb-switch-card">' +
-      '        <div class="sb-sw-head"><span class="sb-sw-name">Motor_ON_OFF_Switch</span><span class="sb-sw-area">Area 2</span></div>' +
+      '        <div class="sb-sw-head"><span class="sb-sw-name">Load (Motor Switch)</span><span class="sb-sw-area">Area 2</span></div>' +
       '        <div class="sb-rocker">' +
-      '          <button class="sb-tog on-green" id="sw-mot-on"><i class="sb-led"></i>1 · Motor ON</button>' +
-      '          <button class="sb-tog" id="sw-mot-off"><i class="sb-led"></i>0 · Motor OFF</button>' +
+      '          <button class="sb-tog on-green" id="sw-mot-on"><i class="sb-led"></i>1 · RL + Motor</button>' +
+      '          <button class="sb-tog" id="sw-mot-off"><i class="sb-led"></i>0 · RL Only</button>' +
       "        </div>" +
+      '        <div class="sb-sw-hint">Base RL (4.42 kW, +5 kVAR) is always ON</div>' +
       "      </div>" +
       '      <div class="sb-switch-card">' +
       '        <div class="sb-sw-head"><span class="sb-sw-name">Cap_ON_OFF_Switch</span><span class="sb-sw-area">Area 3</span></div>' +
@@ -3369,7 +3370,7 @@
       "      </div>" +
       '      <div class="sb-qbal-card">' +
       '        <div class="sb-qbal-head"><span>Q-BALANCE (kVAR)</span><span id="sb-qbal-net">Net: −4.3 VAR</span></div>' +
-      '        <div class="sb-qbal-row"><span>Load</span><div class="sb-qbar-track"><i class="sb-qbar-fill load" id="qbar-load" style="width:79%;"></i></div><strong id="qval-load">+13.31</strong></div>' +
+      '        <div class="sb-qbal-row"><span id="qlbl-load">RL+Mot</span><div class="sb-qbar-track"><i class="sb-qbar-fill load" id="qbar-load" style="width:79%;"></i></div><strong id="qval-load">+13.31</strong></div>' +
       '        <div class="sb-qbal-row"><span>Δ Cap</span><div class="sb-qbar-track"><i class="sb-qbar-fill cap" id="qbar-cap" style="width:100%;"></i></div><strong id="qval-cap">−16.74</strong></div>' +
       '        <div class="sb-qbal-row"><span>Δ TCR</span><div class="sb-qbar-track"><i class="sb-qbar-fill tcr" id="qbar-tcr" style="width:20%;"></i></div><strong id="qval-tcr">+3.43</strong></div>' +
       "      </div>" +
@@ -3420,6 +3421,7 @@
     const qbarLoad = root.querySelector("#qbar-load");
     const qbarCap = root.querySelector("#qbar-cap");
     const qbarTcr = root.querySelector("#qbar-tcr");
+    const qlblLoad = root.querySelector("#qlbl-load");
     const qvalLoad = root.querySelector("#qval-load");
     const qvalCap = root.querySelector("#qval-cap");
     const qvalTcr = root.querySelector("#qval-tcr");
@@ -3610,6 +3612,7 @@
       lcdThd.textContent = tel.thd.toFixed(2) + "%";
 
       // Live Q-Balance Bars (max scale 16.74 kVAR)
+      if (qlblLoad) qlblLoad.textContent = state.motor ? "RL+Mot" : "RL Only";
       qbarLoad.style.width =
         Math.min(100, (tel.qload / 16.74) * 100).toFixed(1) + "%";
       qbarCap.style.width =
