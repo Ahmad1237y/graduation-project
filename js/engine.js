@@ -20,36 +20,6 @@
 
   const THEMES = [
     {
-      id: "aurora",
-      label: "Aurora",
-      mode: "dark",
-      swatch: "linear-gradient(135deg,#0F1426,#818CF8)",
-    },
-    {
-      id: "nordic",
-      label: "Nordic",
-      mode: "dark",
-      swatch: "linear-gradient(135deg,#162130,#7DD3FC)",
-    },
-    {
-      id: "sage",
-      label: "Sage",
-      mode: "dark",
-      swatch: "linear-gradient(135deg,#121F1B,#6EE7B7)",
-    },
-    {
-      id: "ocean",
-      label: "Ocean",
-      mode: "dark",
-      swatch: "linear-gradient(135deg,#0D182B,#38BDF8)",
-    },
-    {
-      id: "dusk",
-      label: "Dusk",
-      mode: "dark",
-      swatch: "linear-gradient(135deg,#191627,#A5B4FC)",
-    },
-    {
       id: "carbon",
       label: "Carbon",
       mode: "dark",
@@ -78,6 +48,42 @@
       label: "Sand",
       mode: "light",
       swatch: "linear-gradient(135deg,#FBF8F3,#1E3A5F)",
+    },
+    {
+      id: "eucalyptus",
+      label: "Eucalyptus",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#F3F7F4,#2D6A4F)",
+    },
+    {
+      id: "porcelain",
+      label: "Porcelain",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#FAF6F4,#9F4A3D)",
+    },
+    {
+      id: "lavender",
+      label: "Lavender",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#F7F5FB,#6D4C9E)",
+    },
+    {
+      id: "skyline",
+      label: "Skyline",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#F2F8FC,#0369A1)",
+    },
+    {
+      id: "cashmere",
+      label: "Cashmere",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#F5F2EE,#7C5A3B)",
+    },
+    {
+      id: "celadon",
+      label: "Celadon",
+      mode: "light",
+      swatch: "linear-gradient(135deg,#F2F7F6,#2B6E75)",
     },
   ];
 
@@ -530,8 +536,8 @@
   function bindTheme() {
     const root = document.documentElement;
     const themeMenu = document.getElementById("theme-menu");
-    let stored = localStorage.getItem("pres-theme") || "aurora";
-    if (!THEMES.some((t) => t.id === stored)) stored = "aurora";
+    let stored = localStorage.getItem("pres-theme") || "alabaster";
+    if (!THEMES.some((t) => t.id === stored)) stored = "alabaster";
 
     function applyThemeById(id) {
       const found = THEMES.find((t) => t.id === id) || THEMES[0];
@@ -553,7 +559,7 @@
       window.dispatchEvent(new CustomEvent("themechange"));
     }
 
-    // Build 10-theme visual swatch menu (Calm Dark + Soft Light)
+    // Build 11-theme visual swatch menu (1 Dark + 10 Soft Light)
     if (themeMenu) {
       const darks = THEMES.filter((t) => t.mode === "dark");
       const lights = THEMES.filter((t) => t.mode === "light");
@@ -568,8 +574,8 @@
         t.label +
         "</span></button>";
       themeMenu.innerHTML =
-        '<div class="tm-group-lbl">Calm Dark Palettes</div>' +
-        '<div class="tm-grid">' +
+        '<div class="tm-group-lbl">Dark Palette</div>' +
+        '<div class="tm-grid tm-grid-1">' +
         darks.map(makeBtn).join("") +
         "</div>" +
         '<div class="tm-group-lbl" style="margin-top:4px;">Soft Light Palettes</div>' +
@@ -594,7 +600,7 @@
         if (themeMenu) {
           themeMenu.classList.toggle("open");
         } else {
-          const cur = root.getAttribute("data-theme") || "aurora";
+          const cur = root.getAttribute("data-theme") || "alabaster";
           const idx = THEMES.findIndex((t) => t.id === cur);
           applyThemeById(THEMES[(idx + 1) % THEMES.length].id);
         }

@@ -8,221 +8,13 @@
 @property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 
 /* ==========================================================
-   10 CURATED CALM DESIGNER PALETTES (6 DARK + 4 SOFT LIGHT)
+   11 CURATED CALM DESIGNER PALETTES (1 CALM DARK + 10 SOFT LIGHT)
+   Note: :root (Alabaster default) MUST come first so every
+   [data-theme="..."] rule below overrides it cleanly in CSS cascade.
    ========================================================== */
 
-/* 1. Midnight Aurora (Calm Indigo Slate — Default) */
+/* Default. Warm Alabaster (Eye-Friendly Soft Ivory & Deep Petrol Teal) */
 :root,
-[data-theme="aurora"] {
-  --bg:          #090B12;
-  --bg-2:        #111522;
-  --bg-rgb:      9, 11, 18;
-  --orb-1:       rgba(99, 102, 241, 0.14);
-  --orb-2:       rgba(56, 189, 248, 0.10);
-  --orb-3:       rgba(168, 85, 247, 0.08);
-  --surf:        #131726;
-  --surf-2:      #1A2034;
-  --line:        rgba(255, 255, 255, 0.10);
-  --line-bright: rgba(129, 140, 248, 0.42);
-  --tx:          #F8FAFC;
-  --tx-body:     #CBD5E1;
-  --tx-rgb:      248, 250, 252;
-  --mut:         #94A3B8;
-  --p:           #818CF8;
-  --p-rgb:       129, 140, 248;
-  --s:           #38BDF8;
-  --s-rgb:       56, 189, 248;
-  --ok:          #34D399;
-  --err:         #FB7185;
-  --cap:         #38BDF8;
-  --sc:          #FB923C;
-  --svc:         #FBBF24;
-  --stat:        #C084FC;
-  --shadow:      0 14px 36px rgba(0, 0, 0, 0.44);
-  --glass:       rgba(20, 24, 40, 0.80);
-}
-
-/* 2. Nordic Frost (Ultra-Calm Glacier Steel & Soft Cyan) */
-[data-theme="nordic"] {
-  --bg:          #0F1722;
-  --bg-2:        #162130;
-  --bg-rgb:      15, 23, 34;
-  --orb-1:       rgba(125, 211, 252, 0.12);
-  --orb-2:       rgba(148, 163, 184, 0.10);
-  --orb-3:       rgba(94, 234, 212, 0.08);
-  --surf:        #182436;
-  --surf-2:      #203047;
-  --line:        rgba(203, 213, 225, 0.12);
-  --line-bright: rgba(125, 211, 252, 0.42);
-  --tx:          #F1F5F9;
-  --tx-body:     #CBD5E1;
-  --tx-rgb:      241, 245, 249;
-  --mut:         #94A3B8;
-  --p:           #7DD3FC;
-  --p-rgb:       125, 211, 252;
-  --s:           #5EEAD4;
-  --s-rgb:       94, 234, 212;
-  --ok:          #34D399;
-  --err:         #FDA4AF;
-  --cap:         #7DD3FC;
-  --sc:          #FDBA74;
-  --svc:         #FDE047;
-  --stat:        #C4B5FD;
-  --shadow:      0 14px 36px rgba(4, 10, 20, 0.46);
-  --glass:       rgba(24, 36, 54, 0.82);
-}
-
-/* 3. Botanical Sage (Calm Deep Forest Slate & Warm Champagne) */
-[data-theme="sage"] {
-  --bg:          #0C1412;
-  --bg-2:        #121F1B;
-  --bg-rgb:      12, 20, 18;
-  --orb-1:       rgba(110, 231, 183, 0.11);
-  --orb-2:       rgba(231, 200, 139, 0.09);
-  --orb-3:       rgba(45, 212, 191, 0.07);
-  --surf:        #142420;
-  --surf-2:      #1B302A;
-  --line:        rgba(167, 243, 208, 0.12);
-  --line-bright: rgba(110, 231, 183, 0.40);
-  --tx:          #F0FDF4;
-  --tx-body:     #D1E7DC;
-  --tx-rgb:      240, 253, 244;
-  --mut:         #95B8A8;
-  --p:           #6EE7B7;
-  --p-rgb:       110, 231, 183;
-  --s:           #E7C88B;
-  --s-rgb:       231, 200, 139;
-  --ok:          #34D399;
-  --err:         #FCA5A5;
-  --cap:         #67E8F9;
-  --sc:          #FDBA74;
-  --svc:         #E7C88B;
-  --stat:        #C4B5FD;
-  --shadow:      0 14px 36px rgba(0, 0, 0, 0.48);
-  --glass:       rgba(20, 36, 32, 0.84);
-}
-
-/* 4. Deep Ocean Sapphire */
-[data-theme="ocean"] {
-  --bg:          #070D18;
-  --bg-2:        #0D182B;
-  --bg-rgb:      7, 13, 24;
-  --orb-1:       rgba(14, 165, 233, 0.14);
-  --orb-2:       rgba(59, 130, 246, 0.11);
-  --orb-3:       rgba(99, 102, 241, 0.08);
-  --surf:        #101E36;
-  --surf-2:      #172A4A;
-  --line:        rgba(125, 211, 252, 0.13);
-  --line-bright: rgba(56, 189, 248, 0.44);
-  --tx:          #F8FAFC;
-  --tx-body:     #E2E8F0;
-  --tx-rgb:      248, 250, 252;
-  --mut:         #94A3B8;
-  --p:           #38BDF8;
-  --p-rgb:       56, 189, 248;
-  --s:           #818CF8;
-  --s-rgb:       129, 140, 248;
-  --ok:          #34D399;
-  --err:         #FB7185;
-  --cap:         #38BDF8;
-  --sc:          #FB923C;
-  --svc:         #FACC15;
-  --stat:        #C084FC;
-  --shadow:      0 14px 36px rgba(2, 6, 16, 0.50);
-  --glass:       rgba(16, 30, 54, 0.82);
-}
-
-/* 5. Velvet Dusk (Soft Plum-Slate & Periwinkle) */
-[data-theme="dusk"] {
-  --bg:          #110F1A;
-  --bg-2:        #191627;
-  --bg-rgb:      17, 15, 26;
-  --orb-1:       rgba(165, 180, 252, 0.12);
-  --orb-2:       rgba(216, 180, 254, 0.10);
-  --orb-3:       rgba(125, 211, 252, 0.08);
-  --surf:        #1C192C;
-  --surf-2:      #25213A;
-  --line:        rgba(224, 231, 255, 0.11);
-  --line-bright: rgba(165, 180, 252, 0.42);
-  --tx:          #F5F3FF;
-  --tx-body:     #DDD6FE;
-  --tx-rgb:      245, 243, 255;
-  --mut:         #A5A1C2;
-  --p:           #A5B4FC;
-  --p-rgb:       165, 180, 252;
-  --s:           #D8B4FE;
-  --s-rgb:       216, 180, 254;
-  --ok:          #6EE7B7;
-  --err:         #FDA4AF;
-  --cap:         #7DD3FC;
-  --sc:          #FDBA74;
-  --svc:         #FDE68A;
-  --stat:        #D8B4FE;
-  --shadow:      0 14px 36px rgba(5, 3, 14, 0.50);
-  --glass:       rgba(28, 25, 44, 0.84);
-}
-
-/* 6. Warm Carbon (Matte Graphite & Soft Amber) */
-[data-theme="carbon"] {
-  --bg:          #0E0F12;
-  --bg-2:        #16171C;
-  --bg-rgb:      14, 15, 18;
-  --orb-1:       rgba(245, 158, 11, 0.10);
-  --orb-2:       rgba(148, 163, 184, 0.09);
-  --orb-3:       rgba(56, 189, 248, 0.06);
-  --surf:        #1A1B22;
-  --surf-2:      #23252F;
-  --line:        rgba(255, 255, 255, 0.10);
-  --line-bright: rgba(245, 158, 11, 0.42);
-  --tx:          #FAFAFA;
-  --tx-body:     #D4D4D8;
-  --tx-rgb:      250, 250, 250;
-  --mut:         #A1A1AA;
-  --p:           #F59E0B;
-  --p-rgb:       245, 158, 11;
-  --s:           #93C5FD;
-  --s-rgb:       147, 197, 253;
-  --ok:          #34D399;
-  --err:         #FB7185;
-  --cap:         #38BDF8;
-  --sc:          #FB923C;
-  --svc:         #FBBF24;
-  --stat:        #C084FC;
-  --shadow:      0 14px 36px rgba(0, 0, 0, 0.54);
-  --glass:       rgba(26, 27, 34, 0.84);
-}
-
-/* 7. Clean Pearl Daylight (Crisp Snow & Indigo) */
-[data-theme="pearl"] {
-  --bg:          #F8FAFC;
-  --bg-2:        #EEF2FF;
-  --bg-rgb:      248, 250, 252;
-  --orb-1:       rgba(79, 70, 229, 0.08);
-  --orb-2:       rgba(14, 165, 233, 0.08);
-  --orb-3:       rgba(168, 85, 247, 0.05);
-  --surf:        #FFFFFF;
-  --surf-2:      #F1F5F9;
-  --line:        rgba(15, 23, 42, 0.11);
-  --line-bright: rgba(79, 70, 229, 0.34);
-  --tx:          #0F172A;
-  --tx-body:     #334155;
-  --tx-rgb:      15, 23, 42;
-  --mut:         #64748B;
-  --p:           #4F46E5;
-  --p-rgb:       79, 70, 229;
-  --s:           #0284C7;
-  --s-rgb:       2, 132, 199;
-  --ok:          #059669;
-  --err:         #E11D48;
-  --cap:         #0284C7;
-  --sc:          #EA580C;
-  --svc:         #D97706;
-  --stat:        #7C3AED;
-  --shadow:      0 10px 28px rgba(15, 23, 42, 0.07);
-  --glass:       rgba(255, 255, 255, 0.92);
-}
-
-/* 8. Warm Alabaster (Eye-Friendly Soft Ivory & Deep Petrol Teal) */
 [data-theme="alabaster"] {
   --bg:          #F7F5F0;
   --bg-2:        #ECE8DF;
@@ -252,7 +44,67 @@
   --glass:       rgba(255, 254, 250, 0.92);
 }
 
-/* 9. Glacier Mist (Calm Soft Blue-Grey & Royal Slate) */
+/* 1. Warm Carbon (Matte Graphite & Soft Amber) */
+[data-theme="carbon"] {
+  --bg:          #0E0F12;
+  --bg-2:        #16171C;
+  --bg-rgb:      14, 15, 18;
+  --orb-1:       rgba(245, 158, 11, 0.10);
+  --orb-2:       rgba(148, 163, 184, 0.09);
+  --orb-3:       rgba(56, 189, 248, 0.06);
+  --surf:        #1A1B22;
+  --surf-2:      #23252F;
+  --line:        rgba(255, 255, 255, 0.10);
+  --line-bright: rgba(245, 158, 11, 0.42);
+  --tx:          #FAFAFA;
+  --tx-body:     #D4D4D8;
+  --tx-rgb:      250, 250, 250;
+  --mut:         #A1A1AA;
+  --p:           #F59E0B;
+  --p-rgb:       245, 158, 11;
+  --s:           #93C5FD;
+  --s-rgb:       147, 197, 253;
+  --ok:          #34D399;
+  --err:         #FB7185;
+  --cap:         #38BDF8;
+  --sc:          #FB923C;
+  --svc:         #FBBF24;
+  --stat:        #C084FC;
+  --shadow:      0 14px 36px rgba(0, 0, 0, 0.54);
+  --glass:       rgba(26, 27, 34, 0.84);
+}
+
+/* 4. Clean Pearl Daylight (Crisp Snow & Indigo) */
+[data-theme="pearl"] {
+  --bg:          #F8FAFC;
+  --bg-2:        #EEF2FF;
+  --bg-rgb:      248, 250, 252;
+  --orb-1:       rgba(79, 70, 229, 0.08);
+  --orb-2:       rgba(14, 165, 233, 0.08);
+  --orb-3:       rgba(168, 85, 247, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #F1F5F9;
+  --line:        rgba(15, 23, 42, 0.11);
+  --line-bright: rgba(79, 70, 229, 0.34);
+  --tx:          #0F172A;
+  --tx-body:     #334155;
+  --tx-rgb:      15, 23, 42;
+  --mut:         #64748B;
+  --p:           #4F46E5;
+  --p-rgb:       79, 70, 229;
+  --s:           #0284C7;
+  --s-rgb:       2, 132, 199;
+  --ok:          #059669;
+  --err:         #E11D48;
+  --cap:         #0284C7;
+  --sc:          #EA580C;
+  --svc:         #D97706;
+  --stat:        #7C3AED;
+  --shadow:      0 10px 28px rgba(15, 23, 42, 0.07);
+  --glass:       rgba(255, 255, 255, 0.92);
+}
+
+/* 5. Glacier Mist (Calm Soft Blue-Grey & Royal Slate) */
 [data-theme="mist"] {
   --bg:          #F1F5F9;
   --bg-2:        #E2E8F0;
@@ -282,7 +134,7 @@
   --glass:       rgba(255, 255, 255, 0.92);
 }
 
-/* 10. Academic Sand (Calm Editorial Cream & Deep Navy) */
+/* 6. Academic Sand (Calm Editorial Cream & Deep Navy) */
 [data-theme="sand"] {
   --bg:          #FBF8F3;
   --bg-2:        #F3EDE2;
@@ -309,6 +161,186 @@
   --svc:         #B45309;
   --stat:        #6D28D9;
   --shadow:      0 10px 26px rgba(30, 41, 59, 0.07);
+  --glass:       rgba(255, 255, 255, 0.93);
+}
+
+/* 7. Calm Eucalyptus (Whisper-Soft Botanical Mint & Forest Sage) */
+[data-theme="eucalyptus"] {
+  --bg:          #F3F7F4;
+  --bg-2:        #E5EFE8;
+  --bg-rgb:      243, 247, 244;
+  --orb-1:       rgba(45, 106, 79, 0.08);
+  --orb-2:       rgba(13, 148, 136, 0.07);
+  --orb-3:       rgba(180, 130, 60, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #ECF3EE;
+  --line:        rgba(22, 46, 36, 0.11);
+  --line-bright: rgba(45, 106, 79, 0.34);
+  --tx:          #162A22;
+  --tx-body:     #354F44;
+  --tx-rgb:      22, 42, 34;
+  --mut:         #5F7A6E;
+  --p:           #2D6A4F;
+  --p-rgb:       45, 106, 79;
+  --s:           #0F766E;
+  --s-rgb:       15, 118, 110;
+  --ok:          #15803D;
+  --err:         #BE123C;
+  --cap:         #0284C7;
+  --sc:          #C2410C;
+  --svc:         #B45309;
+  --stat:        #6D28D9;
+  --shadow:      0 10px 26px rgba(22, 42, 34, 0.06);
+  --glass:       rgba(255, 255, 255, 0.92);
+}
+
+/* 8. Warm Porcelain (Soft Blush Linen & Muted Terracotta) */
+[data-theme="porcelain"] {
+  --bg:          #FAF6F4;
+  --bg-2:        #F2E9E4;
+  --bg-rgb:      250, 246, 244;
+  --orb-1:       rgba(159, 74, 61, 0.08);
+  --orb-2:       rgba(180, 105, 62, 0.06);
+  --orb-3:       rgba(109, 76, 158, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #F5EEEB;
+  --line:        rgba(46, 31, 28, 0.10);
+  --line-bright: rgba(159, 74, 61, 0.34);
+  --tx:          #261C1A;
+  --tx-body:     #4E3D39;
+  --tx-rgb:      38, 28, 26;
+  --mut:         #826E69;
+  --p:           #9F4A3D;
+  --p-rgb:       159, 74, 61;
+  --s:           #B45309;
+  --s-rgb:       180, 83, 9;
+  --ok:          #0F766E;
+  --err:         #BE123C;
+  --cap:         #0369A1;
+  --sc:          #C2410C;
+  --svc:         #B45309;
+  --stat:        #6D28D9;
+  --shadow:      0 10px 26px rgba(38, 28, 26, 0.06);
+  --glass:       rgba(255, 253, 252, 0.93);
+}
+
+/* 9. Cloud Lavender (Ultra-Gentle Pale Lilac & Dusty Plum) */
+[data-theme="lavender"] {
+  --bg:          #F7F5FB;
+  --bg-2:        #EDE8F6;
+  --bg-rgb:      247, 245, 251;
+  --orb-1:       rgba(109, 76, 158, 0.08);
+  --orb-2:       rgba(99, 102, 241, 0.07);
+  --orb-3:       rgba(14, 165, 233, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #F2EEF9;
+  --line:        rgba(37, 27, 56, 0.10);
+  --line-bright: rgba(109, 76, 158, 0.34);
+  --tx:          #1E182B;
+  --tx-body:     #413754;
+  --tx-rgb:      30, 24, 43;
+  --mut:         #726887;
+  --p:           #6D4C9E;
+  --p-rgb:       109, 76, 158;
+  --s:           #4F46E5;
+  --s-rgb:       79, 70, 229;
+  --ok:          #059669;
+  --err:         #E11D48;
+  --cap:         #0284C7;
+  --sc:          #EA580C;
+  --svc:         #D97706;
+  --stat:        #7C3AED;
+  --shadow:      0 10px 26px rgba(30, 24, 43, 0.07);
+  --glass:       rgba(255, 255, 255, 0.93);
+}
+
+/* 10. Frosted Skyline (Airy Pale Sky & Serene Cerulean) */
+[data-theme="skyline"] {
+  --bg:          #F2F8FC;
+  --bg-2:        #E2F0FA;
+  --bg-rgb:      242, 248, 252;
+  --orb-1:       rgba(3, 105, 161, 0.08);
+  --orb-2:       rgba(14, 165, 233, 0.07);
+  --orb-3:       rgba(15, 118, 110, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #EAF3FA;
+  --line:        rgba(12, 36, 56, 0.10);
+  --line-bright: rgba(3, 105, 161, 0.34);
+  --tx:          #0F2436;
+  --tx-body:     #314B61;
+  --tx-rgb:      15, 36, 54;
+  --mut:         #617B91;
+  --p:           #0369A1;
+  --p-rgb:       3, 105, 161;
+  --s:           #0D9488;
+  --s-rgb:       13, 148, 136;
+  --ok:          #059669;
+  --err:         #E11D48;
+  --cap:         #0284C7;
+  --sc:          #EA580C;
+  --svc:         #D97706;
+  --stat:        #7C3AED;
+  --shadow:      0 10px 26px rgba(15, 36, 54, 0.07);
+  --glass:       rgba(255, 255, 255, 0.93);
+}
+
+/* 11. Warm Cashmere (Soft Oatmeal Greige & Muted Bronze) */
+[data-theme="cashmere"] {
+  --bg:          #F5F2EE;
+  --bg-2:        #EAE4DC;
+  --bg-rgb:      245, 242, 238;
+  --orb-1:       rgba(124, 90, 59, 0.08);
+  --orb-2:       rgba(15, 118, 110, 0.06);
+  --orb-3:       rgba(100, 116, 139, 0.06);
+  --surf:        #FFFFFF;
+  --surf-2:      #EFEAE3;
+  --line:        rgba(42, 35, 28, 0.11);
+  --line-bright: rgba(124, 90, 59, 0.35);
+  --tx:          #231E18;
+  --tx-body:     #494037;
+  --tx-rgb:      35, 30, 24;
+  --mut:         #7C7268;
+  --p:           #7C5A3B;
+  --p-rgb:       124, 90, 59;
+  --s:           #0F766E;
+  --s-rgb:       15, 118, 110;
+  --ok:          #15803D;
+  --err:         #BE123C;
+  --cap:         #0369A1;
+  --sc:          #C2410C;
+  --svc:         #B45309;
+  --stat:        #6D28D9;
+  --shadow:      0 10px 26px rgba(35, 30, 24, 0.07);
+  --glass:       rgba(255, 254, 252, 0.93);
+}
+
+/* 12. Tranquil Celadon (Pale Seafoam Stone & Slate Teal) */
+[data-theme="celadon"] {
+  --bg:          #F2F7F6;
+  --bg-2:        #E4EEEC;
+  --bg-rgb:      242, 247, 246;
+  --orb-1:       rgba(43, 110, 117, 0.08);
+  --orb-2:       rgba(45, 106, 79, 0.06);
+  --orb-3:       rgba(3, 105, 161, 0.05);
+  --surf:        #FFFFFF;
+  --surf-2:      #EBF3F2;
+  --line:        rgba(20, 44, 46, 0.10);
+  --line-bright: rgba(43, 110, 117, 0.35);
+  --tx:          #14292B;
+  --tx-body:     #334E51;
+  --tx-rgb:      20, 41, 43;
+  --mut:         #607D80;
+  --p:           #2B6E75;
+  --p-rgb:       43, 110, 117;
+  --s:           #0369A1;
+  --s-rgb:       3, 105, 161;
+  --ok:          #059669;
+  --err:         #BE123C;
+  --cap:         #0284C7;
+  --sc:          #C2410C;
+  --svc:         #B45309;
+  --stat:        #6D28D9;
+  --shadow:      0 10px 26px rgba(20, 41, 43, 0.06);
   --glass:       rgba(255, 255, 255, 0.93);
 }
 
@@ -583,12 +615,19 @@ code, .mono {
   border-radius: 12px;
   padding: 13px 20px;
   margin-top: 4px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   box-shadow: var(--shadow);
+}
+.math-box > div {
+  max-width: 100%;
+  min-width: 0;
 }
 .math-box .katex {
   font-size: clamp(1.18rem, 1.55vw, 1.48rem) !important;
@@ -1843,7 +1882,7 @@ code, .mono {
   display: inline-block;
 }
 
-/* 10-Palette Calm Swatch Picker Popover */
+/* 11-Palette Calm Swatch Picker Popover */
 #theme-menu {
   position: fixed;
   top: 48px;
@@ -1873,6 +1912,9 @@ code, .mono {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
+}
+.tm-grid.tm-grid-1 {
+  grid-template-columns: 1fr;
 }
 .tm-item {
   display: flex;
@@ -1934,6 +1976,7 @@ code, .mono {
   border-color: var(--p);
   width: 38px;
 }
+[data-mode="dark"] .nav-btn:hover { color: #141416; }
 #btn-prev { left: 10px; }
 #btn-next { right: 10px; }
 
@@ -2489,6 +2532,7 @@ code, .mono {
   color: #FFFFFF;
   transform: translateY(-1px);
 }
+[data-mode="dark"] .race-trigger-btn:hover { color: #141416; }
 
 /* ==========================================================
    SECTION 07 — WHY WE SELECTED THE SVC (HERO + 3×2 GRID)
@@ -3803,10 +3847,12 @@ code, .mono {
   overflow: hidden;
   user-select: none;
 }
-.fm-img-wrap.is-zoomed {
+.fm-img-wrap.is-zoomed,
+.fm-img-wrap.is-zoomed .st-hs-zone {
   cursor: grab;
 }
-.fm-img-wrap.is-dragging {
+.fm-img-wrap.is-dragging,
+.fm-img-wrap.is-dragging .st-hs-zone {
   cursor: grabbing;
 }
 .fm-canvas-box {
@@ -3884,57 +3930,121 @@ code, .mono {
   text-overflow: ellipsis;
 }
 
-/* Breadcrumb Sequence Bar on Every Area Slide (P39–P45) */
+/* Breadcrumb Sequence Bar on Every Area Slide (P36–P43) */
 .sim-head-row {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+.sim-head-row .slide-title {
+  font-size: clamp(1.72rem, 2.42vw, 2.38rem);
+  line-height: 1.14;
 }
 .sim-breadcrumb {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 6px;
-  border-radius: 12px;
+  width: 100%;
+  padding: 5px 8px;
+  border-radius: 14px;
   background: var(--glass);
-  border: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line-bright);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
   flex-wrap: wrap;
 }
 .sim-bc-btn {
-  padding: 4px 9px;
-  border-radius: 8px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 9px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--mut);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.16s ease;
+  white-space: nowrap;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.sim-bc-btn:hover { color: var(--tx); background: var(--surf-2); }
+.sim-bc-btn.is-full {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.73rem;
+  font-weight: 800;
+  color: var(--tx-body);
+  background: var(--surf-2);
+  border-color: var(--line);
+  padding: 5px 11px;
+}
+.sim-bc-btn.is-full:hover {
+  border-color: var(--p);
+  color: var(--p);
+  transform: translateY(-1px);
+}
+.sim-bc-dot {
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: var(--bc-c, var(--p));
+  opacity: 0.75;
+  flex-shrink: 0;
+  transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+}
+.sim-bc-btn:not(.is-full):hover {
+  color: var(--tx);
+  background: color-mix(in srgb, var(--bc-c, var(--p)) 10%, var(--surf-2));
+  border-color: color-mix(in srgb, var(--bc-c, var(--p)) 35%, transparent);
+  transform: translateY(-1px);
+}
+.sim-bc-btn:not(.is-full):hover .sim-bc-dot {
+  opacity: 1;
+  transform: scale(1.2);
+}
 .sim-bc-btn.active {
-  background: var(--p);
-  color: #090A10;
-  box-shadow: 0 3px 10px rgba(var(--p-rgb), 0.3);
+  background: linear-gradient(135deg, var(--bc-c, var(--p)), color-mix(in srgb, var(--bc-c, var(--p)) 78%, #0F172A));
+  color: #FFFFFF;
+  border-color: transparent;
+  box-shadow: 0 5px 15px color-mix(in srgb, var(--bc-c, var(--p)) 36%, transparent);
 }
-[data-mode="light"] .sim-bc-btn.active { color: #FFFFFF; }
+.sim-bc-btn.active .sim-bc-dot {
+  background: #FFFFFF;
+  opacity: 1;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+}
+.sim-bc-sep {
+  width: 1.5px;
+  height: 18px;
+  background: var(--line-bright);
+  margin: 0 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
 .sim-bc-arrow {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
+  font-weight: 800;
   color: var(--mut);
-  opacity: 0.55;
+  opacity: 0.4;
   user-select: none;
+  margin: 0 -1px;
 }
 
 /* Golden-Ratio 64% / 36% Spacious Area Layout */
 .sim-area-grid {
   display: grid;
-  grid-template-columns: 1.28fr 1fr;
+  grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr);
   gap: 18px;
   align-items: stretch;
   width: 100%;
+}
+.sim-area-grid > * {
+  min-width: 0;
 }
 .sim-area-visual {
   display: flex;
@@ -3992,38 +4102,115 @@ code, .mono {
   min-width: 0;
 }
 
-/* Signal Input -> Process -> Output Bar at top of each Area */
+/* Signal Input -> Process -> Output Connected Pipeline Cards at top of each Area */
 .sim-io-bar {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 8px;
-  background: var(--surf-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 8px 11px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 .sim-io-cell {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 5px;
   min-width: 0;
-  padding: 2px 7px;
-  border-left: 3px solid var(--io-c, var(--p));
+  padding: 9px 11px 10px;
+  border-radius: 13px;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--io-c, var(--p)) 24%, var(--line));
+  border-top: 3px solid var(--io-c, var(--p));
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.055);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.sim-io-cell:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--io-c, var(--p)) 14%, rgba(15, 23, 42, 0.07));
+}
+.sim-io-cell:not(:last-child)::after {
+  content: "›";
+  position: absolute;
+  right: -13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--surf);
+  border: 1.5px solid var(--line-bright);
+  color: var(--io-c, var(--p));
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  pointer-events: none;
 }
 .sim-io-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.65px;
   text-transform: uppercase;
   color: var(--io-c, var(--p));
+  background: color-mix(in srgb, var(--io-c, var(--p)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--io-c, var(--p)) 25%, transparent);
+  padding: 2px 7px;
+  border-radius: 999px;
+  line-height: 1.15;
 }
 .sim-io-val {
-  font-size: 0.78rem;
+  font-size: 0.79rem;
   font-weight: 700;
   color: var(--tx);
-  line-height: 1.3;
+  line-height: 1.38;
   white-space: normal;
+  word-break: break-word;
+}
+.sim-io-val code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--io-c, var(--p));
+  background: color-mix(in srgb, var(--io-c, var(--p)) 9%, transparent);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.sim-io-val .katex,
+.sim-val-pill .katex,
+.sim-blk-pill .katex {
+  font-size: 0.88em !important;
+  font-weight: 600;
+}
+.sim-step-desc .katex {
+  font-size: 1.02em !important;
+}
+.sim-step-desc strong .katex {
+  font-size: 1.02em !important;
+}
+.qa-eq-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  background: var(--surf-2);
+  border: 1px solid var(--line-bright);
+  color: var(--tx);
+}
+.qa-eq-pill .katex {
+  font-size: 0.98rem !important;
 }
 
 /* ==========================================================
@@ -4206,10 +4393,40 @@ code, .mono {
 }
 
 .sim-area-eq {
-  padding: 9px 14px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px !important;
+  padding: 10px 14px !important;
   margin-top: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-align: center;
 }
-.sim-area-eq .katex { font-size: 1.0rem !important; }
+.sim-eq-line {
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  line-height: 1.35;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.sim-eq-line.sim-eq-sub {
+  padding-top: 5px;
+  border-top: 1px dashed var(--line);
+}
+.sim-area-eq .katex {
+  font-size: clamp(0.84rem, 1.02vw, 0.98rem) !important;
+}
+.sim-area-eq .sim-eq-sub .katex {
+  font-size: clamp(0.8rem, 0.94vw, 0.92rem) !important;
+}
+.sim-area-eq .katex-display {
+  margin: 0 !important;
+}
 
 /* Mode pill toggles for PFC Calculator, FC-TCR Curve, LPF & FFT widgets */
 .w-pill-row {
@@ -5117,7 +5334,7 @@ code, .mono {
     grid-template-columns: 254px 248px 1fr;
     gap: 10px;
   }
-  .sim-area-grid { grid-template-columns: 1.55fr 1fr; gap: 14px; }
+  .sim-area-grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 14px; }
   .fm-flow-ribbon { gap: 6px; }
   .rm-rail { grid-template-columns: repeat(3, 1fr); }
   .studio-grid { grid-template-columns: 1.2fr 1fr; }

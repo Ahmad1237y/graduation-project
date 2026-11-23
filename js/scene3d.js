@@ -274,23 +274,23 @@
       "    </div>" +
       '    <div class="twin3d-pins-layer" id="t3d-pins-layer"></div>' +
       '    <div class="twin3d-legend">' +
-      '      <span><i style="background:#10B981;"></i>Active Power P (Grid → Load)</span>' +
-      '      <span><i style="background:#0EA5E9;"></i>Local Q_SVC Loop (FC-TCR ↔ Motor)</span>' +
-      '      <span><i style="background:#F43F5E;"></i>Uncompensated Grid Q Burden</span>' +
+      '      <span><i style="background:#10B981;"></i>Active Power <em>P</em> (Grid → Load)</span>' +
+      '      <span><i style="background:#0EA5E9;"></i>Local <em>Q</em><sub>SVC</sub> Loop (FC-TCR ↔ Motor)</span>' +
+      '      <span><i style="background:#F43F5E;"></i>Uncompensated Grid <em>Q</em> Burden</span>' +
       "    </div>" +
       '    <div class="twin3d-telemetry">' +
       '      <div class="t3d-stat"><span>Grid PF</span><strong id="t3d-pf" style="color:var(--ok);">1.0000 Unity</strong></div>' +
-      '      <div class="t3d-stat"><span>Feeder I_L</span><strong id="t3d-il">9.02 A</strong></div>' +
-      '      <div class="t3d-stat"><span>Grid Q</span><strong id="t3d-q">−4.3 VAR</strong></div>' +
-      '      <div class="t3d-stat"><span>TCR α</span><strong id="t3d-a" style="color:var(--svc);">130.09°</strong></div>' +
+      '      <div class="t3d-stat"><span>Feeder <i style="font-style:italic;text-transform:none;">I</i><sub style="text-transform:none;">L</sub></span><strong id="t3d-il">9.02 A</strong></div>' +
+      '      <div class="t3d-stat"><span>Grid <i style="font-style:italic;">Q</i></span><strong id="t3d-q">−4.3 VAR</strong></div>' +
+      '      <div class="t3d-stat"><span>TCR <i style="font-style:italic;text-transform:none;">α</i></span><strong id="t3d-a" style="color:var(--svc);">130.09°</strong></div>' +
       "    </div>" +
       "  </div>" +
       '  <div class="twin3d-controls">' +
       '    <div class="twin3d-mode-btns">' +
-      '      <button class="sb-preset-btn active" data-m3d="case1">Auto PI · Motor ON (PF=1.00)</button>' +
-      '      <button class="sb-preset-btn" data-m3d="case2">Auto PI · Motor OFF (α=103.8°)</button>' +
-      '      <button class="sb-preset-btn danger" data-m3d="uncomp">SVC OFF · Uncomp (PF=0.44!)</button>' +
-      '      <button class="sb-preset-btn" data-m3d="cancel">Manual α=90° (Full Cancel)</button>' +
+      '      <button class="sb-preset-btn active" data-m3d="case1"><span class="sb-p-top"><i class="sb-pdot ok"></i>Full SVC (PI)</span><span class="sb-p-sub">RL + Motor · PF 1.00</span></button>' +
+      '      <button class="sb-preset-btn" data-m3d="case2"><span class="sb-p-top"><i class="sb-pdot ok"></i>Full SVC (PI)</span><span class="sb-p-sub">RL Only · α = 103.8°</span></button>' +
+      '      <button class="sb-preset-btn danger" data-m3d="uncomp"><span class="sb-p-top"><i class="sb-pdot bad"></i>No SVC</span><span class="sb-p-sub">RL + Motor · PF 0.44!</span></button>' +
+      '      <button class="sb-preset-btn warn" data-m3d="cancel"><span class="sb-p-top"><i class="sb-pdot warn"></i>Cancel (α = 90°)</span><span class="sb-p-sub">RL Only · SVC = 0</span></button>' +
       "    </div>" +
       '    <div class="twin3d-alpha-bar">' +
       '      <span class="mono" style="font-size:0.78rem;font-weight:800;color:var(--mut);white-space:nowrap;">Live Firing α:</span>' +

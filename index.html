@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="aurora">
+<html lang="en" data-theme="alabaster" data-mode="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -694,7 +694,7 @@
                   --card-clr: var(--p);
                   --card-glow: rgba(var(--p-rgb), 0.32);
                 "
-                data-goto="33"
+                data-goto="32"
               >
                 <span class="evo-gen">Section 08</span>
                 <div class="evo-icon-box">
@@ -5388,8 +5388,8 @@
             PFC &amp; FC-TCR System Design
           </h2>
           <p class="slide-subtitle">
-            Constant \(P\) vs. Constant \(S\) Sizing, \(7\%\) Detuning Standards
-            &amp; Complete \(400\text{ V}\) FC-TCR Calculation
+            Constant \(P\) vs. Constant \(S\) Sizing, Complete \(400\text{ V}\)
+            FC-TCR Calculation &amp; Control Characteristic
           </p>
           <div class="sim-kpi-row stagger">
             <div class="sim-kpi-card" style="--card-clr: var(--p)">
@@ -5496,126 +5496,9 @@
       </section>
 
       <!-- ============================================================ -->
-      <!-- PAGE 34 (slide-33) — Delta Sizing, 7% Detuning & Protection  -->
+      <!-- PAGE 31 (slide-30) — Sizing Our 400 V FC-TCR (111 µF / 91.28 mH) -->
       <!-- ============================================================ -->
       <section class="slide" id="slide-30">
-        <div class="slide-inner" style="gap: 18px">
-          <div>
-            <div class="slide-kicker" style="color: var(--ok)">
-              Section 07 · Industrial Capacitor Bank Standards (IEC 60831)
-            </div>
-            <h2 class="slide-title">
-              Delta Winding, \(7\%\) Detuning &amp; Overcurrent Protection
-            </h2>
-          </div>
-
-          <div class="three-col stagger">
-            <div
-              class="card"
-              style="
-                border-top-color: var(--cap);
-                padding: 20px 22px;
-                gap: 10px;
-              "
-            >
-              <div class="card-head">
-                <span
-                  class="num-badge"
-                  style="
-                    color: var(--cap);
-                    border-color: var(--cap);
-                    background: rgba(56, 189, 248, 0.12);
-                  "
-                  >01</span
-                >
-                <strong>Why Delta (\(\Delta\)) Over Star?</strong>
-              </div>
-              <div class="math-box" style="padding: 10px 14px">
-                <div>
-                  $$C_\Delta = \frac{Q_C}{3\omega V_L^2} = \frac{C_Y}{3}$$
-                </div>
-              </div>
-              <p style="font-size: 0.94rem; line-height: 1.5">
-                Wiring each capacitor across full line-to-line voltage \(V_L\)
-                cuts required capacitance by <strong>\(67\%\)</strong> (e.g.
-                \(238.1\ \mu\text{F}\) in \(\Delta\) vs. \(714.2\ \mu\text{F}\)
-                in \(\text{Y}\)), reducing dielectric cost and panel size.
-              </p>
-            </div>
-
-            <div
-              class="card"
-              style="
-                border-top-color: var(--svc);
-                padding: 20px 22px;
-                gap: 10px;
-              "
-            >
-              <div class="card-head">
-                <span class="num-badge amber">02</span>
-                <strong>\(7\%\) Detuned Reactor Design</strong>
-              </div>
-              <div class="math-box" style="padding: 10px 14px">
-                <div>
-                  $$f_r = \frac{f_1}{\sqrt{p}} = \frac{50}{\sqrt{0.07}} =
-                  189\text{ Hz}$$
-                </div>
-              </div>
-              <p style="font-size: 0.94rem; line-height: 1.5">
-                Series inductance keeps the bank
-                <strong>inductive above \(189\text{ Hz}\)</strong>, making
-                parallel resonance with the \(5\text{th}\) harmonic (\(250\text{
-                Hz}\)) physically impossible. Terminal voltage rises to \(V_C =
-                V_L/(1-p)\), requiring \(440\text{ V}\) IEC 60831 units.
-              </p>
-            </div>
-
-            <div
-              class="card"
-              style="border-top-color: var(--ok); padding: 20px 22px; gap: 10px"
-            >
-              <div class="card-head">
-                <span class="num-badge ok">03</span>
-                <strong>Stepping &amp; MCB Protection</strong>
-              </div>
-              <div class="math-box" style="padding: 10px 14px">
-                <div>
-                  $$I_{\text{MCB}} = 1.5 \times I_{\text{step}} =
-                  1.5\frac{Q_{\text{step}}}{\sqrt{3}\,V_L}$$
-                </div>
-              </div>
-              <p style="font-size: 0.94rem; line-height: 1.5">
-                IEC 60831 permits continuous operation up to \(1.30\,I_n\) under
-                harmonics and \(+10\%\) capacitance tolerance; sizing breakers
-                at
-                <strong>\(1.5\times\)</strong> prevents nuisance tripping during
-                switching inrush.
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="card app-bar-card"
-            style="--card-clr: var(--ok); padding: 13px 22px"
-          >
-            <span class="app-bar-label">
-              <span class="num-badge ok">KEY</span>
-              Design Takeaway for Variable Industrial Loads:
-            </span>
-            <p style="font-size: 0.96rem; color: var(--tx-body); margin: 0">
-              While detuned stepped banks protect steady loads, rapidly changing
-              motor loads require continuous solid-state regulation — leading
-              directly to our
-              <strong>\(400\text{ V}\) Delta FC-TCR SVC</strong>.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================ -->
-      <!-- PAGE 35 (slide-34) — Sizing Our 400 V FC-TCR (111 µF / 91.28 mH) -->
-      <!-- ============================================================ -->
-      <section class="slide" id="slide-31">
         <div class="slide-inner" style="gap: 18px">
           <div>
             <div class="slide-kicker text-svc">
@@ -5752,7 +5635,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 36 (slide-35) — FC-TCR Q_SVC(α) Control Curve           -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-32">
+      <section class="slide" id="slide-31">
         <div class="slide-inner" style="gap: 16px">
           <div>
             <div class="slide-kicker text-svc">
@@ -5829,7 +5712,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 37 (slide-36) — Section 08 Divider: MATLAB & 3D Twin    -->
       <!-- ============================================================ -->
-      <section class="slide section-slide" id="slide-33">
+      <section class="slide section-slide" id="slide-32">
         <div class="slide-inner">
           <span class="section-badge" style="color: var(--p)"
             >Section 08 · Chapter 3 — MATLAB/Simulink Implementation &amp; 3D
@@ -5882,7 +5765,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 38 (slide-37) — FULL SIMULINK ARCHITECTURE OVERVIEW     -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-34">
+      <section class="slide" id="slide-33">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -5897,8 +5780,8 @@
           <div class="fm-stage-card">
             <div class="fm-stage-head">
               <span class="fm-hover-hint" id="fm-hover-hint"
-                >Click any Area on the diagram to open its explanation · Scroll
-                or use + / − to zoom in</span
+                >Point at any Area &amp; scroll to zoom there · Drag to move ·
+                Click any Area to open</span
               >
               <div class="fm-zoom-bar">
                 <button class="fm-zbtn" id="fm-zoom-out" title="Zoom Out">
@@ -5939,7 +5822,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--cap)"
-              data-goto="35"
+              data-goto="34"
               data-area-idx="0"
             >
               <span class="fm-step-badge">01</span>
@@ -5948,7 +5831,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--sc)"
-              data-goto="36"
+              data-goto="35"
               data-area-idx="1"
             >
               <span class="fm-step-badge">02</span>
@@ -5957,7 +5840,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: #0ea5e9"
-              data-goto="37"
+              data-goto="36"
               data-area-idx="2"
             >
               <span class="fm-step-badge">03</span>
@@ -5966,7 +5849,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--err)"
-              data-goto="38"
+              data-goto="37"
               data-area-idx="3"
             >
               <span class="fm-step-badge">04</span>
@@ -5975,7 +5858,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--ok)"
-              data-goto="39"
+              data-goto="38"
               data-area-idx="4"
             >
               <span class="fm-step-badge">05</span>
@@ -5984,7 +5867,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--svc)"
-              data-goto="40"
+              data-goto="39"
               data-area-idx="5"
             >
               <span class="fm-step-badge">06</span>
@@ -5993,7 +5876,7 @@
             <button
               class="fm-step-chip"
               style="--step-c: var(--p)"
-              data-goto="42"
+              data-goto="41"
               data-area-idx="6"
             >
               <span class="fm-step-badge">07</span>
@@ -6006,7 +5889,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 39 (slide-38) — AREA 1: UTILITY GRID & 1 MVA XFMR       -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-35">
+      <section class="slide" id="slide-34">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -6018,23 +5901,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn active" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn active" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -6059,18 +5942,18 @@
               <div class="sim-io-bar">
                 <div class="sim-io-cell" style="--io-c: var(--cap)">
                   <span class="sim-io-tag">Input</span>
-                  <span class="sim-io-val">11 kV, 50 Hz, 30 MVA Source</span>
+                  <span class="sim-io-val">\(11\text{ kV},\, 50\text{ Hz},\, 30\text{ MVA}\) Source</span>
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Step-Down 11 kV → 400 V &amp; Sense V, I</span
+                    >Step-Down \(11\text{ kV} \to 400\text{ V}\) &amp; Sense \(V,\,I\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--ok)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >400 V Bus + Vabc_meas &amp; Iabc_meas</span
+                    >\(400\text{ V}\) Bus + <code>Vabc_meas</code> &amp; <code>Iabc_meas</code></span
                   >
                 </div>
               </div>
@@ -6108,15 +5991,15 @@
                     <div class="sim-step-badges">
                       <span class="sim-blk-pill">Block: 3-Phase Supply</span>
                       <span class="sim-val-pill"
-                        >11 kV · 50 Hz · 30 MVA · X/R = 7</span
+                        >\(11\text{ kV}\) · \(50\text{ Hz}\) · \(30\text{ MVA}\) · \(X/R = 7\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Supplies medium-voltage power at
-                      <strong>11 kV, 50 Hz</strong> with a realistic
-                      short-circuit capacity of <strong>30 MVA</strong> and
-                      <code class="mono">X/R = 7</code>, producing an internal
-                      grid impedance of
+                      <strong>\(11\text{ kV},\, 50\text{ Hz}\)</strong> with a
+                      realistic short-circuit capacity of
+                      <strong>\(30\text{ MVA}\)</strong> and \(X/R = 7\),
+                      producing an internal grid impedance of
                       <strong>\(Z_s = 4.033\;\Omega\)</strong> (\(R_s =
                       0.570\;\Omega,\ L_s = 12.70\text{ mH}\)).
                     </p>
@@ -6131,14 +6014,15 @@
                         >Block: 3-Phase Transformer</span
                       >
                       <span class="sim-val-pill"
-                        >1 MVA · 11 kV Delta (D1) / 400 V Yg</span
+                        >\(1\text{ MVA}\) · \(11\text{ kV}\,\Delta\,(D_1) / 400\text{ V}\,Y_g\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      A <strong>1 MVA, Delta/Yg</strong> distribution
-                      transformer that steps the voltage down from
-                      <strong>11 kV to 400 V</strong> (line-to-line) to feed the
-                      industrial plant loads and the FC-TCR compensator.
+                      A <strong>\(1\text{ MVA},\, \Delta/Y_g\)</strong>
+                      distribution transformer that steps the voltage down from
+                      <strong>\(11\text{ kV}\) to \(400\text{ V}\)</strong>
+                      (line-to-line) to feed the industrial plant loads and the
+                      FC-TCR compensator.
                     </p>
                   </div>
 
@@ -6185,10 +6069,12 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$Z_s = \frac{11{,}000^2}{30\times 10^6} = 4.033\;\Omega
-                  \qquad\Big|\qquad I_{\text{grid}} = I_{\text{Load}} +
-                  I_{\text{Cap}} + I_{\text{TCR}}$$
+                <div class="sim-eq-line">
+                  \(Z_s = \dfrac{11{,}000^2}{30\times 10^6} = 4.033\;\Omega\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(I_{\text{grid}} = I_{\text{Load}} + I_{\text{Cap}} +
+                  I_{\text{TCR}}\)
                 </div>
               </div>
             </div>
@@ -6199,7 +6085,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 40 (slide-39) — AREA 2: RL LOAD + 20 HP INDUCTION MOTOR -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-36">
+      <section class="slide" id="slide-35">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -6212,23 +6098,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn active" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -6254,7 +6140,7 @@
                 <div class="sim-io-cell" style="--io-c: var(--sc)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >400 V Bus + Switch 1 (Motor ON/OFF)</span
+                    >\(400\text{ V}\) Bus + Switch 1 (Motor ON/OFF)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--err)">
@@ -6266,7 +6152,7 @@
                 <div class="sim-io-cell" style="--io-c: var(--svc)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >+13.31 kVAR (ON) or +5.00 kVAR (OFF)</span
+                    >\(+13.31\text{ kVAR}\) (ON) or \(+5.00\text{ kVAR}\) (OFF)</span
                   >
                 </div>
               </div>
@@ -6291,15 +6177,15 @@
                         >Block: 3-Phase Parallel RLC Load</span
                       >
                       <span class="sim-val-pill"
-                        >4.42 kW · +5.00 kVAR · PF = 0.662</span
+                        >\(P = 4.42\text{ kW}\) · \(Q_L = +5.00\text{ kVAR}\) · \(\text{PF} = 0.662\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      Connected permanently to the <strong>400 V</strong> bus,
-                      consuming <strong>4.42 kW</strong> active power and
-                      <strong>+5.00 kVAR</strong> inductive reactive power
+                      Connected permanently to the <strong>\(400\text{ V}\)</strong> bus,
+                      consuming <strong>\(4.42\text{ kW}\)</strong> active power and
+                      <strong>\(+5.00\text{ kVAR}\)</strong> inductive reactive power
                       continuously at a lagging power factor of
-                      <strong>0.662</strong>.
+                      <strong>\(0.662\)</strong>.
                     </p>
                   </div>
 
@@ -6337,16 +6223,17 @@
                         Motor_Torque_Tm</span
                       >
                       <span class="sim-val-pill"
-                        >1.832 kW · +8.31 kVAR · 9.2 N·m @ t = 1.0 s</span
+                        >\(1.832\text{ kW}\) · \(+8.31\text{ kVAR}\) · \(T_m = 9.2\text{ N}\cdot\text{m}\) at \(t = 1.0\text{ s}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      A <strong>20 HP (15 kW), 400 V</strong> squirrel-cage
-                      motor that draws <strong>1.832 kW</strong> and
-                      <strong>+8.31 kVAR</strong> in steady state, with a sudden
-                      <strong>9.2 N·m load torque step</strong> applied at
-                      <code class="mono">t = 1.0 s</code> to test controller
-                      speed.
+                      A <strong>\(20\text{ HP}\ (15\text{ kW}),\, 400\text{ V}\)</strong>
+                      squirrel-cage motor that draws
+                      <strong>\(1.832\text{ kW}\)</strong> and
+                      <strong>\(+8.31\text{ kVAR}\)</strong> in steady state,
+                      with a sudden <strong>\(9.2\text{ N}\cdot\text{m}\)</strong>
+                      load torque step applied at \(t = 1.0\text{ s}\) to test
+                      controller speed.
                     </p>
                   </div>
                 </div>
@@ -6370,10 +6257,12 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$Q_{\text{load,total}} = Q_{\text{RL}} + Q_{\text{Motor}} =
-                  +5.00 + 8.31 = +13.31\text{ kVAR}\quad (\text{Uncompensated
-                  PF} = 0.4407)$$
+                <div class="sim-eq-line">
+                  \(Q_{\text{load,total}} = Q_{\text{RL}} + Q_{\text{Motor}} =
+                  +5.00 + 8.31 = +13.31\text{ kVAR}\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(\text{Uncompensated Full-Load PF} = 0.4407\;\text{Lag}\)
                 </div>
               </div>
             </div>
@@ -6384,7 +6273,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 41 (slide-40) — AREA 3: DELTA FIXED CAPACITOR BANK      -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-37">
+      <section class="slide" id="slide-36">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -6397,23 +6286,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -6439,7 +6328,7 @@
                 <div class="sim-io-cell" style="--io-c: #0ea5e9">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >400 V Bus + Switch 2 (Cap ON/OFF)</span
+                    >\(400\text{ V}\) Bus + Switch 2 (Cap ON/OFF)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--ok)">
@@ -6451,7 +6340,7 @@
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >Q_C = −16.74 kVAR + Current I_Cap_AB</span
+                    >\(Q_C = -16.74\text{ kVAR}\) + \(I_{\text{Cap},AB}\)</span
                   >
                 </div>
               </div>
@@ -6495,14 +6384,14 @@
                         >Blocks: Cap_AB_111uF, Cap_BC, Cap_CA</span
                       >
                       <span class="sim-val-pill"
-                        >3 × 111 µF · X_C = 28.68 Ω · −16.74 kVAR</span
+                        >\(3 \times 111\;\mu\text{F}\) · \(X_{C\Delta} = 28.68\;\Omega\) · \(Q_C = -16.74\text{ kVAR}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      Three <strong>111 µF</strong> capacitors connected in
-                      <strong>Delta (\(\Delta\))</strong> across the
-                      <code class="mono">400 V</code> line-to-line phases inject
-                      a constant <strong>−16.74 kVAR</strong> (\(-5.58\text{
+                      Three <strong>\(111\;\mu\text{F}\)</strong> capacitors
+                      connected in <strong>Delta (\(\Delta\))</strong> across
+                      the \(400\text{ V}\) line-to-line phases inject a constant
+                      <strong>\(-16.74\text{ kVAR}\)</strong> (\(-5.58\text{
                       kVAR}\) per branch) — sized larger than the \(+13.31\text{
                       kVAR}\) load with a \(25.8\%\) control margin.
                     </p>
@@ -6517,15 +6406,15 @@
                         >Blocks: I_Cap_AB &amp; Goto_I_Cap_AB</span
                       >
                       <span class="sim-val-pill"
-                        >13.95 A rms · ±19.73 A peak</span
+                        >\(I_{C,\Delta} = 13.95\text{ A}_{\text{rms}}\) · \(\pm 19.73\text{ A}_{\text{pk}}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Measures the sinusoidal capacitor current inside delta
-                      branch <code class="mono">A–B</code> (<strong
-                        >13.95 A rms / 19.73 A peak</strong
-                      >, leading \(V_{AB}\) by \(+90^\circ\)) and sends it to
-                      the oscilloscope in Area 7.
+                      branch \(A\text{–}B\) (<strong>\(13.95\text{ A}_{\text{rms}}\)
+                      / \(19.73\text{ A}_{\text{pk}}\)</strong>, leading
+                      \(V_{AB}\) by \(+90^\circ\)) and sends it to the
+                      oscilloscope in Area 7.
                     </p>
                   </div>
                 </div>
@@ -6549,9 +6438,12 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$Q_C = 3\,\omega\,C_\Delta\,V_L^2 = 3(2\pi\times
-                  50)(111\;\mu\text{F})(400^2) = -16.74\text{ kVAR}$$
+                <div class="sim-eq-line">
+                  \(Q_C = 3\,\omega\,C_\Delta\,V_L^2 = -16.74\text{ kVAR}\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(X_{C\Delta} = 28.68\;\Omega \quad|\quad I_{C,\Delta} =
+                  13.95\text{ A}_{\text{rms}}\ (19.73\text{ A}_{\text{pk}})\)
                 </div>
               </div>
             </div>
@@ -6562,7 +6454,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 42 (slide-41) — AREA 4: DELTA TCR UNIT & 6 THYRISTORS   -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-38">
+      <section class="slide" id="slide-37">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -6575,23 +6467,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -6617,19 +6509,19 @@
                 <div class="sim-io-cell" style="--io-c: var(--err)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >400 V Bus + 6 Gate Pulses [G_AB_p..n]</span
+                    >\(400\text{ V}\) Bus + 6 Gates \(G_{AB,p\ldots n}\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--svc)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Absorbs Excess Capacitive VARs via α</span
+                    >Absorbs Excess Capacitive VARs via \(\alpha\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--stat)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >Q_TCR (0 to +16.74 kVAR) + I_TCR_AB</span
+                    >\(Q_{\text{TCR}}\ (0 \to +16.74\text{ kVAR})\) + \(I_{\text{TCR},AB}\)</span
                   >
                 </div>
               </div>
@@ -6654,14 +6546,14 @@
                         >Blocks: L_TCR_AB, L_TCR_BC, L_TCR_CA</span
                       >
                       <span class="sim-val-pill"
-                        >3 × 91.28 mH · X_L = X_C = 28.68 Ω</span
+                        >\(3 \times 91.28\text{ mH}\) · \(X_L = X_C = 28.68\;\Omega\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      Three <strong>91.28 mH</strong> inductors connected in
+                      Three <strong>\(91.28\text{ mH}\)</strong> inductors connected in
                       <strong>Delta (\(\Delta\))</strong> with reactance \(X_L =
                       28.68\;\Omega\) matched to the capacitor bank, allowing a
-                      maximum absorption of <strong>+16.74 kVAR</strong> at full
+                      maximum absorption of <strong>\(+16.74\text{ kVAR}\)</strong> at full
                       conduction (\(\alpha = 90^\circ\)).
                     </p>
                   </div>
@@ -6674,7 +6566,7 @@
                       <span class="sim-blk-pill"
                         >Blocks: Thyristor_Pos &amp; Thyristor_Neg (×3)</span
                       >
-                      <span class="sim-val-pill">Gates: G_AB_p ... G_CA_n</span>
+                      <span class="sim-val-pill">Gates: \(G_{AB,p}\ldots G_{CA,n}\)</span>
                     </div>
                     <p class="sim-step-desc">
                       Each delta branch uses
@@ -6687,31 +6579,24 @@
 
                   <div class="sim-step-pane">
                     <div class="sim-step-title">
-                      Step 3 — Variable VAR Balance &amp; Δ Harmonic Trap
+                      Step 3 — Variable VAR Balance &amp; \(\Delta\) Harmonic Trap
                     </div>
                     <div class="sim-step-badges">
                       <span class="sim-blk-pill"
-                        >Firing Range: α ∈ [90°, 180°]</span
+                        >Firing Range: \(\alpha \in [90^\circ,\, 180^\circ]\)</span
                       >
                       <span class="sim-val-pill"
-                        >Triplens (3rd, 9th, 15th) = 0.00% in Grid</span
+                        >Triplens (3rd, 9th, 15th) \(= 0.00\%\) in Grid</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Varying
-                      <strong
-                        >\(\alpha\) from \(90^\circ\) to \(180^\circ\)</strong
-                      >
-                      absorbs the exact excess capacitor power (<strong
-                        >+3.43 kVAR</strong
-                      >
+                      <strong>\(\alpha\) from \(90^\circ\) to \(180^\circ\)</strong>
+                      absorbs the exact excess capacitor power (<strong>\(+3.43\text{ kVAR}\)</strong>
                       at \(\alpha = 130.09^\circ\) with Motor ON;
-                      <strong>+11.74 kVAR</strong> at \(\alpha = 103.80^\circ\)
+                      <strong>\(+11.74\text{ kVAR}\)</strong> at \(\alpha = 103.80^\circ\)
                       with Motor OFF), while the closed
-                      <strong
-                        >Delta loop traps all 3rd, 9th &amp; 15th
-                        harmonics</strong
-                      >.
+                      <strong>Delta (\(\Delta\)) loop traps all 3rd, 9th &amp; 15th harmonics</strong>.
                     </p>
                   </div>
                 </div>
@@ -6735,11 +6620,14 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$Q_{\text{TCR}}(\alpha) =
-                  +16.74\times\frac{2(\pi-\alpha)+\sin(2\alpha)}{\pi}\text{
-                  kVAR} \qquad\Big|\qquad Q_{\text{grid}} = Q_{\text{load}} -
-                  16.74 + Q_{\text{TCR}}(\alpha) = 0$$
+                <div class="sim-eq-line">
+                  \(Q_{\text{TCR}}(\alpha) =
+                  +16.74\times\dfrac{2(\pi-\alpha)+\sin(2\alpha)}{\pi}\text{
+                  kVAR}\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(Q_{\text{grid}} = Q_{\text{load}} - 16.74 +
+                  Q_{\text{TCR}}(\alpha) = 0\)
                 </div>
               </div>
             </div>
@@ -6750,7 +6638,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 43 (slide-42) — AREA 5: POWER MEASUREMENT & 300 Hz LPF  -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-39">
+      <section class="slide" id="slide-38">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -6763,23 +6651,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -6851,19 +6739,19 @@
                 <div class="sim-io-cell" style="--io-c: var(--cap)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >Vabc_meas &amp; Iabc_meas (from Area 1)</span
+                    ><code>Vabc_meas</code> &amp; <code>Iabc_meas</code> (Area 1)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--ok)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Computes P, Q, Filters 300 Hz &amp; PF</span
+                    >Computes \(P,\,Q\), Filters \(300\text{ Hz}\) &amp; \(\text{PF}\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >Clean Q_grid_meas + [PQ] &amp; [PF]</span
+                    >Clean <code>Q_grid_meas</code> + <code>[PQ]</code> &amp; <code>[PF]</code></span
                   >
                 </div>
               </div>
@@ -6910,17 +6798,15 @@
                         >Blocks: LPF_P &amp; LPF_Q</span
                       >
                       <span class="sim-val-pill"
-                        >1 / (0.02s + 1) · τ = 20 ms · 97.35% Rejection</span
+                        >\(G(s) = \frac{1}{0.02s+1}\) · \(\tau = 20\text{ ms}\) · \(97.35\%\) Rejection</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Thyristor switching creates a
-                      <strong>300 Hz ripple</strong> on raw power. These two
-                      <strong
-                        >20 ms low-pass filters remove 97.35% of the
-                        ripple</strong
-                      >
-                      and send clean feedback
+                      <strong>\(300\text{ Hz}\) ripple</strong> on raw power.
+                      These two <strong>\(20\text{ ms}\) low-pass filters
+                      remove \(97.35\%\) of the ripple</strong> and send clean
+                      feedback
                       <strong><code class="mono">Q_grid_meas</code></strong> to
                       the PI controller in Area 6.
                     </p>
@@ -6935,7 +6821,7 @@
                         >Blocks: Product → Add → Sqrt → Divide</span
                       >
                       <span class="sim-val-pill"
-                        >Output: Goto1 [PF] = 1.0000</span
+                        >Output: \(\text{PF} = 1.0000\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
@@ -6948,7 +6834,7 @@
                       <strong>\(S = \sqrt{P^2 + Q^2}\)</strong>, and divides
                       <strong>\(P / S\)</strong> (<code class="mono"
                         >Divide</code
-                      >) to output real-time <strong>PF</strong>.
+                      >) to output real-time <strong>\(\text{PF}\)</strong>.
                     </p>
                   </div>
                 </div>
@@ -6972,10 +6858,12 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$G_{\text{LPF}}(s) = \frac{1}{0.02\,s+1}\;\text{(97.35\%
-                  Ripple Rejected)} \qquad\Big|\qquad \text{PF} =
-                  \frac{P}{\sqrt{P^2+Q^2}} = 1.0000$$
+                <div class="sim-eq-line">
+                  \(G_{\text{LPF}}(s) = \dfrac{1}{0.02\,s+1}\quad (\text{97.35\%
+                  Ripple Rejected})\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(\text{PF} = \dfrac{P}{\sqrt{P^2+Q^2}} = 1.0000\)
                 </div>
               </div>
             </div>
@@ -6986,7 +6874,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 44 (slide-43) — AREA 6 (PART 1): OUTER PI PANEL         -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-40">
+      <section class="slide" id="slide-39">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -7000,25 +6888,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="40">
-                Area 6 (PI)
-              </button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -7044,19 +6930,19 @@
                 <div class="sim-io-cell" style="--io-c: var(--ok)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >Q_grid_meas, [PQ], [PF] + Target_Q = 0</span
+                    ><code>Q_grid_meas</code>, <code>[PQ]</code>, <code>[PF]</code> + \(Q_{\text{ref}} = 0\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--svc)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Compares Q_grid to 0 &amp; Computes Angle α</span
+                    >Compares \(Q_{\text{grid}}\) to \(0\) &amp; Computes \(\alpha\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >Angle α (90°..180°) → TRIAC Circuit</span
+                    >\(\alpha \in [90^\circ,\, 180^\circ]\) → TRIAC Circuit</span
                   >
                 </div>
               </div>
@@ -7081,17 +6967,16 @@
                         >Blocks: P &amp; Q · Power Factor · Firing_Angle</span
                       >
                       <span class="sim-val-pill"
-                        >6252 W · −4.3 VAR · PF = 1.0000</span
+                        >\(6{,}252\text{ W}\) · \(-4.3\text{ VAR}\) · \(\text{PF} = 1.0000\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Digital display blocks show real-time grid active and
-                      reactive power (<strong>6252 W, −4.3 VAR</strong>), grid
-                      power factor (<strong>1.0000</strong>), and the active
-                      firing angle <strong>\(\alpha\)</strong> (<strong
-                        >130.09°</strong
-                      >
-                      or <strong>103.80°</strong>).
+                      reactive power (<strong>\(6{,}252\text{ W},\, -4.3\text{ VAR}\)</strong>),
+                      grid power factor (<strong>\(1.0000\)</strong>), and the
+                      active firing angle <strong>\(\alpha\)</strong>
+                      (<strong>\(130.09^\circ\)</strong> or
+                      <strong>\(103.80^\circ\)</strong>).
                     </p>
                   </div>
 
@@ -7101,24 +6986,21 @@
                     </div>
                     <div class="sim-step-badges">
                       <span class="sim-blk-pill"
-                        >Blocks: Target_Q = 0 · Sum_Q_err · Closed_Loop_PI</span
+                        >Blocks: Target_Q · Sum_Q_err · Closed_Loop_PI</span
                       >
                       <span class="sim-val-pill"
-                        >Kp = 0.004 · Ki = 0.25 · Clamping [90°, 180°]</span
+                        >\(K_p = 0.004\) · \(K_i = 0.25\) · Clamp \([90^\circ,\, 180^\circ]\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Subtracts
-                      <strong
-                        ><code class="mono">Target_Q_grid_var = 0</code></strong
-                      >
+                      <strong><code class="mono">Target_Q_grid_var = 0</code></strong>
                       from measured
-                      <strong><code class="mono">Q_grid_meas</code></strong
-                      >. The <strong>PI Controller</strong> (with
-                      <code class="mono">[90°, 180°]</code> anti-windup
-                      clamping) automatically adjusts
-                      <strong>\(\alpha\)</strong> until grid reactive power
-                      reaches zero.
+                      <strong><code class="mono">Q_grid_meas</code></strong>.
+                      The <strong>PI Controller</strong> (with
+                      \([90^\circ,\, 180^\circ]\) anti-windup clamping)
+                      automatically adjusts <strong>\(\alpha\)</strong> until
+                      grid reactive power reaches zero.
                     </p>
                   </div>
 
@@ -7140,9 +7022,7 @@
                       position) or a
                       <strong>Manual fixed firing angle \(\alpha\)</strong> (top
                       position) and sends the chosen angle into
-                      <strong
-                        ><code class="mono">TRIAC_Control_Circuit</code></strong
-                      >
+                      <strong><code class="mono">TRIAC_Control_Circuit</code></strong>
                       (explained on the next slide).
                     </p>
                   </div>
@@ -7167,10 +7047,12 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$e_Q(t) = Q_{\text{grid,meas}} - 0
-                  \qquad\Longrightarrow\qquad \alpha_{\text{PI}}(t) = \alpha_0 +
-                  K_p\,e_Q(t) + K_i\int e_Q(t)\,dt \in [90^\circ,\ 180^\circ]$$
+                <div class="sim-eq-line">
+                  \(e_Q(t) = Q_{\text{grid,meas}} - 0\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(\alpha_{\text{PI}}(t) = \alpha_0 + K_p\,e_Q(t) + K_i\!\int
+                  e_Q(t)\,dt \in [90^\circ,\ 180^\circ]\)
                 </div>
               </div>
             </div>
@@ -7181,7 +7063,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 45 (slide-44) — AREA 6 (PART 2): INSIDE TRIAC CIRCUIT   -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-41">
+      <section class="slide" id="slide-40">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -7190,30 +7072,27 @@
                 Synchronized Gate Firing
               </div>
               <h2 class="slide-title">
-                Inside TRIAC_Control_Circuit: Converting Angle α into 6 Gate
-                Pulses
+                Inside TRIAC_Control_Circuit: Converting \(\alpha\) into 6 Gate Pulses
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="41">
-                Area 6 (TRIAC)
-              </button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -7239,19 +7118,19 @@
                 <div class="sim-io-cell" style="--io-c: var(--svc)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >Firing Angle Alpha_deg + Vabc_meas</span
+                    >Firing Angle \(\alpha\) + <code>Vabc_meas</code></span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Converts α to Delay t_d &amp; Syncs to V_Δ</span
+                    >Converts \(\alpha \to t_d\) &amp; Syncs to \(V_\Delta\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--ok)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >6 Gate Pulses: G_AB_p..n, G_BC_p..n, G_CA_p..n</span
+                    >6 Gates: \(G_{AB,p/n},\, G_{BC,p/n},\, G_{CA,p/n}\)</span
                   >
                 </div>
               </div>
@@ -7277,18 +7156,17 @@
                         >Blocks: Alpha_Sat_90_180 &amp; Deg_to_DelaySec</span
                       >
                       <span class="sim-val-pill"
-                        >Gain = 1 / 18000 (360° × 50 Hz)</span
+                        >\(\text{Gain} = \frac{1}{18{,}000}\ (360^\circ \times 50\text{ Hz})\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Clamps the input angle
                       <strong><code class="mono">Alpha_deg</code></strong>
-                      safely between <strong>90° and 180°</strong>, then
-                      multiplies it by
-                      <strong><code class="mono">1/18000</code></strong> to
-                      convert degrees into time delay
-                      <strong>\(t_d\)</strong> in seconds (since \(360^\circ
-                      \times 50\text{ Hz} = 18{,}000\text{ deg/s}\)).
+                      safely between <strong>\(90^\circ\) and \(180^\circ\)</strong>,
+                      then multiplies it by <strong>\(\frac{1}{18{,}000}\)</strong>
+                      to convert degrees into time delay <strong>\(t_d\)</strong>
+                      in seconds (since \(360^\circ \times 50\text{ Hz} =
+                      18{,}000\text{ deg/s}\)).
                     </p>
                   </div>
 
@@ -7298,16 +7176,16 @@
                     </div>
                     <div class="sim-step-badges">
                       <span class="sim-blk-pill"
-                        >Blocks: Vabc_to_Vdelta ([3×3]*u) &amp; Var_Delay</span
+                        >Blocks: Vabc_to_Vdelta &amp; Var_Delay</span
                       >
-                      <span class="sim-val-pill">V_abc → V_AB, V_BC, V_CA</span>
+                      <span class="sim-val-pill">\(V_{abc} \to V_{AB},\, V_{BC},\, V_{CA}\)</span>
                     </div>
                     <p class="sim-step-desc">
                       Multiplies
                       <strong><code class="mono">Vabc_meas</code></strong> by a
-                      <strong><code class="mono">[3×3]</code> matrix</strong> to
-                      obtain the delta line-to-line voltages (\(V_{AB}, V_{BC},
-                      V_{CA}\)), then feeds them into
+                      <strong>\(3 \times 3\) matrix</strong> to obtain the delta
+                      line-to-line voltages (\(V_{AB},\, V_{BC},\, V_{CA}\)),
+                      then feeds them into
                       <strong><code class="mono">Var_Delay</code></strong> which
                       shifts the voltage sine wave by the time delay
                       <strong>\(t_d\)</strong>.
@@ -7323,7 +7201,7 @@
                         >Blocks: &gt; 0, &lt; 0 &amp; Logical AND</span
                       >
                       <span class="sim-val-pill"
-                        >Pos Pulse: [α, 180°] · Neg Pulse: [180°+α, 360°]</span
+                        >Pos: \([\alpha,\, 180^\circ]\) · Neg: \([180^\circ + \alpha,\, 360^\circ]\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
@@ -7348,19 +7226,15 @@
                         >Blocks: double · Demux · Goto Tags</span
                       >
                       <span class="sim-val-pill"
-                        >G_AB_p, G_BC_p, G_CA_p &amp; G_AB_n, G_BC_n,
-                        G_CA_n</span
+                        >\(G_{AB,p},\, G_{BC,p},\, G_{CA,p}\) &amp; \(G_{AB,n},\, G_{BC,n},\, G_{CA,n}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       Converts the logic pulses to
                       <code class="mono">double</code>, splits the 3 phases
                       using <code class="mono">Demux</code>, and sends the
-                      <strong>6 gate firing signals</strong> (<code class="mono"
-                        >3 positive</code
-                      >
-                      and <code class="mono">3 negative</code>) directly to the
-                      6 thyristors in Area 4.
+                      <strong>6 gate firing signals</strong> (3 positive and 3
+                      negative) directly to the 6 thyristors in Area 4.
                     </p>
                   </div>
                 </div>
@@ -7385,10 +7259,13 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$t_d = \frac{\alpha}{360^\circ\times 50\text{ Hz}} =
-                  \frac{\alpha}{18{,}000}\text{ s}\quad (\text{At }\alpha =
-                  130.09^\circ \implies t_d = 7.23\text{ ms})$$
+                <div class="sim-eq-line">
+                  \(t_d = \dfrac{\alpha}{360^\circ\times 50\text{ Hz}} =
+                  \dfrac{\alpha}{18{,}000}\text{ s}\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(\alpha = 130.09^\circ \implies 7.23\text{ ms} \quad|\quad
+                  103.80^\circ \implies 5.77\text{ ms}\)
                 </div>
               </div>
             </div>
@@ -7399,7 +7276,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 46 (slide-45) — AREA 7: DUAL SCOPES & LIVE THD          -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-42">
+      <section class="slide" id="slide-41">
         <div class="slide-inner" style="gap: 10px">
           <div class="sim-head-row">
             <div>
@@ -7411,23 +7288,23 @@
               </h2>
             </div>
             <div class="sim-breadcrumb">
-              <button class="sim-bc-btn" data-goto="34">Full</button>
+              <button class="sim-bc-btn is-full" data-goto="33">⊞ Full</button>
+              <span class="sim-bc-sep" aria-hidden="true"></span>
+              <button class="sim-bc-btn" style="--bc-c: var(--cap)" data-goto="34"><i class="sim-bc-dot"></i>Area 1</button>
               <span class="sim-bc-arrow">›</span>
-              <button class="sim-bc-btn" data-goto="35">Area 1</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="36">Area 2</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="37">Area 3</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="38">Area 4</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="39">Area 5</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="40">Area 6 (PI)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn" data-goto="41">Area 6 (TRIAC)</button>
-              <span class="sim-bc-arrow">→</span>
-              <button class="sim-bc-btn active" data-goto="42">Area 7</button>
+              <button class="sim-bc-btn" style="--bc-c: var(--sc)" data-goto="35"><i class="sim-bc-dot"></i>Area 2</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #0ea5e9" data-goto="36"><i class="sim-bc-dot"></i>Area 3</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--err)" data-goto="37"><i class="sim-bc-dot"></i>Area 4</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--ok)" data-goto="38"><i class="sim-bc-dot"></i>Area 5</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: var(--svc)" data-goto="39"><i class="sim-bc-dot"></i>Area 6 (PI)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn" style="--bc-c: #f59e0b" data-goto="40"><i class="sim-bc-dot"></i>Area 6 (TRIAC)</button>
+              <span class="sim-bc-arrow">›</span>
+              <button class="sim-bc-btn active" style="--bc-c: var(--p)" data-goto="41"><i class="sim-bc-dot"></i>Area 7</button>
             </div>
           </div>
 
@@ -7474,19 +7351,19 @@
                 <div class="sim-io-cell" style="--io-c: var(--cap)">
                   <span class="sim-io-tag">Input</span>
                   <span class="sim-io-val"
-                    >All Measurement Tags (V_AB, Gates, I, PQ, PF)</span
+                    >Tags: \(V_{AB}\), Gates, \(I\), \(P,\,Q\), \(\text{PF}\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--p)">
                   <span class="sim-io-tag">Role</span>
                   <span class="sim-io-val"
-                    >Plots 80 ms &amp; 1.2 s Scopes + Measures THD%</span
+                    >Plots \(80\text{ ms}\) &amp; \(1.2\text{ s}\) Scopes + \(\text{THD}\)</span
                   >
                 </div>
                 <div class="sim-io-cell" style="--io-c: var(--stat)">
                   <span class="sim-io-tag">Output</span>
                   <span class="sim-io-val"
-                    >4-Ch AC Scope + 3-Ch PI Scope + THD = 16.28%</span
+                    >4-Ch &amp; 3-Ch Scopes + \(\text{THD} = 16.28\%\)</span
                   >
                 </div>
               </div>
@@ -7511,41 +7388,41 @@
                         >Block: TCR_Waveforms_Scope</span
                       >
                       <span class="sim-val-pill"
-                        >80 ms Window (4 AC Cycles)</span
+                        >\(80\text{ ms}\) Window (4 AC Cycles)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      Zoomed into <strong>4 AC cycles (0.08 s)</strong> to
+                      Zoomed into <strong>4 AC cycles (\(0.08\text{ s}\))</strong> to
                       clearly display: <strong>(Ch 1)</strong> delta voltage
                       \(V_{AB}\) (\(\pm 565.7\text{ V}\)),
-                      <strong>(Ch 2)</strong> gate pulses \(G_p\text{ &amp;
-                      }G_n\), <strong>(Ch 3)</strong> \(I_{\text{TCR}}\) vs.
+                      <strong>(Ch 2)</strong> gate pulses \(G_p\) &amp; \(G_n\),
+                      <strong>(Ch 3)</strong> \(I_{\text{TCR}}\) vs.
                       \(I_{\text{Cap}}\), and <strong>(Ch 4)</strong> phase
-                      voltage \(V_a\) vs. scaled current \(10\times I_a\).
+                      voltage \(V_a\) vs. scaled current \(10 \times I_a\).
                     </p>
                   </div>
 
                   <div class="sim-step-pane">
                     <div class="sim-step-title">
-                      Step 2 — Inside Grid_PhaseA_Signals (Why ×10?)
+                      Step 2 — Inside Grid_PhaseA_Signals (Why \(\times 10\)?)
                     </div>
                     <div class="sim-step-badges">
                       <span class="sim-blk-pill"
                         >Subsystem: Grid_PhaseA_Signals &amp; Scale_Ia_x10</span
                       >
                       <span class="sim-val-pill"
-                        >V_a = 326.6 V pk · I_a = 12.76 A pk</span
+                        >\(V_a = 326.6\text{ V}_{\text{pk}}\) · \(I_a = 12.76\text{ A}_{\text{pk}}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
-                      Extracts Phase-A voltage (\(326.6\text{ V}\) peak) and
-                      current (\(12.76\text{ A}\) peak).
+                      Extracts Phase-A voltage (\(326.6\text{ V}_{\text{pk}}\)) and
+                      current (\(12.76\text{ A}_{\text{pk}}\)).
                       <strong>Port 1</strong> multiplies \(I_a\) by
-                      <strong>10</strong> (<code class="mono">Scale_Ia_x10</code
+                      <strong>\(10\)</strong> (<code class="mono">Scale_Ia_x10</code
                       >) so it is tall enough to compare zero-crossings with
                       \(V_a\) on the same graph, while
                       <strong>Port 2</strong> sends the
-                      <strong>unscaled current</strong> to the THD block.
+                      <strong>unscaled current</strong> to the \(\text{THD}\) block.
                     </p>
                   </div>
 
@@ -7558,22 +7435,18 @@
                         >Blocks: THD_50Hz &amp; System_Performance_Scope</span
                       >
                       <span class="sim-val-pill"
-                        >Grid THD = 16.28% · Macro Window = 1.2 s</span
+                        >\(\text{THD}_{\text{grid}} = 16.28\%\) · Macro Window \(= 1.2\text{ s}\)</span
                       >
                     </div>
                     <p class="sim-step-desc">
                       <strong><code class="mono">THD_50Hz</code></strong>
                       measures grid current distortion and multiplies by
-                      <code class="mono">100</code> to display
-                      <strong>16.28%</strong> (down from \(54.18\%\) inside the
-                      delta), while
-                      <strong
-                        ><code class="mono"
-                          >System_Performance_Scope</code
-                        ></strong
-                      >
-                      plots the full <strong>1.2 s</strong> dynamic response of
-                      \(P, Q\), \(\alpha\), and \(\text{PF}\).
+                      \(100\) to display
+                      <strong>\(16.28\%\)</strong> (down from \(54.18\%\) inside the
+                      \(\Delta\)), while
+                      <strong><code class="mono">System_Performance_Scope</code></strong>
+                      plots the full <strong>\(1.2\text{ s}\)</strong> dynamic response of
+                      \(P,\, Q,\, \alpha,\) and \(\text{PF}\).
                     </p>
                   </div>
                 </div>
@@ -7597,10 +7470,13 @@
               </div>
 
               <div class="math-box sim-area-eq">
-                <div>
-                  $$\text{THD}_{\text{Inside }\Delta} = 54.18\%
-                  \quad\xrightarrow{\text{3rd, 9th, 15th Trapped in
-                  }\Delta}\quad \text{THD}_{\text{Grid Line}} = 16.28\%$$
+                <div class="sim-eq-line">
+                  \(\text{THD}_{\text{Inside }\Delta} = 54.18\%
+                  \;\longrightarrow\; \text{THD}_{\text{Grid Line}} = 16.28\%\)
+                </div>
+                <div class="sim-eq-line sim-eq-sub">
+                  \(\text{3rd, 9th, 15th Trapped in }\Delta\ (0.00\%\text{ in
+                  Line} \implies -70\%\text{ THD})\)
                 </div>
               </div>
             </div>
@@ -7611,7 +7487,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 47 (slide-46) — 3D WEBGL FC-TCR SUBSTATION DIGITAL TWIN -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-43">
+      <section class="slide" id="slide-42">
         <div class="slide-inner" style="gap: 10px">
           <div>
             <div class="slide-kicker text-cap">
@@ -7629,7 +7505,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 48 (slide-47) — Results: Before vs. After & Scopes      -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-44">
+      <section class="slide" id="slide-43">
         <div class="slide-inner" style="gap: 12px">
           <div>
             <div class="slide-kicker" style="color: var(--ok)">
@@ -7725,7 +7601,7 @@
                 <div class="result-kpi" style="--rk-clr: var(--svc)">
                   <span class="result-kpi-lbl">Feeder Copper Losses</span>
                   <span class="result-kpi-nums">100% → 19.82%</span>
-                  <span class="result-kpi-delta">−80.18% I²R Loss Savings</span>
+                  <span class="result-kpi-delta">−80.18% \(I^2 R\) Loss Savings</span>
                 </div>
               </div>
 
@@ -7744,16 +7620,16 @@
                     Scope?</strong
                   >
                 </div>
-                <p style="font-size: 0.91rem; line-height: 1.44">
+                <p style="font-size: 0.91rem; line-height: 1.46">
                   \(400\text{ V}\) is the <strong>RMS</strong> line-to-line
                   rating, whereas the oscilloscope plots instantaneous peak
                   voltage:
-                  <strong
-                    >\(V_{AB,\text{peak}} = \sqrt{2} \times 400\text{ V} =
-                    565.69\text{ V}\)</strong
-                  >
-                  (and Phase-A \(V_{a,\text{peak}} = 326.6\text{ V}\)).
                 </p>
+                <div class="qa-eq-pill">
+                  \(V_{AB,\text{pk}} = \sqrt{2}\times 400\text{ V} = 565.69\text{ V}\)
+                  <span style="opacity:0.45">|</span>
+                  \(V_{a,\text{pk}} = 326.6\text{ V}\)
+                </div>
               </div>
 
               <div
@@ -7786,7 +7662,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 49 (slide-48) — CROWN JEWEL: Live 5-Case Switchboard    -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-45">
+      <section class="slide" id="slide-44">
         <div class="slide-inner" style="gap: 10px">
           <div class="area-slide-head">
             <div>
@@ -7812,7 +7688,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 50 (slide-49) — FFT Spectrum & Theory Verification      -->
       <!-- ============================================================ -->
-      <section class="slide" id="slide-46">
+      <section class="slide" id="slide-45">
         <div class="slide-inner" style="gap: 12px">
           <div>
             <div class="slide-kicker text-stat">
@@ -7923,7 +7799,7 @@
       <!-- ============================================================ -->
       <!-- PAGE 51 (slide-50) — Thank You & Q&A Quick-Jump              -->
       <!-- ============================================================ -->
-      <section class="slide thankyou" id="slide-47">
+      <section class="slide thankyou" id="slide-46">
         <div class="cover-grid-wrap" aria-hidden="true">
           <canvas class="cover-grid-canvas" id="ty-grid-bg"></canvas>
         </div>
@@ -7955,24 +7831,24 @@
           </p>
 
           <div class="qa-jump-bar">
-            <button class="qa-jump-btn" data-goto="34">
+            <button class="qa-jump-btn" data-goto="33">
               Simulink Walkthrough
             </button>
             <button
               class="qa-jump-btn"
-              data-goto="43"
+              data-goto="42"
               style="border-color: var(--cap); color: var(--cap)"
             >
               3D WebGL Substation
             </button>
             <button
               class="qa-jump-btn"
-              data-goto="45"
+              data-goto="44"
               style="border-color: var(--svc); color: var(--svc)"
             >
               Live 5-Case Switchboard
             </button>
-            <button class="qa-jump-btn" data-goto="46">
+            <button class="qa-jump-btn" data-goto="45">
               FFT &amp; Verification
             </button>
           </div>
@@ -7987,17 +7863,17 @@
     <!-- Non-Overlapping Top-Left Slide Counter -->
     <div id="hud-left">
       <span id="slide-counter" title="Click or press G for Slide Overview"
-        >Page 1 / 48</span
+        >Page 1 / 47</span
       >
     </div>
 
-    <!-- Non-Overlapping Top-Right Utility Pill (10 Calm Palettes & Fullscreen) -->
+    <!-- Non-Overlapping Top-Right Utility Pill (11 Calm Palettes & Fullscreen) -->
     <div id="hud">
       <button
         id="theme-toggle"
-        title="Pick from 10 calm dark &amp; light palettes"
+        title="Pick from 11 calm dark &amp; light palettes"
       >
-        <span class="theme-dot-preview"></span>Aurora ▾
+        <span class="theme-dot-preview"></span>Alabaster ▾
       </button>
       <button id="fullscreen-btn" title="Fullscreen presentation mode (F)">
         Full (F)

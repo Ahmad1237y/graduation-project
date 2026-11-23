@@ -3321,7 +3321,7 @@
       '          <button class="sb-tog on-green" id="sw-mot-on"><i class="sb-led"></i>1 · RL + Motor</button>' +
       '          <button class="sb-tog" id="sw-mot-off"><i class="sb-led"></i>0 · RL Only</button>' +
       "        </div>" +
-      '        <div class="sb-sw-hint">Base RL (4.42 kW, +5 kVAR) is always ON</div>' +
+      '        <div class="sb-sw-hint">Base RL (+5.0 kVAR) Always ON</div>' +
       "      </div>" +
       '      <div class="sb-switch-card">' +
       '        <div class="sb-sw-head"><span class="sb-sw-name">Cap_ON_OFF_Switch</span><span class="sb-sw-area">Area 3</span></div>' +
@@ -3359,13 +3359,13 @@
       '          <text x="24" y="109" text-anchor="middle" class="sb-arc-lbl">0.0</text>' +
       '          <text x="196" y="109" text-anchor="middle" class="sb-arc-lbl">1.0</text>' +
       "        </svg>" +
-      '        <div class="sb-pf-meta-row"><span id="lcd-il">I_line = 9.02 A rms</span><span id="lcd-sig">σ = 99.8°</span></div>' +
+      '        <div class="sb-pf-meta-row"><span id="lcd-il"><i>I</i><sub>line</sub> = 9.02 A rms</span><span id="lcd-sig">σ = 99.8°</span></div>' +
       '        <div class="sb-status-pill" id="sb-regime">UNITY PF · OPTIMAL</div>' +
       "      </div>" +
       '      <div class="sb-meter-grid">' +
-      '        <div class="sb-mcell"><span class="sb-mlbl">Active P_grid</span><strong class="sb-mval" id="lcd-p">6,252.2 W</strong></div>' +
-      '        <div class="sb-mcell"><span class="sb-mlbl">Reactive Q_grid</span><strong class="sb-mval" id="lcd-q">−4.3 VAR</strong></div>' +
-      '        <div class="sb-mcell"><span class="sb-mlbl">Firing Angle α</span><strong class="sb-mval accent-amber" id="lcd-alpha">130.09°</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Active <i>P</i><sub>grid</sub></span><strong class="sb-mval" id="lcd-p">6,252.2 W</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Reactive <i>Q</i><sub>grid</sub></span><strong class="sb-mval" id="lcd-q">−4.3 VAR</strong></div>' +
+      '        <div class="sb-mcell"><span class="sb-mlbl">Firing Angle <i>α</i></span><strong class="sb-mval accent-amber" id="lcd-alpha">130.09°</strong></div>' +
       '        <div class="sb-mcell"><span class="sb-mlbl">Grid Line THD</span><strong class="sb-mval accent-cyan" id="lcd-thd">16.28%</strong></div>' +
       "      </div>" +
       '      <div class="sb-qbal-card">' +
@@ -3379,10 +3379,10 @@
       '      <div class="sb-scope-bezel-head">' +
       '        <div class="sb-scope-tags">' +
       '          <span class="sb-live-dot" id="sb-live-badge"><i></i>LIVE 50 Hz</span>' +
-      '          <span class="sb-ch-pill" style="--ch-c:#38BDF8;">Ch1: V_a</span>' +
-      '          <span class="sb-ch-pill" id="sb-ch-ia" style="--ch-c:#34D399;">10·I_a</span>' +
-      '          <span class="sb-ch-pill" style="--ch-c:#0EA5E9;">Ch2: I_Cap</span>' +
-      '          <span class="sb-ch-pill" style="--ch-c:#FBBF24;">I_TCR</span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#38BDF8;">Ch1: <i>V</i><sub>a</sub></span>' +
+      '          <span class="sb-ch-pill" id="sb-ch-ia" style="--ch-c:#34D399;">10·<i>I</i><sub>a</sub></span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#0EA5E9;">Ch2: <i>I</i><sub>Cap</sub></span>' +
+      '          <span class="sb-ch-pill" style="--ch-c:#FBBF24;"><i>I</i><sub>TCR</sub></span>' +
       "        </div>" +
       '        <div class="sb-scope-actions">' +
       '          <span class="sb-phi-pill" id="sb-phi-read">φ = 0.0°</span>' +
@@ -3592,7 +3592,7 @@
           : tel.Q > 0
             ? "LAGGING · cos φ"
             : "LEADING · cos φ";
-      lcdIL.textContent = "I_line = " + tel.IL.toFixed(2) + " A rms";
+      lcdIL.innerHTML = "<i>I</i><sub>line</sub> = " + tel.IL.toFixed(2) + " A rms";
       lcdSig.textContent = "σ = " + tel.sigma.toFixed(1) + "°";
 
       // Unified 2x2 Precision Telemetry Grid (Zero overflow!)
