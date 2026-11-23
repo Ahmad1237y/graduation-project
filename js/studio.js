@@ -1,5 +1,5 @@
 /**
- * studio.js — Interactive Full-Model Map Controller (Page 34 / slide-33)
+ * studio.js — Interactive Full-Model Map Controller (Page 32 / slide-31)
  * Adds hover-synced Area 1..7 hotspots + smooth in-place Zoom & Drag-Pan
  * over the high-resolution fig_ch3_full_model.png schematic.
  */
@@ -7,13 +7,13 @@
   "use strict";
 
   const FULL_MODEL_ZONES = [
-    { goto: 34, left: "3.73%",  top: "23.33%", width: "26.60%", height: "14.42%", clr: "#0284C7", label: "Area 1 — 11 kV Utility Grid & 1 MVA Transformer" },
-    { goto: 35, left: "38.18%", top: "20.74%", width: "61.65%", height: "15.55%", clr: "#EA580C", label: "Area 2 — Static RL Load & 20 HP Induction Motor" },
-    { goto: 36, left: "33.99%", top: "37.98%", width: "15.81%", height: "30.56%", clr: "#0EA5E9", label: "Area 3 — Delta Fixed Capacitor Bank (3×111 µF)" },
-    { goto: 37, left: "52.57%", top: "37.98%", width: "25.11%", height: "41.51%", clr: "#E11D48", label: "Area 4 — Delta TCR Unit (3×91.28 mH + 6 SCRs)" },
-    { goto: 38, left: "21.42%", top: "0.23%",  width: "38.46%", height: "19.70%", clr: "#10B981", label: "Area 5 — Power Measurement, 300 Hz LPF & Feedback" },
-    { goto: 39, left: "0.15%",  top: "38.72%", width: "33.00%", height: "29.81%", clr: "#D97706", label: "Area 6 — Anti-Windup PI & TRIAC_Control_Circuit" },
-    { goto: 41, left: "1.64%",  top: "71.06%", width: "42.17%", height: "28.68%", clr: "#06B6D4", label: "Area 7 — Dual Scopes, Phase-A Signals & Live THD" },
+    { goto: 32, left: "3.73%",  top: "23.33%", width: "26.60%", height: "14.42%", clr: "#0284C7", label: "Area 1 — 11 kV Utility Grid & 1 MVA Transformer" },
+    { goto: 33, left: "38.18%", top: "20.74%", width: "61.65%", height: "15.55%", clr: "#EA580C", label: "Area 2 — Static RL Load & 20 HP Induction Motor" },
+    { goto: 34, left: "33.99%", top: "37.98%", width: "15.81%", height: "30.56%", clr: "#0EA5E9", label: "Area 3 — Delta Fixed Capacitor Bank (3×111 µF)" },
+    { goto: 35, left: "52.57%", top: "37.98%", width: "25.11%", height: "41.51%", clr: "#E11D48", label: "Area 4 — Delta TCR Unit (3×91.28 mH + 6 SCRs)" },
+    { goto: 36, left: "21.42%", top: "0.23%",  width: "38.46%", height: "19.70%", clr: "#10B981", label: "Area 5 — Power Measurement, 300 Hz LPF & Feedback" },
+    { goto: 37, left: "0.15%",  top: "38.72%", width: "33.00%", height: "29.81%", clr: "#D97706", label: "Area 6 — Anti-Windup PI & TRIAC_Control_Circuit" },
+    { goto: 39, left: "1.64%",  top: "71.06%", width: "42.17%", height: "28.68%", clr: "#06B6D4", label: "Area 7 — Dual Scopes, Phase-A Signals & Live THD" },
   ];
 
   function initFullModelMap() {

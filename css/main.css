@@ -4245,6 +4245,13 @@ code, .mono {
   gap: 6px;
   flex-wrap: wrap;
 }
+.sim-step-tabs.is-dense {
+  gap: 5px;
+}
+.sim-step-tabs.is-dense .sim-step-tab {
+  padding: 5px 9px;
+  font-size: 0.73rem;
+}
 .sim-step-tab {
   appearance: none;
   border: 1px solid var(--line);
@@ -4267,6 +4274,17 @@ code, .mono {
   color: #FFFFFF;
   border-color: var(--pager-c, var(--p));
   box-shadow: 0 4px 12px rgba(var(--p-rgb), 0.28);
+}
+.sim-step-tab.is-proof {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--pager-c, var(--p)) 48%, var(--line));
+  color: var(--pager-c, var(--p));
+  background: color-mix(in srgb, var(--pager-c, var(--p)) 8%, var(--surf-2));
+}
+.sim-step-tab.is-proof.active {
+  border-style: solid;
+  background: var(--pager-c, var(--p));
+  color: #FFFFFF;
 }
 .sim-pager-count {
   font-family: 'JetBrains Mono', monospace;
@@ -4338,6 +4356,97 @@ code, .mono {
 .sim-step-desc strong {
   color: var(--tx);
   font-weight: 700;
+}
+
+/* Compact 3-Step Mathematical Proof List inside Step-Pager */
+.sim-proof-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sim-proof-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--pager-c, var(--p)) 6%, var(--surf-2));
+  border: 1px solid color-mix(in srgb, var(--pager-c, var(--p)) 18%, var(--line));
+}
+.sim-proof-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: var(--pager-c, var(--p));
+  color: #FFFFFF;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sim-proof-txt {
+  font-size: 0.85rem;
+  line-height: 1.46;
+  color: var(--tx-body);
+  min-width: 0;
+}
+.sim-proof-txt strong {
+  color: var(--tx);
+  font-weight: 700;
+}
+.sim-proof-txt .katex {
+  font-size: 0.92em;
+}
+
+/* Spacious Centered Display-Math Proof Cards inside Step-Pager */
+.sim-math-proof {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.sim-mp-eq {
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--surf-2);
+  border: 1px solid var(--line);
+  text-align: center;
+  color: var(--tx);
+  overflow-x: auto;
+}
+.sim-mp-eq .katex {
+  font-size: clamp(0.95rem, 1.15vw, 1.12rem);
+}
+.sim-mp-note {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--mut);
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+.sim-mp-result {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--pager-c, var(--p)) 10%, var(--surf-2));
+  border: 1.5px solid color-mix(in srgb, var(--pager-c, var(--p)) 42%, var(--line));
+  text-align: center;
+  color: var(--tx);
+}
+.sim-mp-result .katex {
+  font-size: clamp(1.02rem, 1.24vw, 1.2rem);
+}
+.sim-mp-result .katex .fbox {
+  border-color: var(--pager-c, var(--p));
+  border-width: 1.5px;
+  border-radius: 6px;
+  padding: 3px 8px;
 }
 
 .sim-pager-foot {
